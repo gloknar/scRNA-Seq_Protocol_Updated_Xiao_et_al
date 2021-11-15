@@ -1,18 +1,3 @@
----
-title: "Proyecto scRNA-seq de ovarios"
-author: "Adam Casas"
-date: 'Compilado: `r format(Sys.Date(), "%d de %B del %Y")`'
-output: 
-  html_document:
-    df_print: paged
-    highlight: kate
-    number_sections: no
-    theme: cerulean
-    toc: yes
-    toc_float: yes
-    toc_depth: 2
----
-
 # Proyecto scRNA-seq de ovarios
 
 Xiao _et al._ publicaron en 2019 un [artículo](https://www.nature.com/articles/s41467-019-11738-0) en Nature Communications en el que caracterizan 2 tipos de tumores a nivel de transcriptoma de célula única y GSEA (Gene Set Enrichment Analysis). El producto de dicha investigación está disponible en forma de [repositorio](https://github.com/LocasaleLab/Single-Cell-Metabolic-Landscape) con todo el código para `R 3.5` + `bash`
