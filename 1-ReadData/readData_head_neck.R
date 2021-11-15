@@ -1,4 +1,5 @@
-source("../utils.R")
+# Carga de paquetes, opciones y funciones de interés
+source("../utils.R") # Cargamos funciones definidas en el archivo `utils.R` 
 library(scater)
 library(stringr)
 options(stringsAsFactors=FALSE)
@@ -6,8 +7,10 @@ library(reshape2)
 library(plyr)
 
 outdir <- "dataset/head_neck"
-if(!dir.exists(outdir)) dir.create(outdir)
-# 1. Read the ata
+if(!dir.exists(outdir)) dir.create(outdir) # Si no existe la carpeta `head_neck`, la creamos
+
+
+# 1. Leemos el dataset de head and neck cancer
 #################################################################################################
 #The value is normalized Expression value
 raw_tpm_file <- "dataset/GSE103322_HNSCC_all_data.txt"
