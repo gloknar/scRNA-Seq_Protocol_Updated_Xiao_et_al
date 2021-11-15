@@ -35,17 +35,17 @@ col_data[col_data$malignant==1,"malignant"] <- "Non-malignant"
 col_data[col_data$malignant==2,"malignant"] <- "Malignant"
 col_data[col_data$malignant==0,"malignant"] <- "Unresolved"
 col_data$malignant <- factor(col_data$malignant,levels=c("Non-malignant","Malignant","Unresolved"))
-col_data[col_data$cellType==0,"cellType"] <- "Unknow"
+col_data[col_data$cellType==0,"cellType"] <- "Unknown"
 col_data[col_data$cellType==1,"cellType"] <- "T cell"
 col_data[col_data$cellType==2,"cellType"] <- "B cell"
 col_data[col_data$cellType==3,"cellType"] <- "Macrophage"
 col_data[col_data$cellType==4,"cellType"] <- "Endothelial"
 col_data[col_data$cellType==5,"cellType"] <- "CAF"
 col_data[col_data$cellType==6,"cellType"] <- "NK"
-#some unknow is malignant
-tumor_select <- (col_data$cellType=="Unknow") & (col_data$malignant=="Malignant")
+#some Unknown is malignant
+tumor_select <- (col_data$cellType=="Unknown") & (col_data$malignant=="Malignant")
 col_data[tumor_select,"cellType"] <- "Malignant"
-col_data$cellType <- factor(col_data$cellType,levels = c("Unknow","Malignant","T cell","B cell","Macrophage","Endothelial","CAF","NK"))
+col_data$cellType <- factor(col_data$cellType,levels = c("Unknown","Malignant","T cell","B cell","Macrophage","Endothelial","CAF","NK"))
 
 #remove the annotation lines
 remove_rows <- c(remove_rows,1,2,3)
@@ -81,7 +81,7 @@ sce <- SingleCellExperiment(
 
 #malignant cells
 tumor_sce <- sce[,sce$cellType == "Malignant"]
-nontumor_sce <- sce[,!sce$cellType%in%c("Unknow","Malignant")]
+nontumor_sce <- sce[,!sce$cellType%in%c("Unknown","Malignant")]
 #select tumor cells
 tumor_sample_stats <- table(tumor_sce$tumor)
 tumor_sample_select <- names(tumor_sample_stats)[tumor_sample_stats>=50]
