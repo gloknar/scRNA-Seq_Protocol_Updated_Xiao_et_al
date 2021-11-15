@@ -1,3 +1,5 @@
+#### Instalación paquetes en R 4.1
+
 # Paralelizado instalación paquetes mediante `make` y `Ncpus` (4 hilos)
 Ncpus <- 4L
 Sys.setenv("MAKE" = "make -k -j 4")
