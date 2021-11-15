@@ -1,17 +1,18 @@
 #!/usr/bin/env bash
 
-###### download melanoma dataset #####
+###### Descargamos el dataset del melanoma #####
 
-url='ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE72nnn/GSE72056/suppl/GSE72056_melanoma_single_cell_revised_v2.txt.gz'
-wget $url || curl $url -o GSE72056_melanoma_single_cell_revised_v2.txt.gz
-gunzip GSE72056_melanoma_single_cell_revised_v2.txt.gz
+url='ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE72nnn/GSE72056/suppl/GSE72056_melanoma_single_cell_revised_v2.txt.gz'  # Recuerda que las single quotes en bash no interpretan metacarácteres, preservan el valor literal de la string
+wget $url || curl $url -o GSE72056_melanoma_single_cell_revised_v2.txt.gz     # Prueba a descargar el dataset mediante wget, y si falla, prueba con curl ( || significa OR en bash)
+gunzip GSE72056_melanoma_single_cell_revised_v2.txt.gz  # Descomprime el archivo descargado, equivalente a gzip -d <nombre_comprimido>
 
-#rename corrupt gene symbols due to incorrect conversion by Excel
+
+
+###### Corregimos nombres de genes incorrectos (causado por una conversión incorrecta desde Excel) #####
 # 1-Mar -> MARCH1
 # 1-Dec -> DEC1
 # 1-Sep -> SEPT1
 # SEPT15 should be SEP15
-
 
 command="sed"
 for (( i = 15; i > 0; i-- )); do
@@ -19,19 +20,23 @@ for (( i = 15; i > 0; i-- )); do
 done
 
 eval "cat GSE72056_melanoma_single_cell_revised_v2.txt | $command > GSE72056_melanoma_single_cell_corrected.txt"
-rm GSE72056_melanoma_single_cell_revised_v2.txt
-rm GSE72056_melanoma_single_cell_revised_v2.txt.gz
+rm GSE72056_melanoma_single_cell_revised_v2.txt       # Con el dataset ya corregido, eliminamos el dataset descargado (sin corregir)
+# rm GSE72056_melanoma_single_cell_revised_v2.txt.gz  # El archivo comprimido se borra automáticamente al descomprimirlo con gzip/gunzip, por lo que esta línea es innecesaria
 
-###### download head and neck dataset #####
-url="ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE103nnn/GSE103322/suppl/GSE103322_HNSCC_all_data.txt.gz"
+
+
+###### Descargamos el dataset del cancer de cabeza y cuello #####
+
+url='ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE103nnn/GSE103322/suppl/GSE103322_HNSCC_all_data.txt.gz'
 wget $url || curl $url -o GSE103322_HNSCC_all_data.txt.gz
 gunzip GSE103322_HNSCC_all_data.txt.gz
 
 
-##move the data to directory
-if [ ! -d "dataset" ]
+
+###### Movemos los datasets a su carpeta #####
+if [ ! -d "dataset" ]  # Si no existe la carpeta dataset, la creamos con mkdir. Ten en cuenta que debes dejar un espacio entre cada cosa dentro de los corchetes, si pones if [-d "'tal'], no funciona
 then
   mkdir dataset
 fi
 
-mv {GSE103322_HNSCC_all_data.txt,GSE72056_melanoma_single_cell_corrected.txt} dataset/
+mv {GSE103322_HNSCC_all_data.txt,GSE72056_melanoma_single_cell_corrected.txt} dataset/ # equivalente a mv GSE103322_HNSCC_all_data.txt dataset/ & mv GSE72056_melanoma_single_cell_corrected.txt dataset/
