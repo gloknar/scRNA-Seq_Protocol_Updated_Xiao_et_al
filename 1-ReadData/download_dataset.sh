@@ -19,14 +19,13 @@ for (( i = 15; i > 0; i-- )); do
 	command="$command -e \"s/$i-Mar/MARCH$i/g\" -e \"s/$i-Sep/SEPT$i/g\" -e \"s/$i-Dec/DEC$i/g\" -e \"s/SEPT15/SEP15/g\""
 done
 
-eval "cat GSE72056_melanoma_single_cell_revised_v2.txt | $command > GSE72056_melanoma_single_cell_corrected.txt"
+eval "cat GSE72056_melanoma_single_cell_revised_v2.txt | $command > GSE72056_melanoma_single_cell_corrected.txt" # Ejecuta el comando sed tal como lo configuramos arriba y guarda el output en el archivo GSE72056_melanoma_single_cell_corrected.txt
 rm GSE72056_melanoma_single_cell_revised_v2.txt       # Con el dataset ya corregido, eliminamos el dataset descargado (sin corregir)
 # rm GSE72056_melanoma_single_cell_revised_v2.txt.gz  # El archivo comprimido se borra automáticamente al descomprimirlo con gzip/gunzip, por lo que esta línea es innecesaria
 
 
 
 ###### Descargamos el dataset del cancer de cabeza y cuello #####
-
 url='ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE103nnn/GSE103322/suppl/GSE103322_HNSCC_all_data.txt.gz'
 wget $url || curl $url -o GSE103322_HNSCC_all_data.txt.gz
 gunzip GSE103322_HNSCC_all_data.txt.gz
@@ -34,7 +33,7 @@ gunzip GSE103322_HNSCC_all_data.txt.gz
 
 
 ###### Movemos los datasets a su carpeta #####
-if [ ! -d "dataset" ]  # Si no existe la carpeta dataset, la creamos con mkdir. Ten en cuenta que debes dejar un espacio entre cada cosa dentro de los corchetes, si pones if [-d "'tal'], no funciona
+if [ ! -d "dataset" ]  # Si no existe la carpeta "dataset", la creamos con mkdir. Ten en cuenta que debes dejar un espacio entre cada cosa dentro de los corchetes, si pones if [-d "tal"], no funciona
 then
   mkdir dataset
 fi
