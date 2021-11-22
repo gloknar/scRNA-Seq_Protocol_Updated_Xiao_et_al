@@ -35,6 +35,13 @@ if(!library(ggrepel,logical.return=T)){              # Si no está instalado ggr
   #install.packages("ggrepel")
 }
 
+# Instalamos car
+if(!library(car,logical.return=T)){              # Si no está instalado car, lanza una advertencia
+  warning("please install car and try again")
+  #install.packages("car")
+}
+
+
 # Descargamos GSEA 4.1.0
 if(!file.exists("GSEA_Linux_4.1.0.zip")){            # Si no hemos descargado el archivo comprimido de GSEA, lanza una advertencia
   warning("please download gsea-4.1.0.zip from http://software.broadinstitute.org/gsea/downloads.jsp")
