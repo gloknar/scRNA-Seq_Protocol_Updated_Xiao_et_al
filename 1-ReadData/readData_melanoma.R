@@ -1,83 +1,131 @@
-source("../utils.R")
+######################################################################################
+###########     0. Carga de paquetes, opciones y funciones de interés      ###########
+######################################################################################
+
+source("../utils.R") # Cargamos funciones definidas en el archivo `utils.R` 
 library(scater)
 library(stringr)
-options(stringsAsFactors=FALSE)
 library(reshape2)
+options(stringsAsFactors=FALSE)
+
 outdir <- "dataset/melanoma"
-if(!dir.exists(outdir)) dir.create(outdir)
-#################################################################################################
-# 1. Read the data
-#################################################################################################
-raw_tpm_file <- "dataset/GSE72056_melanoma_single_cell_corrected.txt"
-tmp_data <- read.table(raw_tpm_file,head=T,sep="\t",quote=NULL,stringsAsFactors=F)
+if(!dir.exists(outdir)) {dir.create(outdir)}  # Si no existe la carpeta `head_neck`, la creamos
 
-#there are two duplicated genes: MARCH1 and MARCH2
-#For each duplicated gene, remove the one with lower mean expression
-remove_rows <- c()
-march1_rows <- grep("^MARCH1$",tmp_data$Cell)
-march1_rows_mean <- apply(tmp_data[march1_rows,2:ncol(tmp_data)],1,mean)
-remove_rows <- c(remove_rows,names(march1_rows_mean)[order(march1_rows_mean)][1])
 
-march2_rows <- grep("^MARCH2$",tmp_data$Cell)
-march2_rows_mean <- apply(tmp_data[march2_rows,2:ncol(tmp_data)],1,mean)
+
+####################################################################################################
+
+#################################################################
+###########     1. Leemos el dataset de melanoma      ###########
+#################################################################
+
+# Los valores de expresión génica vienen en formato log2(TPM+1), o sea
+# cuasi-logaritmo binario de TPM (Transcripts Per Million). TPM se interpreta
+# como "por cada 1,000,000 moléculas de ARNm en la muestra secuenciada, x vienen
+# de este gen." Al ser una medida estandarizada por 10^6, los transcritos de
+# cada célula/muestra deberían sumar siempre 10^6. Si no se cumple eso, es que
+# nuestros datos están mal (fuentes: https://www.biostars.org/p/403916/ y
+# https://github.com/gpertea/stringtie/issues/213)
+
+dataset_crudo <- "dataset/GSE72056_melanoma_single_cell_corrected.txt"
+temporary_data <- read.table(dataset_crudo, head = T, sep = "\t",
+                             quote = NULL, stringsAsFactors = F)
+
+# Hay dos genes duplicados: MARCH1 y MARCH2. Eliminaremos las copias que tengan
+# la expresión media más baja
+march1_rows <- grep("^MARCH1$",temporary_data$Cell)
+march1_rows_mean <- apply(temporary_data[march1_rows,2:ncol(temporary_data)],1,mean)
+remove_rows <- c(names(march1_rows_mean)[order(march1_rows_mean)][1])
+
+march2_rows <- grep("^MARCH2$",temporary_data$Cell)
+march2_rows_mean <- apply(temporary_data[march2_rows,2:ncol(temporary_data)],1,mean)
 remove_rows <- c(remove_rows,names(march2_rows_mean)[order(march2_rows_mean)][1])
 remove_rows <- as.integer(remove_rows)
 
 
-#column data
-col_data = data.frame(tumor=t(tmp_data[1,2:ncol(tmp_data)]),malignant=t(tmp_data[2,2:ncol(tmp_data)]),
-                      cellType=t(tmp_data[3,2:ncol(tmp_data)]))
+# col_data` es un dataframe con los metadatos de las células y es necesario para
+# construir el objeto de tipo `sce` en el paso 3
+col_data = data.frame(tumor = t(temporary_data[1,2:ncol(temporary_data)]),
+                      malignant = t(temporary_data[2,2:ncol(temporary_data)]),
+                      cellType = t(temporary_data[3,2:ncol(temporary_data)]))
+
+# Por algún motivo no se crean bien los nombres de las columnas de `col_data`,
+# por lo que los asignamos manualmente
 colnames(col_data) <- c("tumor","malignant","cellType")
-col_data$tumor <- factor(paste0("T",col_data$tumor))
-#malignant(1=no,2=yes,0=unresolved)
+
+col_data$tumor <- factor(paste0("T",col_data$tumor)) # Los nombres de los melanomas tienen forma TXX
+
+
+# Recodificamos la columna `malignant` y la casteamos a factor 
 #non-malignant cell type (0=unclassfied,1=T,2=B,3=Macro.4=Endo.,5=CAF;6=NK)
-col_data[col_data$malignant==1,"malignant"] <- "Non-malignant"
-col_data[col_data$malignant==2,"malignant"] <- "Malignant"
-col_data[col_data$malignant==0,"malignant"] <- "Unresolved"
-col_data$malignant <- factor(col_data$malignant,levels=c("Non-malignant","Malignant","Unresolved"))
-col_data[col_data$cellType==0,"cellType"] <- "Unknown"
-col_data[col_data$cellType==1,"cellType"] <- "T cell"
-col_data[col_data$cellType==2,"cellType"] <- "B cell"
-col_data[col_data$cellType==3,"cellType"] <- "Macrophage"
-col_data[col_data$cellType==4,"cellType"] <- "Endothelial"
-col_data[col_data$cellType==5,"cellType"] <- "CAF"
-col_data[col_data$cellType==6,"cellType"] <- "NK"
-#some Unknown is malignant
+col_data$malignant <- car::recode(col_data$malignant, '0="Unresolved";1="Non-malignant";2="Malignant"')
+col_data$malignant <- factor(col_data$malignant)
+
+
+# Ídem para la columna cellType
+col_data$cellType <- car::recode(col_data$cellType, 
+  '0="Unknown";1="T cell";2="B cell";3="Macrophage";4="Endothelial";5="CAF";6="NK"')
+
+# Algunas células `Unknown` son en realidad tumorales (=`malignant`)
 tumor_select <- (col_data$cellType=="Unknown") & (col_data$malignant=="Malignant")
 col_data[tumor_select,"cellType"] <- "Malignant"
-col_data$cellType <- factor(col_data$cellType,levels = c("Unknown","Malignant","T cell","B cell","Macrophage","Endothelial","CAF","NK"))
+col_data$cellType <- factor(col_data$cellType)
 
-#remove the annotation lines
+
+# Con los metadatos de las células ya listos en `col_data`, eliminamos las filas
+# de las que provienen (de la 1 a la 3, más las copias de los genes MARCH1 y 2)
+# para quedarnos con un dataframe de genes x células. También eliminamos la
+# primera columna, que contiene los nombres de las filas
 remove_rows <- c(remove_rows,1,2,3)
-all_data <- tmp_data[-remove_rows,]
-rownames(all_data) <- all_data$Cell
-all_data$Cell=NULL
-rm(tmp_data)
+quasilog2_tpm <- temporary_data[-remove_rows,]
+rownames(quasilog2_tpm) <- quasilog2_tpm$Cell
+quasilog2_tpm <- quasilog2_tpm[,-1]
+rm(temporary_data)
+
+
 
 ####################################################################################################
-###2. marker the metabolic genes
+
+#############################################################################
+###########     2. Marcamos los genes de las rutas de interés     ###########
+#############################################################################
+
+pathways <- gmtPathways("../Data/KEGG_metabolism.gmt")  # Obtenemos una lista de rutas metabólicas a partir de un archivo .GMT
+metabolics <- unique(as.vector(unname(unlist(pathways))))  # Nos quedamos con los nombres únicos (=no repetidos) de los genes que participan en dichas rutas metabólicas, que son 1667 (los guardamos en un vector de strings)
+row_data <- data.frame(metabolic = rep(FALSE, nrow(quasilog2_tpm)), row.names = rownames(quasilog2_tpm))  # Creamos un dataframe que indica para cada gen si pertenece a las rutas de interés. Este objeto es necesario para crear el objeto de tipo `sce`
+row_data[rownames(row_data)%in%metabolics,"metabolic"] = TRUE  # Marcamos como TRUE los 1667 genes de interés, de un total de 23686 genes secuenciados... nos quedaremos sólo con los genes de interés en el paso de generar el objeto de tipo `Single Cell Experiment`
+
+
+
 ####################################################################################################
 
-pathways <- gmtPathways("../Data/KEGG_metabolism.gmt")
-metabolics <- unique(as.vector(unname(unlist(pathways))))
-row_data <- data.frame(metabolic=rep(FALSE,nrow(all_data)),row.names = rownames(all_data))
-row_data[rownames(row_data)%in%metabolics,"metabolic"]=TRUE
+#####################################################################################
+###########     3. Creamos el objeto `Single Cell Experiment` de scater   ###########
+#####################################################################################
 
-####################################################################################################
-#3. build scater object
-####################################################################################################
-all_data <- data.matrix(all_data)
-raw_tpm <- 2^ all_data - 1
+# Casteamos el dataframe de genes x células a una matriz (= todos los valores
+# son numéricos). Me aseguré de que no hay ningún NA ni Inf, los valores de
+# log2(TPM+1) están acotados entre [0,16], por lo que no se crean valores Inf al
+# calcular los TPM
+
+quasilog2_tpm <- data.matrix(quasilog2_tpm)
+raw_tpm <- (2^quasilog2_tpm) - 1
+# hist(apply(raw_tpm, 2, sum)) # La suma de TPMs de cada célula/muestra debería sumar 1 millón. Si no, está mal
 sce <- SingleCellExperiment(
-  assays = list(tpm=raw_tpm,exprs=all_data),
+  assays = list(tpm=raw_tpm,exprs=quasilog2_tpm),
   colData = col_data,
-  rowData = row_data
-)
+  rowData = row_data)
+
+
 
 ####################################################################################################
-#4. filtering the cells.
-# cutoff 50 
-####################################################################################################
+
+##################################################
+###########   4. Filtrado de células   ###########
+##################################################
+
+# Eliminaremos los tumores y las estirpes celulares que contengan < 50 células
+
 
 #malignant cells
 tumor_sce <- sce[,sce$cellType == "Malignant"]
