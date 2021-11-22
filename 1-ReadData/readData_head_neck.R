@@ -87,6 +87,7 @@ row_data[rownames(row_data)%in%metabolics,"metabolic"] = TRUE  # Marcamos como T
 quasilog2_tpm <- data.matrix(quasilog2_tpm)
 # sum(raw_tpm[,1])  # Las lecturas de 1 muestra no suman 1 millon...
 # range(quasilog2_tpm) El valor máximo solo puede ser 19.93157
+# hist(apply(raw_tpm, 2, sum), density  = 0.5) # La suma de TPMs de cada célula/muestra debería sumar 1 millón. Si no, está mal
 raw_tpm <- (2^quasilog2_tpm) - 1 # ¡¡¡¡En este paso se introducen Infinitos!!!!! Aquí se produce el error que me afecta al imputado de datos del dataset de head_neck
 sce <- SingleCellExperiment(assays = list(tpm = raw_tpm, exprs = quasilog2_tpm),
                             colData = col_data,
