@@ -55,8 +55,26 @@ assay(selected_tumor_sce,"exprs") <- data.matrix(log2(imputed_tpm + 1)) # actual
 
 
 
-# ME HE QUEDADO AQUÍ. AQUI ES DONDE DA ERROR EL SCRIPT
+# ME HE QUEDADO AQUÍ. AQUI ES DONDE DA ERROR EL SCRIPT. Hay valores infinitos, igual es eso
 # Imputación del non tumor
+getwd()
+outDir
+list.files("dataset/head_neck/nontumor.tpm")
+min(selected_nontumor_tpm)
+
+anyMissing(selected_nontumor_sce@assays@data$exprs)
+anyNA(selected_nontumor_sce@assays@data$exprs)
+anyMissing(selected_nontumor_sce@assays@data$tpm)
+anyNA(selected_nontumor_sce@assays@data$tpm)
+range(selected_nontumor_sce@assays@data$tpm)
+range(selected_nontumor_sce@assays@data$exprs)
+
+range(selected_tumor_sce@assays@data$tpm) # Este no tiene inf
+range(selected_tumor_sce@assays@data$exprs)
+
+
+
+# DA ERROR PORQUE SE CREAN TPMs infinitos
 scimpute(file.path(outDir, "nontumor.tpm"), infile = "csv", outfile = "csv",
          out_dir = file.path(outDir, "non-malignant_"), labeled = TRUE,
          labels = as.vector(labels_nontumor),	type = "TPM", genelen = genelen,
