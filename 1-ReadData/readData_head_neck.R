@@ -8,7 +8,6 @@ library(stringr)
 library(reshape2)
 library(plyr)
 options(stringsAsFactors=FALSE)
-
 outdir <- "dataset/head_neck"
 if(!dir.exists(outdir)) {dir.create(outdir)}  # Si no existe la carpeta `head_neck`, la creamos
 
@@ -42,7 +41,6 @@ cell_type <- as.character(temporary_data[5,]) # Crea un vector de strings a part
 malignant_cells <- as.character(temporary_data[3,]) == "1"   # La fila 3 codifica si la célula es normal ("0") o tumoral ("1")
 cell_type[malignant_cells] <- "Malignant"  # Coge el vector de tipos celulares, y las que tengan en la fila 3 el valor 1, las recataloga como "Malignant"
 cell_type[cell_type==0] <- "Unknown" # Las células catalogadas como "0" se renombran a "Unknown" (tipo celular desconocido)
-
 
 # col_data` es un dataframe con los metadatos de las células y es necesario para
 # construir el objeto de tipo `sce` en el paso 3
@@ -82,13 +80,14 @@ row_data[rownames(row_data)%in%metabolics,"metabolic"] = TRUE  # Marcamos como T
 # Casteamos el dataframe de genes x células a una matriz (= todos los valores
 # son numéricos). Me aseguré de que no hay ningún NA ni Inf, los valores de
 # log2(TPM+1) están acotados entre [0,6068], lo cual es imposible (TPM mide por
-# millón de lecturas, no puede tener un valor superior a 10**6)
+# millón de lecturas, no puede tener un valor superior a 10^6 = 2^19.93157). Voy
+# a transformar todos los valores superiores a 16 en 16 para acotar los
+# log2(TPM+1) entre [0,16]
 
 quasilog2_tpm <- data.matrix(quasilog2_tpm)
-# sum(raw_tpm[,1])  # Las lecturas de 1 muestra no suman 1 millon...
-# range(quasilog2_tpm) El valor máximo solo puede ser 19.93157
-# hist(apply(raw_tpm, 2, sum), density  = 0.5) # La suma de TPMs de cada célula/muestra debería sumar 1 millón. Si no, está mal
-raw_tpm <- (2^quasilog2_tpm) - 1 # ¡¡¡¡En este paso se introducen Infinitos!!!!! Aquí se produce el error que me afecta al imputado de datos del dataset de head_neck
+quasilog2_tpm[quasilog2_tpm > 16] <- 16 # Con esta acotación deberíamos evitar crear valores infinitos
+raw_tpm <- (2^quasilog2_tpm) - 1 # Ahora no deberían introducirse infinitos y el paso de la imputación debería funcionar
+# hist(apply(raw_tpm, 2, sum)) # La mayoría de células deberían sumar 1 millón de TPMs. Si no, está mal
 sce <- SingleCellExperiment(assays = list(tpm = raw_tpm, exprs = quasilog2_tpm),
                             colData = col_data,
                             rowData = row_data)
@@ -109,7 +108,6 @@ sce <- SingleCellExperiment(assays = list(tpm = raw_tpm, exprs = quasilog2_tpm),
 tumor_sce <- sce[,sce$cellType == "Malignant"]
 nontumor_sce <- sce[,!sce$cellType%in%c("Unknown","Malignant")]
 
-
 # Nos quedamos con los tumores de más de 50 células
 tumor_sample_stats <- table(tumor_sce$tumor)
 tumor_sample_select <- names(tumor_sample_stats)[tumor_sample_stats>=50] # Eliminaron los tipos celulares con <50 células
@@ -120,17 +118,24 @@ nontumor_stats <- table(nontumor_sce$cellType)
 nontumor_select <- names(nontumor_stats)[nontumor_stats>=50]    # Eliminaron los tipos celulares con <50 células
 selected_nontumor_sce <- nontumor_sce[,nontumor_sce$cellType %in% nontumor_select]
 
-# Crea el objeto `selected_sce`, con células de todos los tipos celulares
+# Crea el objeto `filtered_sce`, con células de todos los tipos celulares
 # excepto los `Unknown` y los que tienen < 50 células. Básicamente filtramos las
 # células y pasamos de tener 5902 a 5502
 selected_columns <- unique(c(colnames(selected_tumor_sce),colnames(selected_nontumor_sce)))
-selected_sce <- sce[,colnames(sce) %in% selected_columns]
+filtered_sce <- sce[,colnames(sce) %in% selected_columns]
 
 # Renombramos los tumores de MEEIX a HNSX
-selected_sce$tumor <- factor(selected_sce$tumor)
-selected_sce$tumor <- mapvalues(selected_sce$tumor, 
+filtered_sce$tumor <- factor(filtered_sce$tumor)
+filtered_sce$tumor <- mapvalues(filtered_sce$tumor, 
                                 from = c("MEEI5","MEEI6","MEEI7","MEEI8","MEEI10","MEEI12","MEEI13","MEEI16","MEEI17","MEEI18","MEEI20","MEEI22","MEEI23","MEEI24","MEEI25","MEEI26","MEEI28","MEEIC"),
                                 to = paste0("HNS",seq(18))) # mapvalues sustituye los valores que tu le digas de un vector/factor por otros
 
-#saveRDS(sce,file.path(outdir,"sce.rds"))
-saveRDS(selected_sce,file.path(outdir,"selected_sce.rds"))
+
+
+####################################################################################################
+
+####################################################################
+###########   5. Guardamos los objetos sce resultantes   ###########
+####################################################################
+
+saveRDS(filtered_sce,file.path(outdir,"filtered_sce.rds"))
