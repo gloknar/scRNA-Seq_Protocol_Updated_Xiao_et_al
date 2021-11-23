@@ -1,80 +1,140 @@
+#######################################################################
+###########     0. Carga de paquetes, opciones y datos      ###########
+#######################################################################
+
+# Paquetes
 library(scImpute)
 library(scater)
 
-args <- commandArgs()
-tumor <- "head_neck"  # args
-num_cores <- 6 #for windows it should be 1
+# Opciones
+argumento <- "melanoma"
+outDir <- file.path("./dataset", argumento) # Carpeta donde guardaremos todos los archivos relacionados con la imputación del objeto `sce`
+if(!dir.exists(outDir)) dir.create(outDir,recursive=TRUE) # Crea la carpeta ./datasets/melanoma/  si no existe
+num_cores <- 6 # Usar 1 en Windows (scImpute usa mc.apply...)
 
-selected_sce <- readRDS(file.path("../1-ReadData/dataset/head_neck/selected_sce.rds"))
-
-outDir <- file.path("dataset/head_neck") # "dataset",tumor
-if(!dir.exists(outDir)) dir.create(outDir,recursive=TRUE) # Crea la carpeta ./datasets/head_neck/  si no existe
-
-#impute the tumor and non-tumor seperately
-selected_tumor_sce <- selected_sce[,selected_sce$cellType=="Malignant"]
-selected_nontumor_sce <- selected_sce[,selected_sce$cellType!="Malignant"]
+# Leemos el dataset del melanoma con las células filtradas
+filtered_sce <- readRDS(file.path("../1-ReadData/dataset",argumento,"filtered_sce.rds"))
 
 
-# NOTA: el bolsillo `selected_tumor_sce@assays@data$exprs` contiene la
-# expresión génica de las células en formato log2(TMP+1);;
-# El bolsillo `selected_tumor_sce@assays@data$tpm` contiene la expresión génica
-# en formato TPM
 
-#write the tpm matrix
-selected_tumor_tpm <- tpm(selected_tumor_sce)
-selected_nontumor_tpm <- tpm(selected_nontumor_sce) 
-labels_tumor <- selected_tumor_sce$tumor
-labels_nontumor <- selected_nontumor_sce$cellType
+####################################################################################################
 
-write.csv(selected_tumor_tpm,file.path(outDir,"tumor.tpm"))
-write.csv(selected_nontumor_tpm,file.path(outDir,"nontumor.tpm"))
+###########################################################################
+###########     1. Preparado de datasets y matrices de TPM      ###########
+###########################################################################
 
-##prepare the gene length file (esto servía para pasar de TPM a read counts mediante TPM*gene length)
-all_gene_lengths <- read.table("../Data/gene_length.txt",sep="\t",header=F,row.names=1)
-tmp <- intersect(rownames(all_gene_lengths),rownames(selected_tumor_tpm)) # La intersección busca nombres de genes compartidos en ambos conjuntos de nombres de genes
-if (length(tmp) != nrow(selected_tumor_tpm)){ # Compara si el nº de genes en selected_tumor_tpm y all_gene_lengths es igual
+# Creamos 2 objetos `sce`: Uno que contiene las células tumorales y otro que
+# contiene las células sanas (las imputaremos por separado)
+filtered_sce_tumor <- filtered_sce[,filtered_sce$cellType=="Malignant"]
+filtered_sce_nontumor <- filtered_sce[,filtered_sce$cellType!="Malignant"]
+
+# Creamos las matrices de TPMs de ambos subconjuntos celulares
+# NOTA: el bolsillo `filtered_sce_(non)tumor@assays@data$exprs` contiene la
+# expresión génica de las células en formato log2(TPM+1);;
+# El bolsillo `filtered_sce_(non)tumor@assays@data$tpm` contiene la expresión
+# génica en formato TPM
+filtered_sce_tumor_tpm <- tpm(filtered_sce_tumor)
+filtered_sce_nontumor_tpm <- tpm(filtered_sce_nontumor) 
+labels_tumor <- filtered_sce_tumor$tumor
+labels_nontumor <- filtered_sce_nontumor$cellType
+
+# Guardamos las matrices de TPMs en archivos
+write.csv(filtered_sce_tumor_tpm,file.path(outDir,"tumor.tpm"))
+write.csv(filtered_sce_nontumor_tpm,file.path(outDir,"nontumor.tpm"))
+
+
+
+####################################################################################################
+
+############################################################################
+###########     2. Obtención de las longitudes de los genes      ###########
+############################################################################
+
+# Cargamos el archivo que contiene la longitud de todos los genes humanos (esto
+# servía para pasar de TPM a read counts mediante TPM*gene length)
+all_gene_lengths <- read.table("../Data/gene_length.txt", sep = "\t",
+                               header = F, row.names = 1)
+
+# Comprobamos si tenemos el mismo nº de genes en nuestro dataset y en el archivo
+# con las longitudes de los genes
+temporary <- intersect(rownames(all_gene_lengths),rownames(filtered_sce_tumor_tpm)) # La intersección busca nombres de genes compartidos en ambos conjuntos de nombres de genes
+if (length(temporary) != nrow(filtered_sce_tumor_tpm)){ # Compara si el nº de genes en filtered_sce_tumor_tpm y all_gene_lengths es igual. Si todo está bien, no pasa nada, pero si no, emite una advertencia y termina el programa
   warning("check the length file")
-	print(setdiff(rownames(selected_tumor_tpm),rownames(all_gene_lengths)))
+	print(setdiff(rownames(filtered_sce_tumor_tpm),rownames(all_gene_lengths)))
 	q()
 }
 
-genelen <- all_gene_lengths[rownames(selected_tumor_tpm),]
-genelen <- as.numeric(as.vector(genelen)) # Crea una matriz numérica de 23686 * 1 con la longitud de cada gen
+# Preparamos el vector de longitudes de genes necesario para scImpute
+genelen <- all_gene_lengths[rownames(filtered_sce_tumor_tpm),]
+genelen <- as.numeric(as.vector(genelen))
 
+
+
+####################################################################################################
+
+####################################################################################
+###########     3.1 Imputación de la expresión génica (TPM) tumoral      ###########
+####################################################################################
 
 # Imputamos genes con dropout >= 0.5 para evitar sobre-imputación
-scimpute(file.path(outDir, "tumor.tpm"), infile = "csv", outfile = "csv",
-         out_dir = file.path(outDir, "malignant_"), labeled = TRUE, 
-         labels = as.vector(labels_tumor), type = "TPM", genelen = genelen, 
-         drop_thre = 0.5, ncores = num_cores)
+scimpute(count_path = file.path(outDir, "tumor.tpm"), infile = "csv", 
+         outfile = "csv", out_dir = paste(outDir,"malignant/", sep = "/"), 
+         labeled = TRUE, labels = as.vector(labels_tumor), type = "TPM", 
+         genelen = genelen, drop_thre = 0.5, ncores = num_cores)
 
 
-imputed_tpm <- read.csv(file.path(outDir,"malignant_scimpute_count.csv"),header=T,row.names=1)
-tpm(selected_tumor_sce) <- data.matrix(imputed_tpm) 
-assay(selected_tumor_sce,"exprs") <- data.matrix(log2(imputed_tpm + 1)) # actualiza los bolsillos tpm y exprs con los valores imputados de los genes
+# Con la imputación ya hecha, la cargamos en memoria y actualizamos los
+# bolsillos `filtered_sce_tumor@assays@data$exprs` y
+# `filtered_sce_tumor@assays@data$tpm`
+imputed_tpm_tumor <- read.csv(file.path(outDir,"malignant/scimpute_count.csv"),
+                              header = T, row.names = 1)
+tpm(filtered_sce_tumor) <- data.matrix(imputed_tpm_tumor)
+assay(filtered_sce_tumor,"exprs") <- data.matrix(log2(imputed_tpm_tumor + 1)) # Recuerda que `exprs` contiene la expresion génica en formato log2(TPM+1)
 
 
 
-# ME HE QUEDADO AQUÍ. AQUI ES DONDE DA ERROR EL SCRIPT
-# Imputación del non tumor
-scimpute(file.path(outDir, "nontumor.tpm"), infile = "csv", outfile = "csv",
-         out_dir = file.path(outDir, "non-malignant_"), labeled = TRUE,
-         labels = as.vector(labels_nontumor),	type = "TPM", genelen = genelen,
-         drop_thre = 0.5, ncores = num_cores)
+####################################################################################################
 
-imputed_tpm <- read.csv(file.path(outDir,"non-malignant_scimpute_count.csv"),header=T,row.names=1)
-tpm(selected_nontumor_sce) <- data.matrix(imputed_tpm) 
-assay(selected_nontumor_sce,"exprs") <- data.matrix(log2(imputed_tpm + 1))
+###################################################################################
+###########     3.2 Imputación de la expresión génica (TPM) normal      ###########
+###################################################################################
 
-#save as sce
-impute_tpm <- cbind(tpm(selected_tumor_sce), tpm(selected_nontumor_sce))
-impute_exprs <- cbind(assay(selected_tumor_sce,"exprs"),assay(selected_nontumor_sce,"exprs"))
-impute_tpm <- impute_tpm[,colnames(selected_sce)]
-impute_exprs <- impute_exprs[,colnames(selected_sce)]
+# Imputamos genes con dropout >= 0.5 para evitar sobre-imputación
+scimpute(count_path = file.path(outDir, "nontumor.tpm"), infile = "csv", 
+         outfile = "csv", out_dir = paste(outDir,"non-malignant/", sep = "/"), 
+         labeled = TRUE, labels = as.vector(labels_nontumor),	type = "TPM", 
+         genelen = genelen, drop_thre = 0.5, ncores = num_cores)
 
-selected_impute_sce <- SingleCellExperiment(
-  assays = list(tpm = impute_tpm, exprs=impute_exprs),
-  colData = colData(selected_sce),
-  rowData = rowData(selected_sce)
-)
-saveRDS(selected_impute_sce,file.path(outDir,"selected_impute_sce.rds"))
+
+
+# Con la imputación ya hecha, la cargamos en memoria y actualizamos los
+# bolsillos `filtered_sce_tumor@assays@data$exprs` y
+# `filtered_sce_tumor@assays@data$tpm`
+imputed_tpm_nontumor <- read.csv(file.path(outDir,"non-malignant/scimpute_count.csv"),
+                                 header = T, row.names = 1)
+tpm(filtered_sce_nontumor) <- data.matrix(imputed_tpm_nontumor) 
+assay(filtered_sce_nontumor,"exprs") <- data.matrix(log2(imputed_tpm_nontumor + 1))
+
+
+
+####################################################################################################
+
+###################################################################################
+###########     4 Construcción del nuevo objeto `sce` imputado      ###############
+###################################################################################
+
+# Concatenamos los TPMs de las células sanas y las tumorales y los ordenamos
+# como estaban en el objeto original `filtered sce`. Repetimos el proceso para
+# los log2(TPM+1)
+imputed_tpm_total <- cbind(tpm(filtered_sce_tumor), tpm(filtered_sce_nontumor)) # Unimos en una sola matriz la expresión de células tumorales y sanas
+imputed_tpm_total <- imputed_tpm_total[,colnames(filtered_sce)] # Ordenan las células para que se queden en el orden que estaban en el objeto original `filtered_sce`
+imputed_exprs_total <- cbind(assay(filtered_sce_tumor,"exprs"),assay(filtered_sce_nontumor,"exprs"))
+imputed_exprs_total <- imputed_exprs_total[,colnames(filtered_sce)] # Ordenan las células para que se queden en el orden que estaban en el objeto original `filtered_sce`
+
+# Creamos el nuevo objeto de tipo `sce` con la expresión génica imputada
+imputed_sce <- SingleCellExperiment(
+  assays = list(tpm = imputed_tpm_total, exprs = imputed_exprs_total),
+  colData = colData(filtered_sce),
+  rowData = rowData(filtered_sce))
+
+saveRDS(imputed_sce,file.path(outDir,"imputed_sce.rds"))  #  selected_impute_sce.rds

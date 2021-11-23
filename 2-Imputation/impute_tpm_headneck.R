@@ -7,6 +7,7 @@ num_cores <- 6 #for windows it should be 1
 
 selected_sce <- readRDS(file.path("../1-ReadData/dataset/head_neck/selected_sce.rds"))
 
+
 outDir <- file.path("dataset/head_neck") # "dataset",tumor
 if(!dir.exists(outDir)) dir.create(outDir,recursive=TRUE) # Crea la carpeta ./datasets/head_neck/  si no existe
 
