@@ -47,7 +47,7 @@ Rscript impute_tpm.R head_neck
 cd ../
 ```
 
-Este paso utiliza el paquete ["scImpute"](https://github.com/Vivianstats/scImpute) para imputar los valores faltantes de expresión génica. 
+Este paso utiliza el paquete ["scImpute"](https://github.com/Vivianstats/scImpute) para imputar los valores faltantes de aquellos genes que presentan una expresión génica nula en > 50% de las células estudiadas (_i.e. droput rate_ > 50%).
 
 ## Normalizado y evaluación de distintos métodos de normalización
 
