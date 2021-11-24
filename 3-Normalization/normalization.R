@@ -1,3 +1,8 @@
+#######################################################################
+###########     0. Carga de paquetes, opciones y datos      ###########
+#######################################################################
+
+# Paquetes
 library(scater)
 library(ggplot2)
 library(dplyr)
@@ -6,26 +11,35 @@ library(RColorBrewer)
 library(viridis)
 library(edgeR)
 library(scran)
-options(stringsAsFactors=FALSE)
 
-args <- commandArgs()
-tumor <- args[6]
 
-outDir <- file.path("dataset",tumor)
-if(!dir.exists(outDir)) dir.create(outDir,recursive=TRUE)
+# Opciones
+options(stringsAsFactors = FALSE)
+# argumento <- commandArgs()
+# argumento <- argumento[6]
+argumento = "head_neck"
+outDir <- file.path("./dataset", argumento)
+if(!dir.exists(outDir)) {                 # Crea la carpeta ./dataset/<head_neck o melanoma>/  si no existe
+  dir.create(outDir,recursive = TRUE)
+}
 
-#1 load the data
-selected_impute_sce <- readRDS(file.path("../2-Imputation/dataset",tumor,"selected_impute_sce.rds"))
-selected_sce <- readRDS(file.path("../1-ReadData/dataset/",tumor,"selected_sce.rds"))
-cell_types <- unique(selected_sce$cellType)
+
+# Leemos el dataset del head_neck/melanoma con la expresión genica imputada y el
+# dataset con las células filtradas. Cargamos también los tipos celulares
+# presentes en los datasets
+imputed_sce <- readRDS(file.path("../2-Imputation/dataset", argumento, "imputed_sce.rds"))
+filtered_sce <- readRDS(file.path("../1-ReadData/dataset", argumento, "filtered_sce.rds"))
+cell_types <- unique(filtered_sce$cellType)
+
+
 
 ## choose the genes with higher expression and low-dropout rate 
 dropout_cutoff <- 0.75
-gene_select_mat <- matrix(FALSE,nrow=nrow(selected_impute_sce),
+gene_select_mat <- matrix(FALSE,nrow=nrow(imputed_sce),
                           ncol=length(cell_types),
-                          dimnames = list(rownames(selected_impute_sce),cell_types))
+                          dimnames = list(rownames(imputed_sce),cell_types))
 for(c in cell_types){
-  each_sce <- selected_impute_sce[,selected_impute_sce$cellType == c]
+  each_sce <- imputed_sce[,imputed_sce$cellType == c]
   each_exp <- assay(each_sce,"exprs")
   dropout_rate <- apply(each_exp,1, function(x) sum(x>0)/ncol(each_exp))
   select <- dropout_rate >= dropout_cutoff
@@ -41,15 +55,15 @@ low_dropout_genes <- rownames(gene_select_mat)[rowSums(gene_select_mat) >= lengt
 #prepare the gene length file
 #convert the TPM to count scale
 all_gene_lengths <- read.table(file.path("../Data/","gene_length.txt"),sep="\t",header=F,row.names=1)
-tmp <- intersect(rownames(all_gene_lengths),rownames(selected_impute_sce))
-if (length(tmp) != nrow(selected_impute_sce)){
+tmp <- intersect(rownames(all_gene_lengths),rownames(imputed_sce))
+if (length(tmp) != nrow(imputed_sce)){
   warning("check the length file")
 }
-genelen <- all_gene_lengths[rownames(selected_impute_sce),]
+genelen <- all_gene_lengths[rownames(imputed_sce),]
 genelen <- as.numeric(as.vector(genelen))
 
 #1. up-quantile normalization
-selected_impute_tpm <- tpm(selected_impute_sce)
+selected_impute_tpm <- tpm(imputed_sce)
 selected_impute_counts <- sweep(selected_impute_tpm, 1, genelen, FUN = "*")
 
 median.sf <- calcNormFactors(selected_impute_counts[low_dropout_genes,],method="upperquartile",p=0.75)
@@ -77,7 +91,7 @@ saveRDS(selected_impute_tpm_norm,file.path(outDir,"TMM_tpm.rds"))
 
 
 #4. scran, deconvolution
-scran.sf <- scran::computeSumFactors(selected_impute_counts[low_dropout_genes,],clusters=selected_impute_sce$cellType)
+scran.sf <- scran::computeSumFactors(selected_impute_counts[low_dropout_genes,],clusters=imputed_sce$cellType)
 summary(scran.sf)
 selected_impute_tpm_norm <- t(t(selected_impute_tpm) / scran.sf)
 selected_impute_exp_norm <- log2(selected_impute_tpm_norm+1)
@@ -86,7 +100,7 @@ saveRDS(selected_impute_tpm_norm,file.path(outDir,"Deconvolution_tpm.rds"))
 
 
 ###Evaluation of the normalization methods:
-all_cell_type <- as.vector(selected_sce$cellType)
+all_cell_type <- as.vector(filtered_sce$cellType)
 for(m in c("RLE","TMM","UpperQuartile","Deconvolution"))
 {
   rds_file <- file.path(outDir,paste0(m,"_tpm.rds"))
