@@ -90,6 +90,8 @@ selected_impute_exp_norm <- log2(selected_impute_tpm_norm + 1)
 saveRDS(selected_impute_tpm_norm,file.path(outDir,"TMM_tpm.rds"))
 
 
+# NOTA: Los normalizamos por TMM, RLE y up-quantile me salen iguales que en el
+# paper, pero el de deconvolución NO!!!!! MIRAR QUÉ PASA AHÍ
 #4. scran, deconvolution
 scran.sf <- scran::computeSumFactors(selected_impute_counts[low_dropout_genes,],clusters=imputed_sce$cellType)
 summary(scran.sf)
