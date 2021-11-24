@@ -4,13 +4,15 @@ options(stringsAsFactors=FALSE)
 
 args <- commandArgs()
 tumor <- args[6]
-outDir <- file.path("dataset",tumor)
-if(!dir.exists(outDir)) dir.create(outDir,recursive=TRUE)
+outDir <- file.path("./datasets", tumor)
+if(!dir.exists(outDir)) {
+  dir.create(outDir,recursive=TRUE)
+}
 
 #1. Loading the tumor data
-selected_sce <- readRDS(file.path("../2-Imputation/dataset",tumor,"selected_impute_sce.rds"))
+imputed_sce <- readRDS(file.path("../2-Imputation/datasets",tumor,"imputed_sce.rds"))
 
-selected_metabolic_sce <- selected_sce[rowData(selected_sce)$metabolic,]
+selected_metabolic_sce <- imputed_sce[rowData(imputed_sce)$metabolic,]
 selected_tumor_metabolic_sce <- selected_metabolic_sce[,selected_metabolic_sce$cellType=="Malignant"]
 selected_nontumor_metabolic_sce <- selected_metabolic_sce[,selected_metabolic_sce$cellType!="Malignant"]
 
