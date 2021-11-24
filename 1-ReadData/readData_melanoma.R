@@ -7,7 +7,7 @@ library(scater)
 library(stringr)
 library(reshape2)
 options(stringsAsFactors=FALSE)
-outdir <- "dataset/melanoma"
+outdir <- "datasets/melanoma"
 if(!dir.exists(outdir)) {dir.create(outdir)}  # Si no existe la carpeta `head_neck`, la creamos
 
 
@@ -26,7 +26,7 @@ if(!dir.exists(outdir)) {dir.create(outdir)}  # Si no existe la carpeta `head_ne
 # nuestros datos están mal (fuentes: https://www.biostars.org/p/403916/ y
 # https://github.com/gpertea/stringtie/issues/213)
 
-dataset_crudo <- "dataset/GSE72056_melanoma_single_cell_corrected.txt"
+dataset_crudo <- "datasets/GSE72056_melanoma_single_cell_corrected.txt"
 temporary_data <- read.table(dataset_crudo, head = T, sep = "\t",
                              quote = NULL, stringsAsFactors = F)
 

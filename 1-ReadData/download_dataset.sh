@@ -33,9 +33,9 @@ gunzip GSE103322_HNSCC_all_data.txt.gz
 
 
 ###### Movemos los datasets a su carpeta #####
-if [ ! -d "dataset" ]  # Si no existe la carpeta "dataset", la creamos con mkdir. Ten en cuenta que debes dejar un espacio entre cada cosa dentro de los corchetes, si pones if [-d "tal"], no funciona
+if [ ! -d "datasets" ]  # Si no existe la carpeta "datasets", la creamos con mkdir. Ten en cuenta que debes dejar un espacio entre cada cosa dentro de los corchetes, si pones if [-d "tal"], no funciona
 then
-  mkdir dataset
+  mkdir datasets
 fi
 
-mv {GSE103322_HNSCC_all_data.txt,GSE72056_melanoma_single_cell_corrected.txt} dataset/ # equivalente a mv GSE103322_HNSCC_all_data.txt dataset/ & mv GSE72056_melanoma_single_cell_corrected.txt dataset/
+mv {GSE103322_HNSCC_all_data.txt,GSE72056_melanoma_single_cell_corrected.txt} datasets/ # equivalente a mv GSE103322_HNSCC_all_data.txt dataset/ & mv GSE72056_melanoma_single_cell_corrected.txt dataset/

@@ -8,12 +8,12 @@ library(scater)
 
 # Opciones
 argumento <- "melanoma"
-outDir <- file.path("./dataset", argumento) # Carpeta donde guardaremos todos los archivos relacionados con la imputación del objeto `sce`
+outDir <- file.path("./datasets", argumento) # Carpeta donde guardaremos todos los archivos relacionados con la imputación del objeto `sce`
 if(!dir.exists(outDir)) dir.create(outDir,recursive=TRUE) # Crea la carpeta ./datasets/melanoma/  si no existe
 num_cores <- 6 # Usar 1 en Windows (scImpute usa mc.apply...)
 
 # Leemos el dataset del melanoma con las células filtradas
-filtered_sce <- readRDS(file.path("../1-ReadData/dataset",argumento,"filtered_sce.rds"))
+filtered_sce <- readRDS(file.path("../1-ReadData/datasets",argumento,"filtered_sce.rds"))
 
 
 

@@ -8,7 +8,7 @@ library(stringr)
 library(reshape2)
 library(plyr)
 options(stringsAsFactors=FALSE)
-outdir <- "dataset/head_neck"
+outdir <- "datasets/head_neck"
 if(!dir.exists(outdir)) {dir.create(outdir)}  # Si no existe la carpeta `head_neck`, la creamos
 
 
@@ -27,7 +27,7 @@ if(!dir.exists(outdir)) {dir.create(outdir)}  # Si no existe la carpeta `head_ne
 # nuestros datos están mal (fuentes: https://www.biostars.org/p/403916/ y
 # https://github.com/gpertea/stringtie/issues/213)
 
-dataset_crudo <- "dataset/GSE103322_HNSCC_all_data.txt"
+dataset_crudo <- "datasets/GSE103322_HNSCC_all_data.txt"
 temporary_data <- read.table(dataset_crudo, head = T, sep = "\t", row.names = 1,
                              quote = "\'", stringsAsFactors = F)
 
