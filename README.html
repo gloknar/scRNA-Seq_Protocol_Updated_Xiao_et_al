@@ -170,7 +170,7 @@ pre code {
 <div id="proyecto-scrna-seq-de-ovarios" class="section level1">
 <h1>Proyecto scRNA-seq de ovarios</h1>
 <p>Xiao <em>et al.</em> publicaron en 2019 un <a href="https://www.nature.com/articles/s41467-019-11738-0">artículo</a> en Nature Communications en el que caracterizan 2 tipos de tumores a nivel de transcriptoma de célula única y GSEA (Gene Set Enrichment Analysis). El producto de dicha investigación está disponible en forma de <a href="https://github.com/LocasaleLab/Single-Cell-Metabolic-Landscape">repositorio</a> con todo el código para <code>R 3.5</code> + <code>bash</code></p>
-<p>Nosotros queremos replicar dicho protocolo en nuestras muestras del Karolinska Institutet, las cuales son bulk RNA-seq y scRNA-seq de ovarios. Para ello he creado el presente repositorio, en el cual se traduce el protocolo de Xiao y compañeros a la versión más actualizada de R a fecha de la redacción de este documento, <code>R 4.1</code>.</p>
+<p>Nosotros queremos replicar dicho protocolo en nuestras muestras del Karolinska Institutet, las cuales son bulk RNA-seq y scRNA-seq de ovarios. Para ello he creado el presente repositorio, en el cual se traduce el protocolo de Xiao y compañeros a la versión más actualizada de R a fecha de redacción de este documento, <code>R 4.1</code>.</p>
 <p><br></p>
 <p>Adam C, 2021 | <a href="mailto:acm95@ugr.es" class="email">acm95@ugr.es</a></p>
 <hr />
@@ -202,7 +202,7 @@ cd ../</code></pre>
 Rscript impute_tpm.R melanoma 
 Rscript impute_tpm.R head_neck
 cd ../</code></pre>
-<p>Este paso utiliza el paquete <a href="https://github.com/Vivianstats/scImpute">“scImpute”</a> para imputar los valores faltantes de expresión génica.</p>
+<p>Este paso utiliza el paquete <a href="https://github.com/Vivianstats/scImpute">“scImpute”</a> para imputar los valores faltantes de aquellos genes que presentan una expresión génica nula en &gt; 50% de las células estudiadas (<em>i.e. dropout rate</em> &gt; 50%).</p>
 </div>
 <div id="normalizado-y-evaluación-de-distintos-métodos-de-normalización" class="section level2">
 <h2>Normalizado y evaluación de distintos métodos de normalización</h2>
