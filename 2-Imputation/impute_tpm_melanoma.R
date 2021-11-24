@@ -46,14 +46,15 @@ write.csv(filtered_sce_nontumor_tpm,file.path(outDir,"nontumor.tpm"))
 
 ####################################################################################################
 
-############################################################################
-###########     2. Obtención de las longitudes de los genes      ###########
-############################################################################
+#############################################################################################
+###########     2. Obtención de las longitudes de los genes en pares de bases     ###########
+#############################################################################################
 
-# Cargamos el archivo que contiene la longitud de todos los genes humanos (esto
-# servía para pasar de TPM a read counts mediante TPM*gene length)
+# Cargamos el archivo que contiene la longitud de todos los genes humanos en
+# pares de bases (esto servía para pasar de TPM a read counts mediante TPM*gene
+# length)
 all_gene_lengths <- read.table("../Data/gene_length.txt", sep = "\t",
-                               header = F, row.names = 1)
+                               header = F, row.names = 1)  # Longitudes en bp
 
 # Comprobamos si tenemos el mismo nº de genes en nuestro dataset y en el archivo
 # con las longitudes de los genes
@@ -106,10 +107,9 @@ scimpute(count_path = file.path(outDir, "nontumor.tpm"), infile = "csv",
          genelen = genelen, drop_thre = 0.5, ncores = num_cores)
 
 
-
 # Con la imputación ya hecha, la cargamos en memoria y actualizamos los
-# bolsillos `filtered_sce_tumor@assays@data$exprs` y
-# `filtered_sce_tumor@assays@data$tpm`
+# bolsillos `filtered_sce_nontumor@assays@data$exprs` y
+# `filtered_sce_nontumor@assays@data$tpm`
 imputed_tpm_nontumor <- read.csv(file.path(outDir,"non-malignant/scimpute_count.csv"),
                                  header = T, row.names = 1)
 tpm(filtered_sce_nontumor) <- data.matrix(imputed_tpm_nontumor) 
