@@ -137,4 +137,4 @@ imputed_sce <- SingleCellExperiment(
   colData = colData(filtered_sce),
   rowData = rowData(filtered_sce))
 
-saveRDS(imputed_sce,file.path(outDir,"imputed_sce.rds"))  #  selected_impute_sce.rds
+saveRDS(imputed_sce,file.path(outDir,"imputed_sce.rds"))
