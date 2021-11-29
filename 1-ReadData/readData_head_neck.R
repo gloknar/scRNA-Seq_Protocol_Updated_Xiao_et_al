@@ -42,14 +42,14 @@ malignant_cells <- as.character(temporary_data[3,]) == "1"   # La fila 3 codific
 cell_type[malignant_cells] <- "Malignant"  # Coge el vector de tipos celulares, y las que tengan en la fila 3 el valor 1, las recataloga como "Malignant"
 cell_type[cell_type==0] <- "Unknown" # Las células catalogadas como "0" se renombran a "Unknown" (tipo celular desconocido)
 
-# col_data` es un dataframe con los metadatos de las células y es necesario para
-# construir el objeto de tipo `sce` en el paso 3
-col_data <- data.frame(tumor = tumor_samples_names,
+# `metadatos` es un dataframe con los metadatos de las células y es necesario
+# para construir el objeto de tipo `sce` en el paso 3
+metadatos <- data.frame(tumor = tumor_samples_names,
                        cellType = cell_type,
                        lymph = as.integer(temporary_data[2,]),
                        row.names = colnames(temporary_data))
 
-# Con los metadatos de las células ya listos en `col_data`, eliminamos las filas
+# Con los metadatos de las células ya listos en `metadatos`, eliminamos las filas
 # de las que provienen (de la 1 a la 5) para quedarnos con un dataframe de genes
 # x células.
 remove_rows <- c(1,2,3,4,5)
@@ -89,7 +89,7 @@ quasilog2_tpm[quasilog2_tpm > 16] <- 16 # Con esta acotación deberíamos evitar
 raw_tpm <- (2^quasilog2_tpm) - 1 # Ahora no deberían introducirse infinitos y el paso de la imputación debería funcionar
 # hist(apply(raw_tpm, 2, sum)) # La mayoría de células deberían sumar 1 millón de TPMs. Si no, está mal
 sce <- SingleCellExperiment(assays = list(tpm = raw_tpm, exprs = quasilog2_tpm),
-                            colData = col_data,
+                            colData = metadatos,
                             rowData = row_data)
 
 
