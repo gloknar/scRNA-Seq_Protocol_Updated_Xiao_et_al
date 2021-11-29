@@ -9,7 +9,7 @@ library(scater)
 # Opciones
 argumento <- commandArgs()[6]
 outDir <- file.path("./datasets", argumento) # Carpeta donde guardaremos todos los archivos relacionados con la imputación del objeto `sce`
-if(!dir.exists(outDir)) {                   # Crea la carpeta ./datasets/<head_neck o melanoma>/  si no existe
+if(!dir.exists(outDir)) {                   # Crea la carpeta ./datasets/<nombre del tumor>/  si no existe
   dir.create(outDir,recursive = TRUE)
 } 
 num_cores <- 6                              # Usar 1 en Windows (scImpute usa mc.apply...)
