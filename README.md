@@ -36,7 +36,8 @@ Rscript readData_head_neck.R
 Rscript readData_melanoma.R
 cd ../
 ```
-The gene expression profiles and the annotations of the cell types will be stored as R objects.
+
+Con el script de bash descargamos los datasets desde el GEO, y con sendos scripts de R corregimos erratas presentes en dichos datasets, filtramos las células, creamos 2 objetos de tipo `Single Cell Experiment` y los guardamos en los archivos `<head_neck/melanoma>/filtered_sce.rds` 
 
 ## Imputación de NAs
 
