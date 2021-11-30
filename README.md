@@ -71,7 +71,7 @@ Rscript inter_tumor_distance.R head_neck
 cd ../
 ```
 
-En este paso se emplea el algoritmo t-SNE para visualizar la expresión de genes metabólicos en millones de células (El resultado puede variar ligeramente respecto al gráfico del artículo científico debido a la inicialización aleatoria del algoritmo). También se genera la matriz de correlación de spearman para mostrar la heterogeneidad inter-tumoral usando dichos genes metabólicos.
+En este paso se emplea el algoritmo t-SNE para visualizar la expresión de genes metabólicos en miles de células (el resultado puede variar ligeramente respecto al gráfico del artículo científico debido a la inicialización aleatoria del algoritmo). También se genera la matriz de correlación de spearman para mostrar la heterogeneidad entre tumores usando dichos genes metabólicos.
 
 ## Actividad de las rutas metabólicas en distintos tipos celulares
 
