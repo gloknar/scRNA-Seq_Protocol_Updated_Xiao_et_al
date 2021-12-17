@@ -18,22 +18,31 @@ options(stringsAsFactors = FALSE)
 # argumento <- commandArgs()
 # argumento <- argumento[6]
 argumento = "head_neck"
-outDir <- file.path("./dataset", argumento)
-if(!dir.exists(outDir)) {                 # Crea la carpeta ./dataset/<head_neck o melanoma>/  si no existe
+outDir <- file.path("./datasets", argumento)
+if(!dir.exists(outDir)) {                 # Crea la carpeta ./datasets/<head_neck o melanoma>/  si no existe
   dir.create(outDir,recursive = TRUE)
 }
 
 
-# Leemos el dataset del head_neck/melanoma con la expresión genica imputada y el
+# Leemos el dataset del head_neck/melanoma con la expresión génica imputada y el
 # dataset con las células filtradas. Cargamos también los tipos celulares
-# presentes en los datasets
-imputed_sce <- readRDS(file.path("../2-Imputation/dataset", argumento, "imputed_sce.rds"))
-filtered_sce <- readRDS(file.path("../1-ReadData/dataset", argumento, "filtered_sce.rds"))
+# presentes en dichos dataset
+imputed_sce <- readRDS(file.path("../2-Imputation/datasets", argumento, "imputed_sce.rds"))
+filtered_sce <- readRDS(file.path("../1-ReadData/datasets", argumento, "filtered_sce.rds"))
 cell_types <- unique(filtered_sce$cellType)
 
 
 
-## choose the genes with higher expression and low-dropout rate 
+####################################################################################################
+
+####################################################################
+###########     1. Selección de genes de referencia      ###########
+####################################################################
+
+# Para normalizar la expresión de nuestros genes, usaremos como referencia
+# aquellos que tengan una expresión elevada y sean detectados en >25% de las
+# células (tasa de dropout <75%)
+
 dropout_cutoff <- 0.75
 gene_select_mat <- matrix(FALSE,nrow=nrow(imputed_sce),
                           ncol=length(cell_types),
@@ -45,6 +54,7 @@ for(c in cell_types){
   select <- dropout_rate >= dropout_cutoff
   gene_select_mat[select,c] <- TRUE
 }
+
 print("the number of genes selected:")
 print(sum(rowSums(gene_select_mat) >= length(cell_types)))
 low_dropout_genes <- rownames(gene_select_mat)[rowSums(gene_select_mat) >= length(cell_types)]
