@@ -102,7 +102,8 @@ assay(filtered_sce_tumor,"exprs") <- data.matrix(log2(imputed_tpm_tumor + 1)) # 
 ###########     3.2 Imputación de la expresión génica (TPM) normal      ###########
 ###################################################################################
 
-# Imputamos genes con dropout >= 0.5 para evitar sobre-imputación
+# Imputamos genes con dropout >= 0.5 (expresión nula en 50% o más de las
+# células) para evitar sobre-imputación
 scimpute(count_path = file.path(outDir, "nontumor.tpm"), infile = "csv", 
          outfile = "csv", out_dir = paste(outDir,"non-malignant/", sep = "/"), 
          labeled = TRUE, labels = as.vector(labels_nontumor),	type = "TPM", 
