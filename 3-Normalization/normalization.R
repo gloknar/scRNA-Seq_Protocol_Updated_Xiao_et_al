@@ -28,8 +28,7 @@ if(!dir.exists(outDir)) {                 # Crea la carpeta ./datasets/<head_nec
 # dataset con las células filtradas. Cargamos también los tipos celulares
 # presentes en dichos dataset
 imputed_sce <- readRDS(file.path("../2-Imputation/datasets", argumento, "imputed_sce.rds"))
-filtered_sce <- readRDS(file.path("../1-ReadData/datasets", argumento, "filtered_sce.rds"))
-cell_types <- unique(filtered_sce$cellType)
+linajes_celulares <- unique(imputed_sce$cellType)
 
 
 
@@ -40,24 +39,31 @@ cell_types <- unique(filtered_sce$cellType)
 ####################################################################
 
 # Para normalizar la expresión de nuestros genes, usaremos como referencia
-# aquellos que tengan una expresión elevada y sean detectados en >25% de las
-# células (tasa de dropout <75%)
+# aquellos que tengan una expresión elevada y sean detectados en 25% o más de
+# las células (tasa de dropout < 75%)
 
-dropout_cutoff <- 0.75
-gene_select_mat <- matrix(FALSE,nrow=nrow(imputed_sce),
-                          ncol=length(cell_types),
-                          dimnames = list(rownames(imputed_sce),cell_types))
-for(c in cell_types){
-  each_sce <- imputed_sce[,imputed_sce$cellType == c]
-  each_exp <- assay(each_sce,"exprs")
-  dropout_rate <- apply(each_exp,1, function(x) sum(x>0)/ncol(each_exp))
-  select <- dropout_rate >= dropout_cutoff
-  gene_select_mat[select,c] <- TRUE
+limite_dropout <- 0.75
+
+# Creamos una matriz de genes X tipos celulares llena de FALSE, que usaremos de
+# plantilla para seleccionar, para cada linaje celular, los genes con un dropout
+# < 75%
+matriz_seleccion_genes <- matrix(FALSE,
+                                 nrow = nrow(imputed_sce),
+                                 ncol = length(linajes_celulares),
+                                 dimnames = list(rownames(imputed_sce),linajes_celulares))
+
+# Iteramos sobre cada tipo celular
+for(c in linajes_celulares){
+  sce_por_tipo_celular <- imputed_sce[,imputed_sce$cellType == c] # hacemos un subset para cada tipo celular del objeto sce con la expresión génica imputada
+  matriz_genica_log_linaje_celular <- assay(sce_por_tipo_celular,"exprs")  # Calculamos la expresión en log2(TPM+1) de los genes de las células seleccionadas
+  tasa_deteccion_gen <- apply(matriz_genica_log_linaje_celular,1, function(x) sum(x>0)/ncol(matriz_genica_log_linaje_celular))  # Calculamos para cada gen el % de células con expresión génica no nula
+  genes_seleccionados <- tasa_deteccion_gen >= limite_dropout
+  matriz_seleccion_genes[genes_seleccionados,c] <- TRUE
 }
 
 print("the number of genes selected:")
-print(sum(rowSums(gene_select_mat) >= length(cell_types)))
-low_dropout_genes <- rownames(gene_select_mat)[rowSums(gene_select_mat) >= length(cell_types)]
+print(sum(rowSums(matriz_seleccion_genes) >= length(linajes_celulares)))
+low_dropout_genes <- rownames(matriz_seleccion_genes)[rowSums(matriz_seleccion_genes) >= length(linajes_celulares)]
 
 ##########################################################################################
 ## different normalization methods:
@@ -112,7 +118,7 @@ saveRDS(selected_impute_tpm_norm,file.path(outDir,"Deconvolution_tpm.rds"))
 
 
 ###Evaluation of the normalization methods:
-all_cell_type <- as.vector(filtered_sce$cellType)
+all_cell_type <- as.vector(imputed_sce$cellType)
 for(m in c("RLE","TMM","UpperQuartile","Deconvolution"))
 {
   rds_file <- file.path(outDir,paste0(m,"_tpm.rds"))
