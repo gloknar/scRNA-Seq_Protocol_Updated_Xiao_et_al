@@ -28,6 +28,7 @@ if(!dir.exists(outDir)) {                 # Crea la carpeta ./datasets/<head_nec
 # dataset con las células filtradas. Cargamos también los tipos celulares
 # presentes en dichos dataset
 imputed_sce <- readRDS(file.path("../2-Imputation/datasets", argumento, "imputed_sce.rds"))
+imputed_sce$cellType <- droplevels(imputed_sce$cellType)
 linajes_celulares <- unique(imputed_sce$cellType)
 
 
@@ -109,7 +110,11 @@ saveRDS(selected_impute_tpm_norm,file.path(outDir,"TMM_tpm.rds"))
 # NOTA: Los normalizamos por TMM, RLE y up-quantile me salen iguales que en el
 # paper, pero el de deconvolución NO!!!!! MIRAR QUÉ PASA AHÍ
 #4. scran, deconvolution
-scran.sf <- scran::computeSumFactors(selected_impute_counts[low_dropout_genes,],clusters=imputed_sce$cellType)
+
+# Parece que la solución era usar una funcion que sí admite matrices... o sea,
+# usar "calculateSumFactors" en lugar de "computeSumFactors"
+scran.sf <- scran::calculateSumFactors(selected_impute_counts[low_dropout_genes,],clusters=imputed_sce$cellType)
+# scran.sf <- scran::computeSumFactors(selected_impute_counts[low_dropout_genes,],clusters=imputed_sce$cellType)
 summary(scran.sf)
 selected_impute_tpm_norm <- t(t(selected_impute_tpm) / scran.sf)
 selected_impute_exp_norm <- log2(selected_impute_tpm_norm+1)
