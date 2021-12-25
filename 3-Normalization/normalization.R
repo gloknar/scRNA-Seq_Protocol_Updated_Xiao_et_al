@@ -141,12 +141,10 @@ saveRDS(matriz_tpm_norm, file.path(outDir,"UpperQuartile_tpm.rds"))
 ###########     4. Normalización TMM (EdgeR)      ###########
 #############################################################
 
-# A partir de la matriz de conteos, calculamos el factor de escalado para cada
-# célula usando como referencia los genes con poco dropout (apartado 1)
+# Calculamos factores de escalado celulares.
 factores_escalado_TMM <- calcNormFactors(matriz_conteos[low_dropout_genes,], method = "TMM")
 
-# Para normalizar la expresión génica, divide los TPM de cada célula por su
-# factor de escalado correspondiente obtenido con el método "TMM".
+# Normalizamos con el método "TMM"
 matriz_tpm_norm <- sweep(imputed_sce@assays@data$tpm, 2, factores_escalado_TMM, "/")
 # matriz_log_tpm_imputada_norm <- log2(matriz_tpm_norm + 1)
 
@@ -161,31 +159,27 @@ saveRDS(matriz_tpm_norm,file.path(outDir,"TMM_tpm.rds"))
 ###########     5. Normalización RLE (DESeq2)      ###########
 ##############################################################
 
-# A partir de la matriz de conteos, calculamos el factor de escalado para cada
-# célula usando como referencia los genes con poco dropout (apartado 1)
-
-# get the function from "https://github.com/mikelove/DESeq2/blob/master/R/core.R"
+# Calculamos factores de escalado celulares. Aquí usamos la función
+# "estimateSizeFactorsForMatrix" del paquete DESeq2 versión 1.35.0
+# ("https://github.com/mikelove/DESeq2/blob/master/R/core.R")
 source("../utils.R")
 factores_escalado_RLE <- estimateSizeFactorsForMatrix(matriz_conteos[low_dropout_genes,])
 
-BiocManager::install("DESeq2")
-DESeq2
-
-# Para normalizar la expresión génica, divide los TPM de cada célula por su
-# factor de escalado correspondiente obtenido con el método "RLE".
-matriz_tpm_imputada <- sweep(x, 2, factores_escalado_RLE, "/")
-# matriz_log_tpm_imputada_norm <- log2(matriz_tpm_imputada_norm + 1)
-
+# Normalizamos con el método "RLE"
+matriz_tpm_norm <- sweep(imputed_sce@assays@data$tpm, 2, factores_escalado_RLE, "/")
+# matriz_log_tpm_imputada_norm <- log2(matriz_tpm_norm + 1)
 
 # Guardamos la matriz de TPM normalizada para más tarde
-saveRDS(matriz_tpm_imputada_norm,file.path(outDir,"RLE_tpm.rds"))
+saveRDS(matriz_tpm_norm, file.path(outDir,"RLE_tpm.rds"))
 
 
 
+####################################################################################################
 
-# NOTA: Los normalizamos por TMM, RLE y up-quantile me salen iguales que en el
-# paper, pero el de deconvolución NO!!!!! MIRAR QUÉ PASA AHÍ
-#4. scran, deconvolution
+############################################################################
+###########     6. Normalización por deconvolución  (scran)      ###########
+############################################################################
+
 
 # Parece que la solución era usar una funcion que sí admite matrices... o sea,
 # usar "calculateSumFactors" en lugar de "computeSumFactors"
