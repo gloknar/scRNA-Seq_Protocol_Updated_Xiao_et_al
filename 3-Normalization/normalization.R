@@ -207,49 +207,24 @@ rm(imputed_sce, matriz_conteos)
 gc()
 
 
-for(m in c("RLE","TMM","UpperQuartile","Deconvolution"))
+# Creamos los boxplots de los distintos métodos de normalizado probados
+for(metodo in c("RLE","TMM","UpperQuartile","Deconvolution"))
 {
-  rds_file <- file.path(outDir,paste0(m,"_tpm.rds"))
-  norm_tpm <- readRDS(rds_file) 
+  # Cargamos la matriz de TPM normalizada con el método en cuestión
+  ruta_archivo_tpm <- file.path(outDir,paste0(metodo,"_tpm.rds"))
+  matriz_tpm_norm <- readRDS(ruta_archivo_tpm) 
 
-  ##### check the ratio distribution
-  low_dropout_genes_tpm <- norm_tpm[low_dropout_genes, ]
-  low_dropout_genes_tpm_mean <- apply(low_dropout_genes_tpm, 1, function(x) by(x, all_cell_type, mean))
-  low_dropout_genes_tpm_ratio <- t(low_dropout_genes_tpm_mean) / colMeans(low_dropout_genes_tpm_mean)
-  dat <- reshape2::melt(low_dropout_genes_tpm_ratio)
-  p <- ggplot(dat,aes(x=Var2,y=value)) +
-    geom_boxplot(outlier.alpha=0.1)+ theme_classic() + 
-    ylab("expression ratio") + xlab("") +    
-    theme(axis.text.x = element_text(angle=45,hjust=1))
-  ggsave(file.path(outDir,paste0(m,"_ratio_distribution.pdf")),p,width=3.5,height=2.5)
+  # Calculamos una especie de fold change para cada gen y cada estirpe celular
+  low_dropout_genes_tpm <- matriz_tpm_norm[low_dropout_genes,]  # De los genes normalizados, cogemos solo los de referencia
+  low_dropout_genes_tpm_mean_by_cell_type <- apply(low_dropout_genes_tpm, 1, function(x) by(x, all_cell_type, mean)) # Calculamos la expresión media de cada gen por cada tipo celular
+  low_dropout_genes_tpm_ratio <- t(low_dropout_genes_tpm_mean_by_cell_type) / colMeans(low_dropout_genes_tpm_mean_by_cell_type) # Divide la expresión media de cada gen en cada tipo celular por la media global del gen para calcular una especie de fold change. 
+  datos <- reshape2::melt(low_dropout_genes_tpm_ratio) # Aplanamos el dataframe para que ggplot2 pueda usarlo correctamente
+  
+  # Creamos los boxplots y los guardamos en un pdf
+  p <- ggplot(datos,aes(x=Var2,y=value)) +
+       geom_boxplot(outlier.alpha=0.1)+ theme_classic() + 
+       ylab("Gene expression ratio") + xlab("") +    
+       theme(axis.text.x = element_text(angle=45,hjust=1))
+  ggsave(file.path(outDir,paste0(metodo,"_ratio_distribution.pdf")), p, 
+         width = 3.5, height = 2.5)
 }
-
-
-
-
-
-
-m <-  "UpperQuartile"
-ruta_archivo_tpm <- file.path(outDir,paste0(m,"_tpm.rds"))
-matriz_tpm_norm <- readRDS(ruta_archivo_tpm)
-
-##### check the ratio distribution
-low_dropout_genes_tpm <- matriz_tpm_norm[low_dropout_genes,] # De los genes normalizados, cogemos solo los de referencia
-low_dropout_genes_tpm_mean <- apply(low_dropout_genes_tpm, 1, function(x) by(x, all_cell_type, mean)) # Calculamos para cada tipo celular la expresión media de cada gen
-
-
-View(low_dropout_genes_tpm_mean)
-colMeans(low_dropout_genes_tpm_mean)
-View(t(low_dropout_genes_tpm_mean)/colMeans(low_dropout_genes_tpm_mean))
-
-View(low_dropout_genes_tpm_mean / colMeans(low_dropout_genes_tpm_mean))
-
-
-
-low_dropout_genes_tpm_ratio <- t(low_dropout_genes_tpm_mean) / colMeans(low_dropout_genes_tpm_mean)
-dat <- reshape2::melt(low_dropout_genes_tpm_ratio)
-p <- ggplot(dat,aes(x=Var2,y=value)) +
-  geom_boxplot(outlier.alpha=0.1)+ theme_classic() + 
-  ylab("expression ratio") + xlab("") +    
-  theme(axis.text.x = element_text(angle=45,hjust=1))
-ggsave(file.path(outDir,paste0(m,"_ratio_distribution.pdf")),p,width=3.5,height=2.5)
