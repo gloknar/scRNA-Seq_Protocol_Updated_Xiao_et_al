@@ -56,8 +56,8 @@ matriz_seleccion_genes <- matrix(FALSE,
 
 # Iteramos sobre cada estirpe celular
 for(tipo in linajes_celulares){
-  sce_por_tipo_celular <- imputed_sce[,imputed_sce$cellType == tipo] # hacemos un subset para cada tipo celular del objeto sce con la expresión génica imputada
-  matriz_genica_log_linaje_celular <- assay(sce_por_tipo_celular,"exprs")  # Calculamos la expresión en log2(TPM+1) de los genes de las células seleccionadas
+  sce_linaje_celular <- imputed_sce[,imputed_sce$cellType == tipo] # hacemos un subset para cada tipo celular del objeto sce con la expresión génica imputada
+  matriz_genica_log_linaje_celular <- assay(sce_linaje_celular,"exprs")  # Calculamos la expresión en log2(TPM+1) de los genes de las células seleccionadas
   tasa_deteccion_gen <- apply(matriz_genica_log_linaje_celular,1, function(x) sum(x>0)/ncol(matriz_genica_log_linaje_celular))  # Calculamos para cada gen el % de células con expresión génica no nula
   genes_seleccionados <- tasa_deteccion_gen >= tasa_deteccion_minima # Seleccionamos como TRUE aquellos genes con expresion no nula en >= 75% de las células de la estirpe en cuestión (tasa dropout < 25%)
   matriz_seleccion_genes[genes_seleccionados,tipo] <- TRUE
@@ -70,9 +70,9 @@ low_dropout_genes <- rownames(matriz_seleccion_genes)[rowSums(matriz_seleccion_g
 
 
 # Limpiamos RAM
-# rm(sce_por_tipo_celular, matriz_genica_log_linaje_celular, tasa_deteccion_gen,
-#    genes_seleccionados, tasa_deteccion_minima, tipo)
-# gc(verbose = F)
+rm(sce_por_tipo_celular, matriz_genica_log_linaje_celular, tasa_deteccion_gen,
+   genes_seleccionados, tasa_deteccion_minima, tipo)
+gc(verbose = F)
 
 
 
@@ -83,7 +83,7 @@ low_dropout_genes <- rownames(matriz_seleccion_genes)[rowSums(matriz_seleccion_g
 ############################################################################
 
 # Cargamos la longitud de los genes en pares de bases, tal como hicimos en el
-# punto 2 del paso de imputado
+# apartado 2 del paso de imputado
 all_gene_lengths <- read.table(file.path("../Data/","gene_length.txt"), 
                                sep = "\t", header = F, row.names = 1)
 
@@ -102,6 +102,16 @@ genelen <- all_gene_lengths[rownames(imputed_sce),]
 genelen <- as.numeric(genelen)
 
 
+# A partir de los TPM del objeto sce imputado, calculamos los conteos de los
+# transcritos de ARNm (i.e. tamaño de librería), paso necesario para calcular el
+# factor de escalado de cada célula. Tamaño librería = TPM * longitud gen (en
+# pares de bases)
+matriz_conteos <- sweep(imputed_sce@assays@data$tpm, 1, genelen, FUN = "*") 
+
+# Nota: sweep es un apply que recorre de manera recursiva el 3er argumento
+# (STATS), o sea hace objeto[1] * genelen[1], objeto[2] * genelen[2]...
+
+
 
 ####################################################################################################
 
@@ -109,47 +119,68 @@ genelen <- as.numeric(genelen)
 ###########     3. Normalización Upper-Quartile (EdgeR)      ###########
 ########################################################################
 
-# Guardamos la expresión TPM de los genes del objeto sce imputado y la
-# multiplicamos por sus longitudes génicas para obtener el nº de lecturas crudas
-# para cada gen (necesario para calcular el factor de escalado con
-# "calcNormFactors")
-matriz_tpm_imputada <- tpm(imputed_sce)
-matriz_conteos_imputada <- sweep(matriz_tpm_imputada, 1, genelen, FUN = "*") # Nota: sweep es un apply que recorre de manera recursiva el 3er argumento, o sea hace objeto[1] * genelen[1], objeto[2] * genelen[2]...
-
-# Calculamos el factor de escalado para cada célula usando como referencia los
-# genes con poco dropout (apartado 1)
-factores_escalado_UQ_norm <- calcNormFactors(matriz_conteos_imputada[low_dropout_genes,],
+# A partir de la matriz de conteos, calculamos el factor de escalado para cada
+# célula usando como referencia los genes con poco dropout (apartado 1)
+factores_escalado_UQ <- calcNormFactors(matriz_conteos[low_dropout_genes,],
                              method = "upperquartile", p = 0.75)
 
-# Para normalizar la expresión génica, divide los TPM imputados de cada célula
-# por su factor de escalado correspondiente obtenido con el método
-# "upperquartile".
-matriz_tpm_imputada_norm <- sweep(matriz_tpm_imputada, 2, factores_escalado_UQ_norm, "/")
-# matriz_log_tpm_imputada_norm <- log2(matriz_tpm_imputada_norm + 1)
+# Para normalizar la expresión génica, divide los TPM de cada célula por su
+# factor de escalado correspondiente obtenido con el método "upperquartile".
+matriz_tpm_norm <- sweep(imputed_sce@assays@data$tpm, 2, factores_escalado_UQ, "/")
+# matriz_log_tpm_imputada_norm <- log2(matriz_tpm_norm + 1)
 
 
 # Guardamos la matriz de TPM normalizada para más tarde
-saveRDS(matriz_tpm_imputada_norm,file.path(outDir,"UpperQuartile_tpm.rds"))
+saveRDS(matriz_tpm_norm, file.path(outDir,"UpperQuartile_tpm.rds"))
 
 
-#2.DESeq2 normalization
+
+####################################################################################################
+
+#############################################################
+###########     4. Normalización TMM (EdgeR)      ###########
+#############################################################
+
+# A partir de la matriz de conteos, calculamos el factor de escalado para cada
+# célula usando como referencia los genes con poco dropout (apartado 1)
+factores_escalado_TMM <- calcNormFactors(matriz_conteos[low_dropout_genes,], method = "TMM")
+
+# Para normalizar la expresión génica, divide los TPM de cada célula por su
+# factor de escalado correspondiente obtenido con el método "TMM".
+matriz_tpm_norm <- sweep(imputed_sce@assays@data$tpm, 2, factores_escalado_TMM, "/")
+# matriz_log_tpm_imputada_norm <- log2(matriz_tpm_norm + 1)
+
+# Guardamos la matriz de TPM normalizada para más tarde
+saveRDS(matriz_tpm_norm,file.path(outDir,"TMM_tpm.rds"))
+
+
+
+####################################################################################################
+
+##############################################################
+###########     5. Normalización RLE (DESeq2)      ###########
+##############################################################
+
+# A partir de la matriz de conteos, calculamos el factor de escalado para cada
+# célula usando como referencia los genes con poco dropout (apartado 1)
+
 # get the function from "https://github.com/mikelove/DESeq2/blob/master/R/core.R"
 source("../utils.R")
-deseq2_sf <- estimateSizeFactorsForMatrix(matriz_conteos_imputada[low_dropout_genes,])
-matriz_tpm_imputada_norm <- t(t(matriz_tpm_imputada) / deseq2_sf)
+factores_escalado_RLE <- estimateSizeFactorsForMatrix(matriz_conteos[low_dropout_genes,])
+
+BiocManager::install("DESeq2")
+DESeq2
+
+# Para normalizar la expresión génica, divide los TPM de cada célula por su
+# factor de escalado correspondiente obtenido con el método "RLE".
+matriz_tpm_imputada <- sweep(x, 2, factores_escalado_RLE, "/")
 # matriz_log_tpm_imputada_norm <- log2(matriz_tpm_imputada_norm + 1)
 
 
 # Guardamos la matriz de TPM normalizada para más tarde
 saveRDS(matriz_tpm_imputada_norm,file.path(outDir,"RLE_tpm.rds"))
 
-#3. edgeR (TMM)
-edgeR_sf <- calcNormFactors(matriz_conteos_imputada[low_dropout_genes,],method="TMM")
-matriz_tpm_imputada_norm <- t(t(matriz_tpm_imputada) / edgeR_sf)
-# matriz_log_tpm_imputada_norm <- log2(matriz_tpm_imputada_norm + 1)
 
-# Guardamos la matriz de TPM normalizada para más tarde
-saveRDS(matriz_tpm_imputada_norm,file.path(outDir,"TMM_tpm.rds"))
 
 
 # NOTA: Los normalizamos por TMM, RLE y up-quantile me salen iguales que en el
@@ -158,8 +189,8 @@ saveRDS(matriz_tpm_imputada_norm,file.path(outDir,"TMM_tpm.rds"))
 
 # Parece que la solución era usar una funcion que sí admite matrices... o sea,
 # usar "calculateSumFactors" en lugar de "computeSumFactors"
-scran.sf <- scran::calculateSumFactors(matriz_conteos_imputada[low_dropout_genes,],clusters=imputed_sce$cellType)
-# scran.sf <- scran::computeSumFactors(matriz_conteos_imputada[low_dropout_genes,],clusters=imputed_sce$cellType)
+scran.sf <- scran::calculateSumFactors(matriz_conteos[low_dropout_genes,],clusters=imputed_sce$cellType)
+# scran.sf <- scran::computeSumFactors(matriz_conteos[low_dropout_genes,],clusters=imputed_sce$cellType)
 summary(scran.sf)
 matriz_tpm_imputada_norm <- t(t(matriz_tpm_imputada) / scran.sf)
 # matriz_log_tpm_imputada_norm <- log2(matriz_tpm_imputada_norm+1)
