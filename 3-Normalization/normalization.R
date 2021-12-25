@@ -180,21 +180,28 @@ saveRDS(matriz_tpm_norm, file.path(outDir,"RLE_tpm.rds"))
 ###########     6. Normalización por deconvolución  (scran)      ###########
 ############################################################################
 
-
 # Parece que la solución era usar una funcion que sí admite matrices... o sea,
 # usar "calculateSumFactors" en lugar de "computeSumFactors"
-scran.sf <- scran::calculateSumFactors(matriz_conteos[low_dropout_genes,],clusters=imputed_sce$cellType)
-# scran.sf <- scran::computeSumFactors(matriz_conteos[low_dropout_genes,],clusters=imputed_sce$cellType)
-summary(scran.sf)
-matriz_tpm_imputada_norm <- t(t(matriz_tpm_imputada) / scran.sf)
-# matriz_log_tpm_imputada_norm <- log2(matriz_tpm_imputada_norm+1)
+factores_escalado_deconvolucion <- scran::calculateSumFactors(matriz_conteos[low_dropout_genes,], 
+                                   clusters = imputed_sce$cellType)
+
+# Normalizamos con el método de deconvolución
+matriz_tpm_norm <- sweep(tpm(imputed_sce), 2, factores_escalado_deconvolucion, "/")
+# matriz_log_tpm_imputada_norm <- log2(matriz_tpm_norm + 1)
 
 # Guardamos la matriz de TPM normalizada para más tarde
-saveRDS(matriz_tpm_imputada_norm,file.path(outDir,"Deconvolution_tpm.rds"))
+saveRDS(matriz_tpm_norm, file.path(outDir,"Deconvolution_tpm.rds"))
 
 
-###Evaluation of the normalization methods:
+
+####################################################################################################
+
+############################################################################################
+###########     7. Benchmark de los métodos de normalización para scRNA-seq      ###########
+############################################################################################
+
 all_cell_type <- as.vector(imputed_sce$cellType)
+
 for(m in c("RLE","TMM","UpperQuartile","Deconvolution"))
 {
   rds_file <- file.path(outDir,paste0(m,"_tpm.rds"))
@@ -211,3 +218,23 @@ for(m in c("RLE","TMM","UpperQuartile","Deconvolution"))
     theme(axis.text.x = element_text(angle=45,hjust=1))
   ggsave(file.path(outDir,paste0(m,"_ratio_distribution.pdf")),p,width=3.5,height=2.5)
 }
+
+
+
+
+
+
+m <-  "UpperQuartile"
+rds_file <- file.path(outDir,paste0(m,"_tpm.rds"))
+norm_tpm <- readRDS(rds_file) 
+
+##### check the ratio distribution
+low_dropout_genes_tpm <- norm_tpm[low_dropout_genes, ]
+low_dropout_genes_tpm_mean <- apply(low_dropout_genes_tpm, 1, function(x) by(x, all_cell_type, mean))
+low_dropout_genes_tpm_ratio <- t(low_dropout_genes_tpm_mean) / colMeans(low_dropout_genes_tpm_mean)
+dat <- reshape2::melt(low_dropout_genes_tpm_ratio)
+p <- ggplot(dat,aes(x=Var2,y=value)) +
+  geom_boxplot(outlier.alpha=0.1)+ theme_classic() + 
+  ylab("expression ratio") + xlab("") +    
+  theme(axis.text.x = element_text(angle=45,hjust=1))
+ggsave(file.path(outDir,paste0(m,"_ratio_distribution.pdf")),p,width=3.5,height=2.5)
