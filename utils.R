@@ -19,12 +19,24 @@ get_os <- function() {
   }
 }
 
-##from :  https://github.com/mikelove/DESeq2/blob/master/R/core.R
+
+## Función de normalizado de DESeq2 versión 1.35.0, obtenida de:
+## https://github.com/mikelove/DESeq2/blob/master/R/core.R
 estimateSizeFactorsForMatrix <- function(counts, locfunc=stats::median,
-                                         geoMeans, controlGenes) {
+                                         geoMeans, controlGenes,
+                                         type=c("ratio","poscounts")) {
+  type <- match.arg(type, c("ratio","poscounts"))
   if (missing(geoMeans)) {
     incomingGeoMeans <- FALSE
-    loggeomeans <- rowMeans(log(counts))
+    if (type == "ratio") {
+      loggeomeans <- rowMeans(log(counts))
+    } else if (type == "poscounts") {
+      lc <- log(counts)
+      lc[!is.finite(lc)] <- 0
+      loggeomeans <- rowMeans(lc)
+      allZero <- rowSums(counts) == 0
+      loggeomeans[allZero] <- -Inf
+    }
   } else {
     incomingGeoMeans <- TRUE
     if (length(geoMeans) != nrow(counts)) {
@@ -54,6 +66,8 @@ estimateSizeFactorsForMatrix <- function(counts, locfunc=stats::median,
   }
   sf
 }
+
+
 
 
 ##calculate how many pathways of one gene involved.
