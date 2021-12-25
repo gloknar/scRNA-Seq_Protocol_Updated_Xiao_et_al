@@ -202,6 +202,11 @@ saveRDS(matriz_tpm_norm, file.path(outDir,"Deconvolution_tpm.rds"))
 
 all_cell_type <- as.vector(imputed_sce$cellType)
 
+# Limpieza RAM
+rm(imputed_sce, matriz_conteos)
+gc()
+
+
 for(m in c("RLE","TMM","UpperQuartile","Deconvolution"))
 {
   rds_file <- file.path(outDir,paste0(m,"_tpm.rds"))
@@ -225,12 +230,22 @@ for(m in c("RLE","TMM","UpperQuartile","Deconvolution"))
 
 
 m <-  "UpperQuartile"
-rds_file <- file.path(outDir,paste0(m,"_tpm.rds"))
-norm_tpm <- readRDS(rds_file) 
+ruta_archivo_tpm <- file.path(outDir,paste0(m,"_tpm.rds"))
+matriz_tpm_norm <- readRDS(ruta_archivo_tpm)
 
 ##### check the ratio distribution
-low_dropout_genes_tpm <- norm_tpm[low_dropout_genes, ]
-low_dropout_genes_tpm_mean <- apply(low_dropout_genes_tpm, 1, function(x) by(x, all_cell_type, mean))
+low_dropout_genes_tpm <- matriz_tpm_norm[low_dropout_genes,] # De los genes normalizados, cogemos solo los de referencia
+low_dropout_genes_tpm_mean <- apply(low_dropout_genes_tpm, 1, function(x) by(x, all_cell_type, mean)) # Calculamos para cada tipo celular la expresión media de cada gen
+
+
+View(low_dropout_genes_tpm_mean)
+colMeans(low_dropout_genes_tpm_mean)
+View(t(low_dropout_genes_tpm_mean)/colMeans(low_dropout_genes_tpm_mean))
+
+View(low_dropout_genes_tpm_mean / colMeans(low_dropout_genes_tpm_mean))
+
+
+
 low_dropout_genes_tpm_ratio <- t(low_dropout_genes_tpm_mean) / colMeans(low_dropout_genes_tpm_mean)
 dat <- reshape2::melt(low_dropout_genes_tpm_ratio)
 p <- ggplot(dat,aes(x=Var2,y=value)) +
