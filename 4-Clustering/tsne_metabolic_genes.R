@@ -7,7 +7,7 @@ library(scater)
 library(Rtsne)
 
 # Opciones
-options(stringsAsFactors=FALSE)
+options(stringsAsFactors = FALSE)
 argumento <- commandArgs()
 argumento <- argumento[6]
 # argumento <- "head_neck"
