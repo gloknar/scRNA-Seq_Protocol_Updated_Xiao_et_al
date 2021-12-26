@@ -69,7 +69,7 @@ cd "4-Clustering"
 Rscript tsne_metabolic_genes.R melanoma
 Rscript tsne_metabolic_genes.R head_neck
 
-# UMAP
+# UMAP (Opcional)
 Rscript umap_metabolic_genes.R melanoma
 Rscript umap_metabolic_genes.R head_neck
 
