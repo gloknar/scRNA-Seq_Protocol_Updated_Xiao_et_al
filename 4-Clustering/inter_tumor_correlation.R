@@ -2,13 +2,10 @@
 ###########     0. Carga de paquetes, opciones y datos      ###########
 #######################################################################
 
-# Paquetes y funciones auxiliares
+# Paquetes
 library(scater)
-library(stringr)
-library(Rtsne)
 library(pheatmap)
 library(RColorBrewer)
-source("../utils.R")
 
 # Opciones
 options(stringsAsFactors=FALSE)
@@ -72,15 +69,15 @@ metadatos_heatmap$tumor <- factor(metadatos_heatmap$tumor) # Al castear de nuevo
 
 # Creamos un pdf de 5x4 pulgadas donde guardaremos el heatmap
 pdf(file.path(outDir,"malignant_metabolic_correlationMatrix.pdf"), 
-    width = 5, height = 4, onefile = T) 
+    width = 7, height = 5, onefile = T) 
 
 # Generamos la visualización de la matriz de correlación
 pheatmap(matriz_cor,
+         main = paste0("Matriz de correlación de spearman del dataset ",argumento),
          color=colores_heatmap,
          cluster_rows = clusters_tumores,     # Dendrograma creado con el método de ward.D2
          cluster_cols = clusters_tumores,
          annotation_row = metadatos_heatmap,  # Dataframe con el tumor al que pertenece cada célula maligna
-         annotation_col = metadatos_heatmap,
          annotation_legend = T,               # Para mostrar los tumores
          show_rownames = F,                   # No mostramos los nombres de las 1167 células tumorales para poder visualizar el heatmap
          show_colnames = F)
@@ -106,10 +103,11 @@ if (argumento == "melanoma"){
    
    # Creamos un pdf de 5x4 pulgadas donde guardaremos el heatmap
    pdf(file.path(outDir,"malignant_metabolic_correlationMatrix.pdf"),
-       width = 5, height = 4, onefile = T)
+       width = 7, height = 5, onefile = T)
    
    # Generamos la visualización de la matriz de correlación
    pheatmap(matriz_cor2,
+            main = paste0("Matriz de correlación de spearman del dataset ",argumento),
             color = colores_heatmap,
             cluster_rows = F,
             cluster_cols = F,
