@@ -27,11 +27,11 @@ if(!dir.exists(outDir)) {                    # Crea la carpeta ./datasets/<head_
 # ahí generamos un objeto sce que contenga sólo las células tumorales y los
 # genes de interés (en este caso, los metabólicos)
 imputed_sce <- readRDS(file.path("../2-Imputation/datasets",argumento,"imputed_sce.rds"))
-tumor_metabolic_sce <- imputed_sce[rowData(tumor_sce)$metabolic, imputed_sce$cellType == "Malignant"]
+tumor_metabolic_sce <- imputed_sce[rowData(imputed_sce)$metabolic, imputed_sce$cellType == "Malignant"]
 
 # Limpieza RAM
 rm(imputed_sce)
-gc()
+gc(verbose = F)
 
 
 
@@ -42,7 +42,10 @@ gc()
 ########################################################################
 
 expr_genes_metab_tumor <- assay(tumor_metabolic_sce, "exprs")  # Cogemos la expresión génica en formato log2(TPM+1)
-matriz_distancias  <- cor(expr_genes_metab_tumor, method = "spearman")
+matriz_cor  <- cor(expr_genes_metab_tumor, method = "spearman") # Calculamos la matriz de correlación de spearman (no paramétrico)
+??corplot
+psych::cor.plot(matriz_cor[1:4,1:4])
+
 hc <- hclust(as.dist(1-dist_dat),method="ward.D2")
 mycolor = colorRampPalette(c("white","red"))(10)
 mycolor=colorRampPalette(rev(brewer.pal(n = 7, name ="RdYlBu")))(8)

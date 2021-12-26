@@ -204,7 +204,7 @@ all_cell_type <- as.vector(imputed_sce$cellType)
 
 # Limpieza RAM
 rm(imputed_sce, matriz_conteos)
-gc()
+gc(verbose = F)
 
 
 # Creamos los boxplots de los distintos métodos de normalizado probados
