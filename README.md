@@ -66,8 +66,8 @@ Four commonly used data normalization methods are applied on each dataset. The d
 cd "4-Clustering"
 Rscript metabolic_landscape.R melanoma
 Rscript metabolic_landscape.R head_neck
-Rscript inter_tumor_distance.R melanoma
-Rscript inter_tumor_distance.R head_neck
+Rscript inter_tumor_correlation.R melanoma
+Rscript inter_tumor_correlation.R head_neck
 cd ../
 ```
 
