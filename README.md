@@ -64,8 +64,16 @@ Four commonly used data normalization methods are applied on each dataset. The d
 
 ``` bash
 cd "4-Clustering"
+
+# t-SNE
 Rscript tsne_metabolic_genes.R melanoma
 Rscript tsne_metabolic_genes.R head_neck
+
+# UMAP
+Rscript umap_metabolic_genes.R melanoma
+Rscript umap_metabolic_genes.R head_neck
+
+# Matriz de correlación de Spearman
 Rscript inter_tumor_correlation.R melanoma
 Rscript inter_tumor_correlation.R head_neck
 cd ../
