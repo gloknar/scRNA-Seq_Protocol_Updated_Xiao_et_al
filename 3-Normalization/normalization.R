@@ -18,7 +18,7 @@ options(stringsAsFactors = FALSE)
 argumento <- commandArgs()
 argumento <- argumento[6]
 # argumento = "melanoma"
-outDir <- file.path("./datasets", argumento)
+outDir <- file.path("./datasets",argumento)
 if(!dir.exists(outDir)) {                 # Crea la carpeta ./datasets/<head_neck o melanoma>/  si no existe
   dir.create(outDir,recursive = TRUE)
 }
