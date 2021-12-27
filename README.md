@@ -60,7 +60,7 @@ cd ../
 ```
 
 En este paso evaluamos en nuestros datasets la eficacia de 4 métodos de normalizado, a saber:
-* Upper Quartile (EdgeR)
+* Upper-Quartile (EdgeR)
 * TMM (EdgeR)
 * RLE (DESeq2)
 * Deconvolution (scran)
