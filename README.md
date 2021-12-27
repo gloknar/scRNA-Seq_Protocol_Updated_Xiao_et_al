@@ -37,7 +37,7 @@ Rscript readData_melanoma.R
 cd ../
 ```
 
-Con el script de bash `download_dataset.sh` descargamos los datasets desde el GEO, y con sendos scripts de R corregimos erratas presentes en dichos datasets, filtramos grupos celulares con menos de 50 células, creamos 2 objetos de tipo `Single Cell Experiment` y los guardamos en los archivos `<head_neck/melanoma>/filtered_sce.rds` 
+Con el script de bash `download_dataset.sh` descargamos los datasets desde el GEO, y con sendos scripts de R corregimos erratas presentes en dichos datasets, filtramos grupos celulares con menos de 50 células, creamos 2 objetos de tipo `Single Cell Experiment` y los guardamos en los archivos `<head_neck o melanoma>/filtered_sce.rds` 
 
 ## Imputación de NAs
 
