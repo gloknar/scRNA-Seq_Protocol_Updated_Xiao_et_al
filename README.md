@@ -37,7 +37,7 @@ Rscript readData_melanoma.R
 cd ../
 ```
 
-Con el script de bash descargamos los datasets desde el GEO, y con sendos scripts de R corregimos erratas presentes en dichos datasets, filtramos las células, creamos 2 objetos de tipo `Single Cell Experiment` y los guardamos en los archivos `<head_neck/melanoma>/filtered_sce.rds` 
+Con el script de bash `download_dataset.sh` descargamos los datasets desde el GEO, y con sendos scripts de R corregimos erratas presentes en dichos datasets, filtramos grupos celulares con menos de 50 células, creamos 2 objetos de tipo `Single Cell Experiment` y los guardamos en los archivos `<head_neck/melanoma>/filtered_sce.rds` 
 
 ## Imputación de NAs
 
@@ -48,9 +48,9 @@ Rscript impute_tpm.R head_neck
 cd ../
 ```
 
-Este paso utiliza el paquete ["scImpute"](https://github.com/Vivianstats/scImpute) para imputar los valores faltantes de aquellos genes que presentan una expresión génica nula en > 50% de las células estudiadas (_i.e. dropout rate_ > 50%).
+Este paso utiliza el paquete ["scImpute"](https://github.com/Vivianstats/scImpute) para imputar los valores faltantes de aquellos genes que presentan una expresión génica nula en > 50% de las células estudiadas (_i.e. dropout rate_ > 50%). Nótese que los genes con un dropout del 100% no son imputados por falta de información.
 
-## Normalizado y evaluación de distintos métodos de normalización (EN PROCESO)
+## Normalizado y evaluación de distintos métodos de normalización
 
 ``` bash
 cd "3-Normalization"
@@ -58,7 +58,14 @@ Rscript normalization.R melanoma
 Rscript normalization.R head_neck
 cd ../
 ```
-Four commonly used data normalization methods are applied on each dataset. The distribution of relative gene expression of each cell type will be ploted to evaluate and select the best normalization method.
+
+En este paso evaluamos en nuestros datasets la eficacia de 4 métodos de normalizado, a saber:
+* Upper Quartile (`EdgeR`)
+* TMM (`EdgeR`)
+* RLE (`DESeq2`)
+* Deconvolution (`scran`)
+
+Tras normalizar los datos, graficamos los resultados para poder compararlos y seguir el protocolo con el método que mejor nos funcione (en este caso, será el método de deconvolución de scran).
 
 ## Landscape of the metabolic gene expression profile
 
