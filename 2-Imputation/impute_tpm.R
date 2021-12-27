@@ -9,10 +9,10 @@ library(scater)
 # Opciones
 argumento <- commandArgs()[6]
 outDir <- file.path("./datasets", argumento) # Carpeta donde guardaremos todos los archivos relacionados con la imputación del objeto `sce`
-if(!dir.exists(outDir)) {                   # Crea la carpeta ./datasets/<nombre del tumor>/  si no existe
+if(!dir.exists(outDir)) {                    # Crea la carpeta ./datasets/<nombre del tumor>/  si no existe
   dir.create(outDir,recursive = TRUE)
 } 
-num_cores <- 6                              # Usar 1 en Windows (scImpute usa mc.apply...)
+num_cores <- 6                               # Usar 1 en Windows (scImpute usa mc.apply...)
 
 # Leemos el dataset del head_neck/melanoma con las células filtradas
 filtered_sce <- readRDS(file.path("../1-ReadData/datasets",argumento,"filtered_sce.rds"))
@@ -35,8 +35,8 @@ filtered_sce_nontumor <- filtered_sce[,filtered_sce$cellType!="Malignant"]
 # expresión génica de las células en formato log2(TPM+1);;
 # El bolsillo `filtered_sce_(non)tumor@assays@data$tpm` contiene la expresión
 # génica en formato TPM
-filtered_sce_tumor_tpm <- tpm(filtered_sce_tumor)
-filtered_sce_nontumor_tpm <- tpm(filtered_sce_nontumor) 
+filtered_sce_tumor_tpm <- tpm(filtered_sce_tumor)        # sinónimo de filtered_sce_tumor@assays@data$tpm y de assay(filtered_sce_tumor,"tpm")
+filtered_sce_nontumor_tpm <- tpm(filtered_sce_nontumor)  # sinónimo de filtered_sce_nontumor@assays@data$tpm y de assay(filtered_sce_nontumor,"tpm")
 labels_tumor <- filtered_sce_tumor$tumor
 labels_nontumor <- filtered_sce_nontumor$cellType
 
@@ -103,7 +103,8 @@ assay(filtered_sce_tumor,"exprs") <- data.matrix(log2(imputed_tpm_tumor + 1)) # 
 ###################################################################################
 
 # Imputamos genes con dropout >= 0.5 (expresión nula en 50% o más de las
-# células) para evitar sobre-imputación
+# células) para evitar sobre-imputación. Nótese que los genes con un dropout del
+# 100% no se imputarán
 scimpute(count_path = file.path(outDir, "nontumor.tpm"), infile = "csv", 
          outfile = "csv", out_dir = paste(outDir,"non-malignant/", sep = "/"), 
          labeled = TRUE, labels = as.vector(labels_nontumor),	type = "TPM", 
