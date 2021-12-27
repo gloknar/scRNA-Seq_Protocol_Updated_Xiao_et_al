@@ -60,10 +60,10 @@ cd ../
 ```
 
 En este paso evaluamos en nuestros datasets la eficacia de 4 métodos de normalizado, a saber:
-* Upper Quartile `(EdgeR)`
-* TMM (`EdgeR`)
-* RLE (`DESeq2`)
-* Deconvolution (`scran`)
+* Upper Quartile (EdgeR)
+* TMM (EdgeR)
+* RLE (DESeq2)
+* Deconvolution (scran)
 
 Tras normalizar los datos, graficamos los resultados para poder compararlos y seguir el protocolo con el método que mejor nos funcione (en este caso, será el método de deconvolución de scran).
 
