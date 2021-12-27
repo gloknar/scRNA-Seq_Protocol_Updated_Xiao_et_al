@@ -1,5 +1,8 @@
-rm(list=ls())
-source("../utils.R")
+#######################################################################
+###########     0. Carga de paquetes, opciones y datos      ###########
+#######################################################################
+
+# Paquetes
 library(stringr)
 library(reshape2)
 library(scales)
@@ -9,15 +12,19 @@ library(ggplot2)
 library(dplyr)
 library(ggrepel)
 library(RColorBrewer)
+source("../utils.R")
 
-args <- commandArgs()
-tumor <- args[6]
-outDir <- file.path("dataset",tumor)
+
+# Opciones
+options(stringsAsFactors = F)
+argumento <- commandArgs()
+argumento <- argumento[6]
+outDir <- file.path("dataset",argumento)
 if(!dir.exists(outDir) ) dir.create(outDir,recursive=TRUE)
 pathway_file <- "../Data/KEGG_metabolism.gmt"
 
 #1. Loading the data
-selected_impute_sce <- readRDS(file.path("../2-Imputation/dataset",tumor,"selected_impute_sce.rds"))
+selected_impute_sce <- readRDS(file.path("../2-Imputation/dataset",argumento,"selected_impute_sce.rds"))
 
 pathways <- gmtPathways(pathway_file)
 pathway_names <- names(pathways)
@@ -29,7 +36,7 @@ gene_pathway_number <- num_of_pathways(pathway_file,rownames(selected_impute_sce
 
 set.seed(123)
 normalization_method <- "Deconvolution"
-norm_rds_file <- file.path("../3-Normalization/dataset/",tumor,paste0(normalization_method,"_tpm.rds"))
+norm_rds_file <- file.path("../3-Normalization/dataset/",argumento,paste0(normalization_method,"_tpm.rds"))
 norm_tpm <- readRDS(norm_rds_file)
 
 ##Calculate the pathway activities
