@@ -67,7 +67,7 @@ En este paso evaluamos en nuestros datasets la eficacia de 4 métodos de normali
 
 Tras normalizar los datos, graficamos los resultados para poder compararlos y seguir el protocolo con el método que mejor nos funcione (en este caso, será el método de deconvolución de scran).
 
-## Landscape of the metabolic gene expression profile
+## Clustering y visualización no lineal de las células en función de los genes metabólicos
 
 ``` bash
 cd "4-Clustering"
@@ -86,7 +86,9 @@ Rscript inter_tumor_correlation.R head_neck
 cd ../
 ```
 
-En este paso se emplea el algoritmo t-SNE para visualizar la expresión de genes metabólicos en miles de células (el resultado puede variar ligeramente respecto al gráfico del artículo científico debido a la inicialización aleatoria del algoritmo). También se genera la matriz de correlación de spearman para mostrar la heterogeneidad entre tumores usando dichos genes metabólicos.
+En este paso nos fijaremos en los 1566 genes metabólicos para agrupar y visualizar las células con t-SNE y UMAP (las visualizaciones pueden variar ligeramente respecto al gráfico del artículo científico debido a la inicialización aleatoria del t-SNE y UMAP). En concreto, estudiaremos por un lado las células malignas y por otro las células sanas. 
+
+También calcularemos la matriz de correlación de Spearman (no paramétrico) de los distintos tumores dentro de una misma patología para mostrar su heterogeneidad. Los distintos melanomas presentes en nuestro dataset están clasificados como melanomas, pero sus perfiles de expresión de genes metabólicos demuestran que son distintos entre sí (ídem para las neoplasias de HNSCC).
 
 ## Actividad de las rutas metabólicas en distintos tipos celulares
 
