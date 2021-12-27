@@ -17,26 +17,31 @@ source("../utils.R")
 
 # Opciones
 options(stringsAsFactors = F)
-argumento <- commandArgs()
-argumento <- argumento[6]
-outDir <- file.path("dataset",argumento)
-if(!dir.exists(outDir) ) dir.create(outDir,recursive=TRUE)
+# argumento <- commandArgs()
+# argumento <- argumento[6]
+argumento <- "melanoma"
+
+outDir <- file.path("datasets",argumento)
+if(!dir.exists(outDir) ) {dir.create(outDir,recursive = TRUE)}
 pathway_file <- "../Data/KEGG_metabolism.gmt"
 
-#1. Loading the data
-selected_impute_sce <- readRDS(file.path("../2-Imputation/dataset",argumento,"selected_impute_sce.rds"))
+
+# Leemos el dataset del head_neck/melanoma con la expresión génica imputada
+imputed_sce <- readRDS(file.path("../2-Imputation/datasets",argumento,"imputed_sce.rds"))
+
+
 
 pathways <- gmtPathways(pathway_file)
 pathway_names <- names(pathways)
-all_cell_types <- as.vector(selected_impute_sce$cellType)
+all_cell_types <- as.vector(imputed_sce$cellType)
 cell_types <- unique(all_cell_types)
 
 #some genes occur in multiple pathways.
-gene_pathway_number <- num_of_pathways(pathway_file,rownames(selected_impute_sce)[rowData(selected_impute_sce)$metabolic])
+gene_pathway_number <- num_of_pathways(pathway_file,rownames(imputed_sce)[rowData(imputed_sce)$metabolic])
 
 set.seed(123)
 normalization_method <- "Deconvolution"
-norm_rds_file <- file.path("../3-Normalization/dataset/",argumento,paste0(normalization_method,"_tpm.rds"))
+norm_rds_file <- file.path("../3-Normalization/datasets/",argumento,paste0(normalization_method,"_tpm.rds"))
 norm_tpm <- readRDS(norm_rds_file)
 
 ##Calculate the pathway activities
@@ -136,7 +141,7 @@ for(i in colnames(dat)){
 sort_column <- apply(dat[sort_row,],2,function(x) order(x)[nrow(dat)])
 sort_column <- names(sort_column)
 dat[is.na(dat)] <- 1
-pdf(file.path(outDir, "KEGGpathway_activity_heatmap.pdf"),onefile=T,width=6,height=9)
+pdf(file.path(outDir,"KEGGpathway_activity_heatmap.pdf"),onefile=T,width=6,height=9)
 mybreaks <- c(
   seq(0, 0.5, length.out=33),
   seq(0.51, 1.5, length.out=33),
