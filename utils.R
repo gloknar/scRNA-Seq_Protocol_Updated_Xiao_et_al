@@ -1,4 +1,8 @@
-##gmtPathways is copied from fgsea package.
+##### Funciones relacionadas con rutas metabólicas #####
+
+# Función para leer las rutas metabólicas contenidas en un archivo .gmt y
+# devolverlas en forma de lista, obtenida de fgsea versión 1.21.0
+# https://github.com/ctlab/fgsea/blob/master/R/pathways.R
 gmtPathways <- function(gmt.file) {
     pathwayLines <- strsplit(readLines(gmt.file), "\t")
     pathways <- lapply(pathwayLines, tail, -2)
@@ -6,25 +10,42 @@ gmtPathways <- function(gmt.file) {
     pathways
 }
 
-## get_os is copied from https://github.com/r-lib/rappdirs/blob/master/R/utils.r#L1
-get_os <- function() {
-  if (.Platform$OS.type == "windows") { 
-    "win"
-  } else if (Sys.info()["sysname"] == "Darwin") {
-    "mac" 
-  } else if (.Platform$OS.type == "unix") { 
-    "unix"
-  } else {
-    stop("Unknown OS")
+
+# Función casera para calcular el nº de rutas metabólicas en las que participa
+# un gen
+num_of_pathways <- function (gmtfile, overlapgenes){
+  # TO DO: Añadir documentación a la función
+  pathways <- gmtPathways(gmtfile)
+  pathway_names <- names(pathways)
+  filter_pathways <- list()
+  for (p in pathway_names){
+    genes <- pathways[[p]]
+    common_genes <- intersect(genes,overlapgenes)
+    if(length(common_genes>=5)){
+      filter_pathways[[p]] <- common_genes
+    }
   }
-}
+  
+  all_genes <- unique(as.vector(unlist(filter_pathways)))
+  gene_times <- data.frame(num =rep(0,length(all_genes)),row.names = all_genes)
+  for(p in pathway_names){
+    for(g in filter_pathways[[p]]){
+      gene_times[g,"num"] = gene_times[g,"num"]+1
+    }
+  }
+  gene_times
+} 
 
 
-## Función de normalizado de DESeq2 versión 1.35.0, obtenida de:
-## https://github.com/mikelove/DESeq2/blob/master/R/core.R
-estimateSizeFactorsForMatrix <- function(counts, locfunc=stats::median,
+
+
+##### Funciones de normalizado #####
+
+# Función de normalizado de DESeq2 versión 1.35.0, obtenida de:
+# https://github.com/mikelove/DESeq2/blob/master/R/core.R
+estimateSizeFactorsForMatrix <- function(counts, locfunc = stats::median,
                                          geoMeans, controlGenes,
-                                         type=c("ratio","poscounts")) {
+                                         type = c("ratio", "poscounts")) {
   type <- match.arg(type, c("ratio","poscounts"))
   if (missing(geoMeans)) {
     incomingGeoMeans <- FALSE
@@ -70,25 +91,19 @@ estimateSizeFactorsForMatrix <- function(counts, locfunc=stats::median,
 
 
 
-##calculate how many pathways of one gene involved.
-num_of_pathways <- function (gmtfile,overlapgenes){
-  pathways <- gmtPathways(gmtfile)
-  pathway_names <- names(pathways)
-  filter_pathways <- list()
-  for (p in pathway_names){
-    genes <- pathways[[p]]
-    common_genes <- intersect(genes,overlapgenes)
-    if(length(common_genes>=5)){
-      filter_pathways[[p]] <- common_genes
-    }
+##### Funciones misceláneas #####
+
+# Función de rappdirs versión 0.3.3 para detectar el sistema operativo empleado,
+# obtenida de: https://github.com/r-lib/rappdirs/blob/master/R/utils.r#L1
+get_os <- function() {
+  if (.Platform$OS.type == "windows") { 
+    "win"
+  } else if (Sys.info()["sysname"] == "Darwin") {
+    "mac" 
+  } else if (.Platform$OS.type == "unix") { 
+    "unix"
+  } else {
+    stop("Unknown OS")
   }
-  
-  all_genes <- unique(as.vector(unlist(filter_pathways)))
-  gene_times <- data.frame(num =rep(0,length(all_genes)),row.names = all_genes)
-  for(p in pathway_names){
-    for(g in filter_pathways[[p]]){
-      gene_times[g,"num"] = gene_times[g,"num"]+1
-    }
-  }
-  gene_times
-} 
+}
+
