@@ -76,10 +76,9 @@ mean_expression_shuffle <- matrix(NA, nrow = length(nombres_pathways),
 mean_expression_noshuffle <- matrix(NA, nrow = length(nombres_pathways), 
                              ncol = length(cell_types), dimnames = list(nombres_pathways, cell_types))
 
-View(mean_expression_shuffle)
-View(mean_expression_noshuffle)
-
-View(matriz_TPM_norm[genes_compartidos, ])
+# View(mean_expression_shuffle)
+# View(mean_expression_noshuffle)
+# View(matriz_TPM_norm[genes_compartidos, ])
 
 for (ruta_metab in nombres_pathways) {
   
@@ -144,7 +143,7 @@ for (ruta_metab in nombres_pathways) {
   outliers <- apply(ratio_exp_por_linaje_cel, 1, function(x) {any((x < limite_inferior) | (x > limite_superior))})
   
   if(sum(!outliers) < 3) {
-    message('Tras eliminar los outliers, la ruta metabólica ',ruta_metab,' conserva menos de 3 genes. Omitiendo dicha ruta...')
+    message('Tras eliminar los outliers, la ruta metabólica "',ruta_metab,'" conserva menos de 3 genes. Omitiendo dicha ruta...')
     next
   }
   
