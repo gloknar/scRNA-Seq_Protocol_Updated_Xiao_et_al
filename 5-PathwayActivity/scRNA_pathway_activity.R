@@ -2,11 +2,11 @@
 ###########     0. Carga de paquetes, opciones y datos      ###########
 #######################################################################
 
-# Paquetes
+# Paquetes y funciones auxiliares
+library(scater)
 library(stringr)
 library(reshape2)
 library(scales)
-library(scater)
 library(pheatmap)
 library(ggplot2)
 library(dplyr)
@@ -23,30 +23,47 @@ argumento <- "melanoma"
 
 outDir <- file.path("datasets",argumento)
 if(!dir.exists(outDir) ) {dir.create(outDir,recursive = TRUE)}
-pathway_file <- "../Data/KEGG_metabolism.gmt"
 
 
 # Leemos el dataset del head_neck/melanoma con la expresión génica imputada
 imputed_sce <- readRDS(file.path("../2-Imputation/datasets",argumento,"imputed_sce.rds"))
-
-
-
-pathways <- gmtPathways(pathway_file)
-pathway_names <- names(pathways)
 all_cell_types <- as.vector(imputed_sce$cellType)
 cell_types <- unique(all_cell_types)
 
-#some genes occur in multiple pathways.
-gene_pathway_number <- num_of_pathways(pathway_file,rownames(imputed_sce)[rowData(imputed_sce)$metabolic])
+# Para leer el archivo de las rutas metabólicas y los genes que participan en
+# ellas (obtenido de KEGG), usamos la función auxiliar `gmtPathways()`
+ruta_archivo_pathways <- "../Data/KEGG_metabolism.gmt"
+pathways.gmt <- gmtPathways(ruta_archivo_pathways)
+nombres_pathways <- names(pathways.gmt)
 
+# Vamos a calcular con la función auxiliar `num_of_pathways()` el nº de rutas
+# metabólicas en las que participan nuestros genes de interés (1566 genes
+# metabólicos)
+gene_pathway_number <- num_of_pathways(ruta_archivo_pathways,rownames(imputed_sce)[rowData(imputed_sce)$metabolic])
+
+
+# Leemos la matriz de TPM normalizada por deconvolución del dataset del
+# head_neck/melanoma
 set.seed(123)
-normalization_method <- "Deconvolution"
-norm_rds_file <- file.path("../3-Normalization/datasets/",argumento,paste0(normalization_method,"_tpm.rds"))
-norm_tpm <- readRDS(norm_rds_file)
+metodo_normalizado <- "Deconvolution"
+ruta_matriz_TPM_norm <- file.path("../3-Normalization/datasets",argumento,paste0(metodo_normalizado,"_tpm.rds"))
+matriz_TPM_norm <- readRDS(ruta_matriz_TPM_norm)
 
-##Calculate the pathway activities
+
+
+####################################################################################################
+
+###################################################################################
+###########     1. Cálculo de la actividad de las rutas metabólicas     ###########
+###################################################################################
+
+
 #mean ratio of genes in each pathway for each cell type
-mean_expression_shuffle <- matrix(NA,nrow=length(pathway_names),ncol=length(cell_types),dimnames = list(pathway_names,cell_types))
+mean_expression_shuffle <- matrix(NA, nrow = length(pathway_names), 
+                           ncol = length(cell_types), dimnames = list(pathway_names,cell_types))
+
+
+matrix(NA, nrow = length(pathway_names))
 mean_expression_noshuffle <- matrix(NA,nrow=length(pathway_names),ncol=length(cell_types),dimnames = list(pathway_names,cell_types))
 ###calculate the pvalues using shuffle method
 pvalues_mat <- matrix(NA,nrow=length(pathway_names),ncol=length(cell_types),dimnames = (list(pathway_names, cell_types)))
