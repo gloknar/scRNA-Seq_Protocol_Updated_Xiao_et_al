@@ -4,6 +4,8 @@
 
 # Paquetes y funciones auxiliares
 library(scater)
+source("../utils.R")
+
 library(stringr)
 library(reshape2)
 library(scales)
@@ -12,7 +14,6 @@ library(ggplot2)
 library(dplyr)
 library(ggrepel)
 library(RColorBrewer)
-source("../utils.R")
 
 
 # Opciones
@@ -22,24 +23,13 @@ options(stringsAsFactors = F)
 argumento <- "melanoma"
 
 outDir <- file.path("datasets",argumento)
-if(!dir.exists(outDir) ) {dir.create(outDir,recursive = TRUE)}
+if(!dir.exists(outDir) ) {dir.create(outDir, recursive = TRUE)}
 
 
 # Leemos el dataset del head_neck/melanoma con la expresión génica imputada
 imputed_sce <- readRDS(file.path("../2-Imputation/datasets",argumento,"imputed_sce.rds"))
 all_cell_types <- as.vector(imputed_sce$cellType)
 cell_types <- unique(all_cell_types)
-
-# Para leer el archivo de las rutas metabólicas y los genes que participan en
-# ellas (obtenido de KEGG), usamos la función auxiliar `gmtPathways()`
-ruta_archivo_pathways <- "../Data/KEGG_metabolism.gmt"
-pathways.gmt <- gmtPathways(ruta_archivo_pathways)
-nombres_pathways <- names(pathways.gmt)
-
-# Vamos a calcular con la función auxiliar `num_of_pathways()` el nº de rutas
-# metabólicas en las que participan nuestros genes de interés (1566 genes
-# metabólicos)
-gene_pathway_number <- num_of_pathways(ruta_archivo_pathways,rownames(imputed_sce)[rowData(imputed_sce)$metabolic])
 
 
 # Leemos la matriz de TPM normalizada por deconvolución del dataset del
@@ -50,6 +40,20 @@ ruta_matriz_TPM_norm <- file.path("../3-Normalization/datasets",argumento,paste0
 matriz_TPM_norm <- readRDS(ruta_matriz_TPM_norm)
 
 
+# Para leer el archivo de las rutas metabólicas y los genes que participan en
+# ellas (obtenido de KEGG), usamos la función auxiliar `gmtPathways()`
+ruta_archivo_pathways <- "../Data/KEGG_metabolism.gmt"
+pathways.gmt <- gmtPathways(ruta_archivo_pathways)
+nombres_pathways <- names(pathways.gmt)
+
+
+# Vamos a calcular con la función auxiliar `num_of_pathways()` el nº de rutas
+# metabólicas en las que participan nuestros genes de interés (1566 genes
+# metabólicos)
+gene_pathway_number <- num_of_pathways(ruta_archivo_pathways,rownames(imputed_sce)[rowData(imputed_sce)$metabolic])
+
+
+
 
 ####################################################################################################
 
@@ -57,23 +61,39 @@ matriz_TPM_norm <- readRDS(ruta_matriz_TPM_norm)
 ###########     1. Cálculo de la actividad de las rutas metabólicas     ###########
 ###################################################################################
 
+# Inicializamos 3 matrices vacías de rutas metabólicas X tipos celulares:
 
-#mean ratio of genes in each pathway for each cell type
-mean_expression_shuffle <- matrix(NA, nrow = length(pathway_names), 
-                           ncol = length(cell_types), dimnames = list(pathway_names,cell_types))
+# Una para almacenar los p-valores de la actividad metabólica (p-valores
+# calculados con el método de shuffle)
+matriz_pvalues <- matrix(NA, nrow = length(nombres_pathways), 
+                         ncol = length(cell_types), dimnames = list(nombres_pathways, cell_types))
+
+# Otra para #mean ratio of genes in each pathway for each cell type
+mean_expression_shuffle <- matrix(NA, nrow = length(nombres_pathways), 
+                           ncol = length(cell_types), dimnames = list(nombres_pathways, cell_types))
+
+# Y otra para
+mean_expression_noshuffle <- matrix(NA, nrow = length(nombres_pathways), 
+                             ncol = length(cell_types), dimnames = list(nombres_pathways, cell_types))
+
+View(mean_expression_shuffle)
+View(mean_expression_noshuffle)
 
 
-matrix(NA, nrow = length(pathway_names))
-mean_expression_noshuffle <- matrix(NA,nrow=length(pathway_names),ncol=length(cell_types),dimnames = list(pathway_names,cell_types))
-###calculate the pvalues using shuffle method
-pvalues_mat <- matrix(NA,nrow=length(pathway_names),ncol=length(cell_types),dimnames = (list(pathway_names, cell_types)))
+for(ruta_metab in nombres_pathways){
+  
+  # Comprobamos cuántos genes de la ruta metabólica están presentes tanto en el
+  # archivo pathways.gmt como en la matriz TPM normalizada, y si dicha ruta
+  # contiene menos de 5 genes, omitimos dicha ruta metabólica y pasamos a la
+  # siguiente iteración del bucle
+  genes <- pathways.gmt[[ruta_metab]]
+  genes_comm <- intersect(genes, rownames(matriz_TPM_norm))
+  if(length(genes_comm) < 5) {
+    print(paste0("La ruta metabólica \"",ruta_metab,"\" presenta menos de 5 genes en la matriz de TPMs normalizada. Omitiendo dicha ruta..."))
+    next
+  }
 
-for(p in pathway_names){
-  genes <- pathways[[p]]
-  genes_comm <- intersect(genes, rownames(norm_tpm))
-  if(length(genes_comm) < 5) next
-
-  pathway_metabolic_tpm <- norm_tpm[genes_comm, ]
+  pathway_metabolic_tpm <- matriz_TPM_norm[genes_comm, ]
   pathway_metabolic_tpm <- pathway_metabolic_tpm[rowSums(pathway_metabolic_tpm)>0,]
   
   mean_exp_eachCellType <- apply(pathway_metabolic_tpm, 1, function(x)by(x, all_cell_types, mean))
@@ -108,8 +128,8 @@ for(p in pathway_names){
   mean_exp_eachCellType <- apply(pathway_metabolic_tpm, 1, function(x)by(x, all_cell_types, mean))
   ratio_exp_eachCellType <- t(mean_exp_eachCellType) / colMeans(mean_exp_eachCellType)
   mean_exp_pathway <- apply(ratio_exp_eachCellType,2, function(x) weighted.mean(x, pathway_number_weight/sum(pathway_number_weight)))
-  mean_expression_shuffle[p, ] <-  mean_exp_pathway[cell_types]
-  mean_expression_noshuffle[p, ] <-  mean_exp_pathway[cell_types]
+  mean_expression_shuffle[ruta_metab, ] <-  mean_exp_pathway[cell_types]
+  mean_expression_noshuffle[ruta_metab, ] <-  mean_exp_pathway[cell_types]
     
   ##shuffle 5000 times:  
   ##define the functions 
@@ -132,16 +152,18 @@ for(p in pathway_names){
   rownames(shuffle_results) <- times
   colnames(shuffle_results) <- cell_types
   for(c in cell_types){
-    if(is.na(mean_expression_shuffle[p,c])) next
-    if(mean_expression_shuffle[p,c]>1){
-      pval <- sum(shuffle_results[,c] > mean_expression_shuffle[p,c]) / 5000 
-    }else if(mean_expression_shuffle[p,c]<1){
-      pval <- sum(shuffle_results[,c] < mean_expression_shuffle[p,c]) / 5000
+    if(is.na(mean_expression_shuffle[ruta_metab,c])) next
+    if(mean_expression_shuffle[ruta_metab,c]>1){
+      pval <- sum(shuffle_results[,c] > mean_expression_shuffle[ruta_metab,c]) / 5000 
+    }else if(mean_expression_shuffle[ruta_metab,c]<1){
+      pval <- sum(shuffle_results[,c] < mean_expression_shuffle[ruta_metab,c]) / 5000
     }
-    if(pval>0.01) mean_expression_shuffle[p, c] <- NA  ### NA is  blank in heatmap
-    pvalues_mat[p,c] <- pval
+    if(pval>0.01) mean_expression_shuffle[ruta_metab, c] <- NA  ### NA is  blank in heatmap
+    matriz_pvalues[ruta_metab,c] <- pval
   }
 }
+View(matriz_pvalues)
+
 all_NA <- rowAlls(is.na(mean_expression_shuffle))
 mean_expression_shuffle <- mean_expression_shuffle[!all_NA,]
 #heatmap
@@ -170,7 +192,7 @@ dev.off()
 
 write.table(mean_expression_noshuffle,file=file.path(outDir,"KEGGpathway_activity_noshuffle.txt"),row.names=T,col.names=T,quote=F,sep="\t")
 write.table(mean_expression_shuffle,file=file.path(outDir,"KEGGpathway_activity_shuffle.txt"),row.names=T,col.names=T,quote=F,sep="\t")
-write.table(pvalues_mat,file=file.path(outDir,"KEGGpathway_activity_shuffle_pvalue.txt"),row.names=T,col.names=T,quote=F,sep="\t")
+write.table(matriz_pvalues,file=file.path(outDir,"KEGGpathway_activity_shuffle_pvalue.txt"),row.names=T,col.names=T,quote=F,sep="\t")
 
 #boxplot show the distribution of pathway activity
 scRNA_dat <- as.data.frame(mean_expression_noshuffle)
