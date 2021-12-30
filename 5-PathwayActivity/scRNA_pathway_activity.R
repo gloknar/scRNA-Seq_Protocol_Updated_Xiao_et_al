@@ -50,8 +50,8 @@ nombres_pathways <- names(pathways.gmt)
 # Vamos a calcular con la función auxiliar `num_of_pathways()` el nº de rutas
 # metabólicas en las que participan nuestros genes de interés (1566 genes
 # metabólicos)
-gene_pathway_number <- num_of_pathways(ruta_archivo_pathways,rownames(imputed_sce)[rowData(imputed_sce)$metabolic])
-
+gene_pathway_number <- num_of_pathways(ruta_archivo_pathways, 
+                                       rownames(imputed_sce)[rowData(imputed_sce)$metabolic])
 
 
 
