@@ -123,7 +123,7 @@ for (ruta_metab in nombres_pathways) {
   matriz_TPM_pathway <- t(apply(matriz_TPM_pathway, 1, function(x) {x[x <= 0] <- min(x[x > 0]); return(x)}))
 
   # Actualizamos también la matriz de linaje celular X genes
-  expr_media_por_linaje_cel <- apply(matriz_TPM_pathway, 1, function(x)by(x, all_cell_types, mean))
+  expr_media_por_linaje_cel <- apply(matriz_TPM_pathway, 1, function(x) by(x, all_cell_types, mean))
   
   # Transformamos los valores de expresión TPM de la matriz
   # `expr_media_por_linaje_cel` a ratios (similar al fold change, expresión
@@ -131,10 +131,13 @@ for (ruta_metab in nombres_pathways) {
   # tenga dimensiones genes X tipos celulares
   ratio_exp_por_linaje_cel <- t(expr_media_por_linaje_cel) / colMeans(expr_media_por_linaje_cel)
   
-  pathway_number_weight = 1 / gene_pathway_number[genes_detectados_todos_tipos_celulares,]
   
   
-  # Calculamos para cada linaje celular los cuartiles de los ratios de expresión génica #exclude the extreme ratios
+  # Calculamos para cada linaje celular los cuartiles de los ratios de expresión
+  # génica y eliminamos los genes outliers (con valores de expresión anómalos)
+  # para evitar ratios extremos. Si tras este cribado la ruta metabólica
+  # contiene menos de 3 genes aptos, descartamos su análisis y procedemos a la
+  # siguiente iteración del bucle
   cuartiles_ratios_exp_genica <- apply(ratio_exp_por_linaje_cel, 2, function(x) quantile(x, na.rm = T))
   cuartil1 <- cuartiles_ratios_exp_genica["25%",]
   limite_inferior <- cuartil1 / 3
@@ -143,18 +146,27 @@ for (ruta_metab in nombres_pathways) {
   outliers <- apply(ratio_exp_por_linaje_cel, 1, function(x) {any((x < limite_inferior) | (x > limite_superior))})
   
   if(sum(!outliers) < 3) {
-    message('Tras eliminar los outliers, la ruta metabólica "',ruta_metab,'" conserva menos de 3 genes. Omitiendo dicha ruta...')
+    message('Tras eliminar los genes con valores de expresión anormales (outliers), la ruta metabólica "',ruta_metab,'" conserva menos de 3 genes. Omitiendo dicha ruta...')
     next
   }
   
+  # Cribamos los genes por 3a vez y actualizamos la matriz de TPM, la matriz de
+  # linaje celular X genes y la matriz de ratios
   genes_detectados_todos_tipos_celulares <- names(outliers)[!outliers]
   matriz_TPM_pathway <- matriz_TPM_pathway[genes_detectados_todos_tipos_celulares,]
-  pathway_number_weight = 1 / gene_pathway_number[genes_detectados_todos_tipos_celulares,]
-  expr_media_por_linaje_cel <- apply(matriz_TPM_pathway, 1, function(x)by(x, all_cell_types, mean))
+  expr_media_por_linaje_cel <- apply(matriz_TPM_pathway, 1, function(x) by(x, all_cell_types, mean))
   ratio_exp_por_linaje_cel <- t(expr_media_por_linaje_cel) / colMeans(expr_media_por_linaje_cel)
-  mean_exp_pathway <- apply(ratio_exp_por_linaje_cel,2, function(x) weighted.mean(x, pathway_number_weight/sum(pathway_number_weight)))
-  mean_expression_shuffle[ruta_metab, ] <-  mean_exp_pathway[cell_types]
-  mean_expression_noshuffle[ruta_metab, ] <-  mean_exp_pathway[cell_types]
+  
+  
+  # Procedemos a calcular la actividad de la ruta metabólica en cada linaje
+  # celular. Para ello calcularemos la expresión media ponderada de los genes
+  # que participan en dicha ruta (penalizamos los genes que participan en muchas
+  # rutas metabólicas.
+  pesos_genes_pathway = 1 / gene_pathway_number[genes_detectados_todos_tipos_celulares,]
+  actividad_ponderada_pathway <- apply(ratio_exp_por_linaje_cel, 2, 
+                                 function(x) weighted.mean(x, w = pesos_genes_pathway / sum(pesos_genes_pathway)))
+  mean_expression_shuffle[ruta_metab, ] <-  actividad_ponderada_pathway[cell_types]
+  mean_expression_noshuffle[ruta_metab, ] <-  actividad_ponderada_pathway[cell_types]
     
   ##shuffle 5000 times:  
   ##define the functions 
@@ -166,14 +178,14 @@ for (ruta_metab in nombres_pathways) {
   }
   #####  
   times <- 1:5000
-  weight_values <- pathway_number_weight/sum(pathway_number_weight)
+  weight_values <- pesos_genes_pathway/sum(pesos_genes_pathway)
   shuffle_cell_types_list <- lapply(times,function(x) sample(all_cell_types)) 
   names(shuffle_cell_types_list) <- times
   mean_exp_eachCellType_list <- lapply(times,function(x) group_mean(x))
   ratio_exp_por_linaje_cel_list <- lapply(times,function(x) mean_exp_eachCellType_list[[x]] / rowMeans(mean_exp_eachCellType_list[[x]]))
-  mean_exp_pathway_list <- lapply(times,function(x) column_weigth_mean(x))
+  actividad_ponderada_pathway_list <- lapply(times,function(x) column_weigth_mean(x))
   
-  shuffle_results <- matrix(unlist(mean_exp_pathway_list),ncol=length(cell_types),byrow = T) 
+  shuffle_results <- matrix(unlist(actividad_ponderada_pathway_list),ncol=length(cell_types),byrow = T) 
   rownames(shuffle_results) <- times
   colnames(shuffle_results) <- cell_types
   for(c in cell_types){
