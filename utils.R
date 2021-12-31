@@ -16,15 +16,13 @@ gmtPathways <- function(gmt.file) {
 num_of_pathways <- function (gmtfile, overlapgenes){
   # Computes the sample covariance between two vectors.
   #
-  # Args:
-  #   x: One of two vectors whose sample covariance is to be calculated.
-  #   y: The other vector. x and y must have the same length, greater than one,
-  #      with no missing values.
-  #   verbose: If TRUE, prints sample covariance; if not, not. Default is TRUE.
+  # Argumentos:
+  #   gmtfile: Ruta (relativa o absoluta) al archivo .gmt con las rutas metabólicas
+  #   overlapgenes: vector de tipo "character" con los nombres de los genes a buscar en el archivo .gmt
   #
-  # Returns:
-  #   The sample covariance between x and y.
-  # TO DO: Añadir documentación a la función
+  # Output:
+  #   Un dataframe de dimensiones overlapgenes X 1 que contiene el nº de rutas en las que participa
+  #      cada gen
   pathways <- gmtPathways(gmtfile)
   pathway_names <- names(pathways)
   filter_pathways <- list()
