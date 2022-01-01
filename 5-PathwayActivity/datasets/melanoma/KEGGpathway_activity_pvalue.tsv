@@ -1,4 +1,4 @@
-B cell	T cell	Malignant	CAF	Macrophage	Endothelial	NK
+	B cell	T cell	Malignant	CAF	Macrophage	Endothelial	NK
 Glycolysis / Gluconeogenesis	0	0	0	0.1716	0	0	0.1744
 Citrate cycle (TCA cycle)	2e-04	0	0	0.005	0	0.0758	0.1
 Pentose phosphate pathway	0	0	0	2e-04	0	0.049	0.0038

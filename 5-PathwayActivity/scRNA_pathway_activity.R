@@ -7,22 +7,13 @@ library(scater)
 source("../utils.R")
 library(ggplot2)
 library(pheatmap)
-
-
-library(stringr)
 library(reshape2)
-library(scales)
-library(dplyr)
-library(ggrepel)
-library(RColorBrewer)
-
 
 # Opciones
 options(stringsAsFactors = F)
 # argumento <- commandArgs()
 # argumento <- argumento[6]
 argumento <- "melanoma"
-
 outDir <- file.path("datasets",argumento)
 if(!dir.exists(outDir) ) {dir.create(outDir, recursive = TRUE)}
 
@@ -251,35 +242,80 @@ for (ruta_metab in nombres_pathways) {
 }
 
 
-all_NA <- rowAlls(is.na(distribucion_nula_actividad_pathways))
-distribucion_nula_actividad_pathways <- distribucion_nula_actividad_pathways[!all_NA,]
-#heatmap
-dat <- distribucion_nula_actividad_pathways
+# Eliminamos en la distribución nula las rutas que no son significativas en
+# ningún linaje celular (i.e. la fila sólo contiene NAs)
+rutas_no_significativas <- rowAlls(is.na(distribucion_nula_actividad_pathways))
+distribucion_nula_actividad_pathways <- distribucion_nula_actividad_pathways[!rutas_no_significativas,]
 
-sort_row <- c()
-sort_column <- c()
 
-for(i in colnames(dat)){
-  select_row <- which(rowMaxs(dat,na.rm = T) == dat[,i])
-  tmp <- rownames(dat)[select_row][order(dat[select_row,i],decreasing = T)]
-  sort_row <- c(sort_row,tmp)
+
+####################################################################################################
+
+################################################################################
+###########     2. Generación y guardado de gráficos y resultados    ###########
+################################################################################
+
+# Renombramos la variable por comodidad
+data <- distribucion_nula_actividad_pathways
+
+sorted_rows <- c()
+sorted_columns <- c()
+
+
+# Ordenamos la actividad máxima de las rutas en cada tipo celular para que
+# salgan escalonadas en el heatmap
+for(i in colnames(data)){
+  select_row <- which(rowMaxs(data, na.rm = T) == data[,i])  # Seleciona las rutas en las que el tipo celular i presenta la actividad máxima de entre todos los tipos celulares
+  tmp <- rownames(data)[select_row][order(data[select_row,i], decreasing = T)] # Ordenamos dichas rutas, de mayor a menor actividad
+  sorted_rows <- c(sorted_rows, tmp)
 }
-sort_column <- apply(dat[sort_row,],2,function(x) order(x)[nrow(dat)])
-sort_column <- names(sort_column)
-dat[is.na(dat)] <- 1
-pdf(file.path(outDir,"KEGGpathway_activity_heatmap.pdf"),onefile=T,width=6,height=9)
+
+
+# Correr o no estas dos líneas no parece tener efectos en el heatmap ...
+sorted_columns <- apply(data[sorted_rows,], 2, function(x) order(x)[nrow(data)])
+sorted_columns <- names(sorted_columns)
+
+
+# Las casillas del heatmap sin información se marcan como no significativas
+# (fold change = 1)
+data[is.na(data)] <- 1 
+
+# Generamos el PDF donde guardaremos el heatmap
+pdf(file.path(outDir,"KEGGpathway_activity_heatmap.pdf"), onefile = T,
+    width = 6, height = 9)
+
+# Generamos la paleta de colores: un gradiente de azul a rojo (pasando por el
+# blanco) de 100 pasos
+color <- colorRampPalette(c("blue", "white", "red"))(100)
+
+# Le decimos al heatmap que use esa paleta de manera gradual, siendo el 2 rojo,
+# el 1 blanco y el 0 azul
 mybreaks <- c(
-  seq(0, 0.5, length.out=33),
-  seq(0.51, 1.5, length.out=33),
-  seq(1.51, max(dat),length.out=34)
-) 
-color <- colorRampPalette(c("blue","white","red"))(100)
-pheatmap(dat[sort_row,sort_column],cluster_cols = F,cluster_rows = F,color=color,breaks=mybreaks)
+  seq(0, 0.5, length.out = 33),
+  seq(0.51, 1.5, length.out = 33),
+  seq(1.51, max(data), length.out = 34)
+)
+
+# Graficamos el heatmap
+pheatmap(data[sorted_rows, sorted_columns], cluster_cols = F,
+         cluster_rows = F, color = color, breaks = mybreaks)
+
+# Guardamos heatmap en pdf a disco duro
 dev.off()
 
-write.table(distribucion_empirica_actividad_pathways,file=file.path(outDir,"KEGGpathway_activity_noshuffle.txt"),row.names=T,col.names=T,quote=F,sep="\t")
-write.table(distribucion_nula_actividad_pathways,file=file.path(outDir,"KEGGpathway_activity_shuffle.txt"),row.names=T,col.names=T,quote=F,sep="\t")
-write.table(matriz_pvalues,file=file.path(outDir,"KEGGpathway_activity_shuffle_pvalue.txt"),row.names=T,col.names=T,quote=F,sep="\t")
+
+# Guardamos las matrices de actividad de las rutas metabólicas y las de sus
+# p-valores
+write.table(distribucion_empirica_actividad_pathways, 
+            file = file.path(outDir,"KEGGpathway_activity_empirical_dist.tsv"),
+            row.names = T, col.names = NA, quote = F, sep = "\t")   # con col.names = NA ponemos bien los nomrbes de las columnas, aunque no lo parezca a priori
+
+write.table(distribucion_nula_actividad_pathways,
+            file = file.path(outDir,"KEGGpathway_activity_null_dist.tsv"),
+            row.names = T, col.names = NA, quote = F, sep = "\t")
+
+write.table(matriz_pvalues, file = file.path(outDir,"KEGGpathway_activity_pvalue.tsv"),
+            row.names = T, col.names = NA, quote = F, sep = "\t") 
 
 #boxplot show the distribution of pathway activity
 scRNA_dat <- as.data.frame(distribucion_empirica_actividad_pathways)
@@ -299,7 +335,7 @@ g <- ggplot(scRNA_df,aes(x=variable,y=value,fill=variable)) +
   axis.line=element_line(size=0.2,color="black"),
   axis.ticks = element_line(colour = "black",size=0.2),
   panel.border = element_blank(), panel.background = element_blank(),
-  axis.ticks.length= unit(.5, "mm"))
+  axis.ticks.length= unit(.5, "mm")) + geom_hline(yintercept = 1, color = "black")
 
-ggsave(file.path(outDir,"pathway_activity_violinplot.pdf"),g,width = 2.5,height=1.5,units="in",device="pdf",useDingbats=FALSE)
+ggsave(file.path(outDir,"pathway_activity_violinplot.pdf"), g, width = 2.5, height = 1.5, units = "in", device = "pdf",useDingbats=FALSE)
 
