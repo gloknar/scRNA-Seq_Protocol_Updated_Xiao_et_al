@@ -256,7 +256,7 @@ distribucion_nula_actividad_pathways <- distribucion_nula_actividad_pathways[!ru
 ################################################################################
 
 # Renombramos la variable por comodidad
-data <- distribucion_nula_actividad_pathways
+data <- distribucion_nula_actividad_pathways # No deberíamos usar la distribución empírica?
 
 sorted_rows <- c()
 sorted_columns <- c()
@@ -281,7 +281,7 @@ sorted_columns <- names(sorted_columns)
 data[is.na(data)] <- 1 
 
 # Generamos el PDF donde guardaremos el heatmap
-pdf(file.path(outDir,"KEGGpathway_activity_heatmap.pdf"), onefile = T,
+pdf(file.path(outDir,"KEGGpathway_activity_heatmap_emp.pdf"), onefile = T,
     width = 6, height = 9)
 
 # Generamos la paleta de colores: un gradiente de azul a rojo (pasando por el
@@ -317,25 +317,33 @@ write.table(distribucion_nula_actividad_pathways,
 write.table(matriz_pvalues, file = file.path(outDir,"KEGGpathway_activity_pvalue.tsv"),
             row.names = T, col.names = NA, quote = F, sep = "\t") 
 
-#boxplot show the distribution of pathway activity
-scRNA_dat <- as.data.frame(distribucion_empirica_actividad_pathways)
-scRNA_dat$X <- NULL
 
-scRNA_df <- melt(scRNA_dat)
-scRNA_df <- scRNA_df[!is.na(scRNA_df$value),]
-g <- ggplot(scRNA_df,aes(x=variable,y=value,fill=variable)) +
-  scale_y_continuous(limits=c(0,3),breaks=0:3,labels=0:3)+
-  geom_violin(trim=F,size=0.2,show.legend = F,width=1.0) + labs(y=NULL,x=NULL) + 
-  stat_summary(fun.y = median,geom="point",size=1,color="blue")+
-  scale_fill_brewer(palette="Set2") +
+
+# Creamos un violinplot para comparar la actividad metabólica global entre tipos
+# celulares
+scRNA_data <- as.data.frame(distribucion_empirica_actividad_pathways)
+scRNA_data_flattened <- melt(scRNA_data, na.rm = T)
+# scRNA_data_flattened <- scRNA_data_flattened[!is.na(scRNA_data_flattened$value),]  # Otra manera de eliminar los NA
+
+
+graf_violin <- ggplot(scRNA_data_flattened, aes(x = variable, y = value, fill = variable)) +
+  scale_y_continuous(limits = c(0, 3), breaks = 0:3, labels = 0:3) +   # Establecemos el ylim en 0-3
+  geom_violin(trim = F, size = 0.2, show.legend = F, width = 1.0) +    # Violines
+  labs(y = NULL, x = NULL) +                                           # Eliminamos las etiquetas de los ejes X e Y
+  geom_hline(yintercept = 1, color = "black", linetype = "dashed") +
+  stat_summary(fun = median, geom = "point", size = 1, color = "blue") +  # Marcamos con un punto azul la mediana en los violines
+  scale_fill_brewer(palette = "Set2") +
   theme_classic() + 
-  theme(legend.position="none",
-  axis.text.x=element_text(colour="black", size = 6,angle=45,hjust=1,vjust=1),
-  axis.text.y=element_text(colour="black", size = 6),
-  axis.line=element_line(size=0.2,color="black"),
-  axis.ticks = element_line(colour = "black",size=0.2),
+  theme(legend.position = "none",                                    # Eliminamos la leyenda porque el gráfico es auto-explicatorio
+  axis.text.x = element_text(colour = "black", size = 6, angle = 45, hjust = 1, vjust = 1),  # Propiedades del texto del eje X (tipos celulares)
+  axis.text.y = element_text(colour = "black", size = 6),
+  axis.line = element_line(size = 0.2, color = "black"),
+  axis.ticks = element_line(colour = "black", size = 0.2),
   panel.border = element_blank(), panel.background = element_blank(),
-  axis.ticks.length= unit(.5, "mm")) + geom_hline(yintercept = 1, color = "black")
+  axis.ticks.length = unit(.5, "mm"))
 
-ggsave(file.path(outDir,"pathway_activity_violinplot.pdf"), g, width = 2.5, height = 1.5, units = "in", device = "pdf",useDingbats=FALSE)
+# Guardamos a disco duro el violinplot
+ggsave(file.path(outDir,"pathway_activity_violinplot.pdf"), graf_violin, 
+       width = 2.5, height = 1.5, units = "in", device = "pdf",
+       useDingbats = FALSE)
 
