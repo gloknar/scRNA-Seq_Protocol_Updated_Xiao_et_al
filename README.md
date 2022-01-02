@@ -90,7 +90,7 @@ En este paso nos fijaremos en los 1566 genes metabólicos para agrupar y visuali
 
 También calcularemos la matriz de correlación de Spearman (no paramétrico) de los distintos tumores dentro de una misma patología para mostrar su heterogeneidad. Los distintos melanomas presentes en nuestro dataset están clasificados como melanomas, pero sus perfiles de expresión de genes metabólicos demuestran que son distintos entre sí (ídem para las neoplasias de HNSCC).
 
-## Actividad de las rutas metabólicas en distintos tipos celulares
+## Heatmap y violinplot de la actividad metabólica en los distintos tipos celulares
 
 
 ``` bash
