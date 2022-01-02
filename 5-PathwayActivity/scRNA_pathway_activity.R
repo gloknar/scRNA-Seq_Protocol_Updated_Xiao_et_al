@@ -64,8 +64,8 @@ gene_pathway_number <- num_of_pathways(ruta_archivo_pathways,
 # aquí: https://www.jwilber.me/permutationtest/)
 
 
-# Primero inicializamos 3 matrices vacías de dimensiones rutas metabólicas X tipos
-# celulares:
+## Primero inicializamos 3 matrices vacías de dimensiones rutas metabólicas X
+## tipos celulares:
 
 # Una para almacenar los p-valores de la actividad metabólica (p-valores
 # calculados con el test de permutación aleatoria)
@@ -87,11 +87,7 @@ distribucion_empirica_actividad_pathways <- matrix(NA, nrow = length(nombres_pat
 
 
 
-
-
-
-
-# Lo segundo es definir las funciones que usaremos en el bucle a continuación
+## Lo segundo es definir las funciones que usaremos en el bucle a continuación
 group_mean <- function(x){
   sapply(linajes_celulares, function(y) rowMeans(matriz_TPM_pathway[,etiquetas_celulas_dist_nula[[x]] == y, drop = F]))
 }
@@ -101,9 +97,10 @@ column_weigth_mean <- function(x){
 }
 
 
-# Ahora iteramos sobre cada ruta metabólica del archivo pathways.gmt para
-# calcular su actividad relativa (a lo "Fold Change") respecto a los distintos
-# linajes celulares y su p-valor por linaje celular
+
+## Ahora iteramos sobre cada ruta metabólica del archivo pathways.gmt para
+## calcular su actividad relativa (a lo "Fold Change") respecto a los distintos
+## linajes celulares y su p-valor por linaje celular
 for (ruta_metab in nombres_pathways) {
   
   ########################################################################
@@ -204,7 +201,7 @@ for (ruta_metab in nombres_pathways) {
   distribucion_permutada_actividad_pathways[ruta_metab, ] <-  actividad_ponderada_pathway[linajes_celulares]
   distribucion_empirica_actividad_pathways[ruta_metab, ] <-  actividad_ponderada_pathway[linajes_celulares]
   
-  # Generamos la distribución nula (No sacarlo del bucle; los resultados cambian ligeramente respecto al paper original)
+  # Generamos la distribución permutada (No sacarlo del bucle; los resultados cambian ligeramente respecto al paper original)
   permutaciones <- 1:5000
   etiquetas_celulas_dist_nula <- lapply(permutaciones, function(x) sample(etiquetas_celulas))
   names(etiquetas_celulas_dist_nula) <- permutaciones
@@ -250,7 +247,7 @@ for (ruta_metab in nombres_pathways) {
 }
 
 
-# Eliminamos en la distribución nula las rutas que no son significativas en
+# Eliminamos en la distribución permutada las rutas que no son significativas en
 # ningún linaje celular (i.e. la fila sólo contiene NAs)
 rutas_no_significativas <- rowAlls(is.na(distribucion_permutada_actividad_pathways))
 distribucion_permutada_actividad_pathways <- distribucion_permutada_actividad_pathways[!rutas_no_significativas,]
@@ -289,7 +286,7 @@ sorted_columns <- names(sorted_columns)
 data[is.na(data)] <- 1 
 
 # Generamos el PDF donde guardaremos el heatmap
-pdf(file.path(outDir,"KEGGpathway_activity_heatmap_emp.pdf"), onefile = T,
+pdf(file.path(outDir,"KEGGpathway_activity_heatmap_permutation.pdf"), onefile = T,
     width = 6, height = 9)
 
 # Generamos la paleta de colores: un gradiente de azul a rojo (pasando por el
@@ -319,7 +316,7 @@ write.table(distribucion_empirica_actividad_pathways,
             row.names = T, col.names = NA, quote = F, sep = "\t")   # con col.names = NA ponemos bien los nomrbes de las columnas, aunque no lo parezca a priori
 
 write.table(distribucion_permutada_actividad_pathways,
-            file = file.path(outDir,"KEGGpathway_activity_null_dist.tsv"),
+            file = file.path(outDir,"KEGGpathway_activity_permutation_dist.tsv"),
             row.names = T, col.names = NA, quote = F, sep = "\t")
 
 write.table(matriz_pvalues, file = file.path(outDir,"KEGGpathway_activity_pvalue.tsv"),
@@ -351,7 +348,7 @@ graf_violin <- ggplot(scRNA_data_flattened, aes(x = variable, y = value, fill = 
   axis.ticks.length = unit(.5, "mm"))
 
 # Guardamos a disco duro el violinplot
-ggsave(file.path(outDir,"pathway_activity_violinplot.pdf"), graf_violin, 
+ggsave(file.path(outDir,"pathway_global_activity_violinplot.pdf"), graf_violin, 
        width = 2.5, height = 1.5, units = "in", device = "pdf",
        useDingbats = FALSE)
 
