@@ -101,8 +101,8 @@ Rscript TCGA_pathway_activity.R
 cd ..
 ```
 
-En este paso calculamos la actividad de las distintas rutas metabólicas en cada linaje celular, tanto en el dataset de bulk RNA-seq como en el de scRNA-seq.
-Con el script `scRNA_pathway_activity.R` creamos un heatmap donde desglosamos en detalle la actividad de cada ruta metabólica de interés en nuestros tipos celulares y un violinplot donde se muestra la actividad global de las rutas en cada tipo celular. Así mismo, se genera una matriz con los p-valores para la actividad de cada ruta en cada tipo celular.
+En este paso calculamos la actividad de las distintas rutas metabólicas (1566 genes metabs) en cada linaje celular, tanto en el dataset de bulk RNA-seq como en el de scRNA-seq.
+Con el script `scRNA_pathway_activity.R` creamos un heatmap donde desglosamos en detalle la actividad de cada ruta metabólica de interés en nuestros tipos celulares y un violinplot donde se muestra la actividad global de las rutas en cada tipo celular. Así mismo, se genera una matriz con los p-valores para la actividad de cada ruta en cada tipo celular. Los p-valores se obtuvieron remuestreando los datos 5000 veces (test de permutación aleatoria).
 
 Para calcular la actividad de cada ruta, se obtuvo en cada linaje celular la expresión media de los genes que la constituyen, luego se dividieron estas medias por la actividad media del gen a lo largo de todos los linajes celulares para calcular la actividad relativa (a lo fold change), se penalizaron con pesos los genes que participan en más de una ruta y se sumó la actividad de todos los genes de dicha ruta. 
 
