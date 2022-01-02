@@ -104,6 +104,8 @@ cd ..
 En este paso calculamos la actividad de las distintas rutas metabólicas en cada linaje celular, tanto en el dataset de bulk RNA-seq como en el de scRNA-seq.
 Con el script `scRNA_pathway_activity.R` creamos un heatmap donde desglosamos en detalle la actividad de cada ruta metabólica de interés en nuestros tipos celulares y un violinplot donde se muestra la actividad global de las rutas en cada tipo celular. Así mismo, se genera una matriz con los p-valores para la actividad de cada ruta en cada tipo celular.
 
+Para calcular la actividad de cada ruta, se obtuvo en cada linaje celular la expresión media de los genes que la constituyen, luego se dividieron estas medias por la actividad media del gen a lo largo de todos los linajes celulares para calcular la actividad relativa (a lo fold change), se penalizaron con pesos los genes que participan en más de una ruta y se sumó la actividad de todos los genes de dicha ruta. 
+
 *The bulk RNA-seq data was downloaded from TCGA website, please see the instruction of data downloading and preprocessing in Data/TCGA/README.md* 
 
 Metabolic pathway heterogeneity
