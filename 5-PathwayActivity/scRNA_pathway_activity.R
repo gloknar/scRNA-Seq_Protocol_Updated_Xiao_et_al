@@ -59,8 +59,9 @@ gene_pathway_number <- num_of_pathways(ruta_archivo_pathways,
 # la actividad de la ruta en cada linaje celular mediante la expresión media
 # relativa ponderada de los genes que participan en dicha ruta (penalizamos los
 # genes que participan en muchas rutas metabólicas) y compararemos esos valores
-# con los de una distribución nula, resultado de cambiar aleatoriamente las
-# etiquetas de las células.
+# con los de la distribución permutada, resultado de cambiar aleatoriamente las
+# etiquetas de las células. (Más información sobre los tests de permutación
+# aquí: https://www.jwilber.me/permutationtest/)
 
 
 # Primero inicializamos 3 matrices vacías de dimensiones rutas metabólicas X tipos
@@ -71,15 +72,22 @@ gene_pathway_number <- num_of_pathways(ruta_archivo_pathways,
 matriz_pvalues <- matrix(NA, nrow = length(nombres_pathways), 
                          ncol = length(linajes_celulares), dimnames = list(nombres_pathways, linajes_celulares))
 
-# Otra para almacenar la actividad real de las rutas metabólicas en los
-# distintos tipos celulares
-distribucion_nula_actividad_pathways <- matrix(NA, nrow = length(nombres_pathways), 
-                           ncol = length(linajes_celulares), dimnames = list(nombres_pathways, linajes_celulares))
+# Otra para almacenar la actividad de las rutas metabólicas permutadas 5000
+# veces
+distribucion_permutada_actividad_pathways <- matrix(NA, nrow = length(nombres_pathways), 
+                                                    ncol = length(linajes_celulares), dimnames = list(nombres_pathways, linajes_celulares))
 
-# Y otra para almacenar la distribución nula sobre la que comparar la actividad
-# real de las rutas
+# Y otra para almacenar la actividad original de las rutas metabólicas en los
+# distintos tipos celulares, sobre la que compararemos la distirbución permutada
+# para calcular los p-valores
 distribucion_empirica_actividad_pathways <- matrix(NA, nrow = length(nombres_pathways), 
-                             ncol = length(linajes_celulares), dimnames = list(nombres_pathways, linajes_celulares))
+                                                   ncol = length(linajes_celulares), dimnames = list(nombres_pathways, linajes_celulares))
+
+
+
+
+
+
 
 
 
@@ -193,7 +201,7 @@ for (ruta_metab in nombres_pathways) {
   # estadística de la actividad de las rutas metabólicas en cada estirpe
   # celular. Rellenamos la fila correspondiente de las matrices de dimensiones
   # ruta metabólica X linaje celular
-  distribucion_nula_actividad_pathways[ruta_metab, ] <-  actividad_ponderada_pathway[linajes_celulares]
+  distribucion_permutada_actividad_pathways[ruta_metab, ] <-  actividad_ponderada_pathway[linajes_celulares]
   distribucion_empirica_actividad_pathways[ruta_metab, ] <-  actividad_ponderada_pathway[linajes_celulares]
   
   # Generamos la distribución nula (No sacarlo del bucle; los resultados cambian ligeramente respecto al paper original)
@@ -219,21 +227,21 @@ for (ruta_metab in nombres_pathways) {
   
   for (c in linajes_celulares) {
     # Si esta ruta no pasó los cribados (ergo contiene NAs), no la procesamos
-    if (is.na(distribucion_nula_actividad_pathways[ruta_metab,c])) {  
+    if (is.na(distribucion_permutada_actividad_pathways[ruta_metab,c])) {  
       next
     }
     
     # Calculamos los p-values
-    if (distribucion_nula_actividad_pathways[ruta_metab, c] > 1) {
-      pval <- sum(matriz_permutaciones[, c] > distribucion_nula_actividad_pathways[ruta_metab, c]) / 5000 
-    } else if (distribucion_nula_actividad_pathways[ruta_metab,c] < 1) {
-      pval <- sum(matriz_permutaciones[, c] < distribucion_nula_actividad_pathways[ruta_metab, c]) / 5000
+    if (distribucion_permutada_actividad_pathways[ruta_metab, c] > 1) {
+      pval <- sum(matriz_permutaciones[, c] > distribucion_permutada_actividad_pathways[ruta_metab, c]) / 5000 
+    } else if (distribucion_permutada_actividad_pathways[ruta_metab,c] < 1) {
+      pval <- sum(matriz_permutaciones[, c] < distribucion_permutada_actividad_pathways[ruta_metab, c]) / 5000
     }
     
     # Si la ruta no es estadísticamente significativa, le asignamos como p-valor
     # un NA, ya que se muestra blanco en el heatmap
     if (pval > 0.01) {
-      distribucion_nula_actividad_pathways[ruta_metab, c] <- NA
+      distribucion_permutada_actividad_pathways[ruta_metab, c] <- NA
     }
     
     # Por último rellenamos la matriz de los p-valores
@@ -244,8 +252,8 @@ for (ruta_metab in nombres_pathways) {
 
 # Eliminamos en la distribución nula las rutas que no son significativas en
 # ningún linaje celular (i.e. la fila sólo contiene NAs)
-rutas_no_significativas <- rowAlls(is.na(distribucion_nula_actividad_pathways))
-distribucion_nula_actividad_pathways <- distribucion_nula_actividad_pathways[!rutas_no_significativas,]
+rutas_no_significativas <- rowAlls(is.na(distribucion_permutada_actividad_pathways))
+distribucion_permutada_actividad_pathways <- distribucion_permutada_actividad_pathways[!rutas_no_significativas,]
 
 
 
@@ -256,7 +264,7 @@ distribucion_nula_actividad_pathways <- distribucion_nula_actividad_pathways[!ru
 ################################################################################
 
 # Renombramos la variable por comodidad
-data <- distribucion_nula_actividad_pathways # No deberíamos usar la distribución empírica?
+data <- distribucion_permutada_actividad_pathways # No deberíamos usar la distribución empírica?
 
 sorted_rows <- c()
 sorted_columns <- c()
@@ -310,7 +318,7 @@ write.table(distribucion_empirica_actividad_pathways,
             file = file.path(outDir,"KEGGpathway_activity_empirical_dist.tsv"),
             row.names = T, col.names = NA, quote = F, sep = "\t")   # con col.names = NA ponemos bien los nomrbes de las columnas, aunque no lo parezca a priori
 
-write.table(distribucion_nula_actividad_pathways,
+write.table(distribucion_permutada_actividad_pathways,
             file = file.path(outDir,"KEGGpathway_activity_null_dist.tsv"),
             row.names = T, col.names = NA, quote = F, sep = "\t")
 
