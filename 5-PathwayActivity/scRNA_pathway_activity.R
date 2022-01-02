@@ -11,9 +11,9 @@ library(reshape2)
 
 # Opciones
 options(stringsAsFactors = F)
-argumento <- commandArgs()
-argumento <- argumento[6]
-# argumento <- "melanoma"
+# argumento <- commandArgs()
+# argumento <- argumento[6]
+argumento <- "melanoma"
 outDir <- file.path("datasets",argumento)
 if(!dir.exists(outDir) ) {dir.create(outDir, recursive = TRUE)}
 
@@ -335,7 +335,7 @@ graf_violin <- ggplot(scRNA_data_flattened, aes(x = variable, y = value, fill = 
   scale_y_continuous(limits = c(0, 3), breaks = 0:3, labels = 0:3) +   # Establecemos el ylim en 0-3
   geom_violin(trim = F, size = 0.2, show.legend = F, width = 1.0) +    # Violines
   labs(y = NULL, x = NULL) +                                           # Eliminamos las etiquetas de los ejes X e Y
-  geom_hline(yintercept = 1, color = "black", linetype = "dashed") +
+  geom_hline(yintercept = 1, color = "black", linetype = "dashed", size = .2) +
   stat_summary(fun = median, geom = "point", size = 1, color = "blue") +  # Marcamos con un punto azul la mediana en los violines
   scale_fill_brewer(palette = "Set2") +
   theme_classic() + 
