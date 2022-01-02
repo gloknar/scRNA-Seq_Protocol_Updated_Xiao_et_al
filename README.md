@@ -67,7 +67,7 @@ En este paso evaluamos en nuestros datasets la eficacia de 4 métodos de normali
 
 Tras normalizar los datos, graficamos los resultados para poder compararlos y seguir el protocolo con el método que mejor nos funcione (en este caso, será el método de deconvolución de scran).
 
-## Clustering y visualización no lineal de las células en función de los genes metabólicos
+## Clustering y visualización de las células en función de los genes metabólicos
 
 ``` bash
 cd "4-Clustering"
@@ -101,7 +101,8 @@ Rscript TCGA_pathway_activity.R
 cd ..
 ```
 
-This step will calculate the metabolic pathway activities for different single cell populations or bulk tumor/normal samples. The scatter plot will show the discrepancy of pathway activities between single malignant cells and bulk tumors. The violin plot will show the distribution of metabolic pathway activities in single cell populations or bulk tumor/normal samples.
+En este paso calculamos la actividad de las distintas rutas metabólicas en cada linaje celular, tanto en el dataset de bulk RNA-seq como en el de scRNA-seq.
+Con el script `scRNA_pathway_activity.R` creamos un heatmap donde desglosamos en detalle la actividad de cada ruta metabólica de interés en nuestros tipos celulares y un violinplot donde se muestra la actividad global de las rutas en cada tipo celular. Así mismo, se genera una matriz con los p-valores para la actividad de cada ruta en cada tipo celular.
 
 *The bulk RNA-seq data was downloaded from TCGA website, please see the instruction of data downloading and preprocessing in Data/TCGA/README.md* 
 
