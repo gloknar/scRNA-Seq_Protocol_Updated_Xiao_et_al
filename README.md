@@ -95,8 +95,12 @@ También calcularemos la matriz de correlación de Spearman (no paramétrico) de
 
 ``` bash
 cd 5-PathwayActivity
+
+# Datasets de scRNA-seq
 Rscript scRNA_pathway_activity.R melanoma
 Rscript scRNA_pathway_activity.R head_neck
+
+# Dataset de bulk RNA-seq
 Rscript TCGA_pathway_activity.R
 cd ..
 ```
