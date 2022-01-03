@@ -11,15 +11,16 @@ source("runGSEA_preRank.R")
 
 
 
-args <- commandArgs()
-tumor <- args[6]
-outDir <- file.path("dataset",tumor)
+# args <- commandArgs()
+# tumor <- args[6]
+tumor = "melanoma"
+outDir <- file.path("datasets",tumor)
 if(!dir.exists(outDir) ) dir.create(outDir,recursive=TRUE)
 pathway_file <- "../Data/KEGG_metabolism.gmt"
 
 
 #1. Loading the data
-selected_sce <- readRDS(file.path("../1-ReadData/dataset/",tumor,"selected_sce.rds"))
+selected_sce <- readRDS(file.path("../1-ReadData/datasets/",tumor,"filtered_sce.rds"))
 selected_tumor_sce <- selected_sce[,selected_sce$cellType=="Malignant"]
 selected_tumor_metabolic_sce <- selected_tumor_sce[rowData(selected_tumor_sce)$metabolic,]
 #=========================================================================
@@ -31,6 +32,7 @@ enrich_data_df <- data.frame(x=NULL,y=NULL,NES=NULL,PVAL=NULL)
 pc_plotdata <- data.frame(x=numeric(),y=numeric(),
                           sel=character(),tumor=character())
 
+t= "MEL7"
 for (t in tumors){
   each_metabolic_sce <- selected_tumor_metabolic_sce[,selected_tumor_metabolic_sce$tumor==t]
   each_metabolic_tpm <- assay(each_metabolic_sce,"exprs")
@@ -60,12 +62,29 @@ for (t in tumors){
   #get the result
   result_dir <- list.files(path="preRankResults",pattern = paste0("^",t,".GseaPreranked(.*)"),full.names=T)
   result_file <- list.files(path=result_dir,pattern="gsea_report_for_na_pos_(.*).xls",full.names=T)
-  gsea_result <- read.table(result_file,header = T,sep="\t",row.names=1)
+  # gsea_result <- read.table(result_file,header = T,sep="\t",row.names=1)
+  gsea_result <- read.table("prerank.rnk",header = T,sep="\t",row.names=1)
   gsea_pathways <- str_to_title(rownames(gsea_result))
   gsea_pathways <- str_replace(gsea_pathways,"Tca","TCA")
   gsea_pathways <- str_replace(gsea_pathways,"Gpi","GPI")
+  
   enrich_data_df <- rbind(enrich_data_df,data.frame(x=t,y=gsea_pathways,NES=gsea_result$NES,PVAL=gsea_result$NOM.p.val))
 }
+
+
+#### DEPURADO DE BUGS
+enrich_data_df
+
+data.frame(x=t,y=gsea_pathways,NES=gsea_result$"X1.4560827160373",PVAL=gsea_result$NOM.p.val)
+
+names(gsea_result)
+
+##################
+
+
+
+
+
 #remove pvalue <0.01 pathways
 min_pval <- by(enrich_data_df$PVAL, enrich_data_df$y, FUN=min)
 select_pathways <- names(min_pval)[(min_pval<=0.01)]
