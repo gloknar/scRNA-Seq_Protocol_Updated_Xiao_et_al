@@ -13,7 +13,7 @@ colClass[1] <- "character"
 colClass[2] <- "NULL"
 ccld_data <- read.table("CCLE_RNAseq_rsem_genes_tpm_20180929.txt",header=T,sep="\t",row.names=1,colClasses = colClass)
 rownames(ccld_data) <- str_split_fixed(rownames(ccld_data),fixed('.'),2)[,1]
-ensembl <- useMart("ensembl",host="http://www.ensembl.org")
+ensembl <- useMart("ensembl",host="https://www.ensembl.org")
 ensembl <- useDataset("hsapiens_gene_ensembl",mart=ensembl)
 gene_names <- getBM(attributes=c("ensembl_gene_id","hgnc_symbol"),
                     filter="ensembl_gene_id",
@@ -45,4 +45,4 @@ hypoxia_mean <- colMeans(hypoxia_exp,na.rm=T)
 
 dat <- data.frame(OXPHOS=oxphos_mean,Glycolysis=glycolysis_mean,Hypoxia=hypoxia_mean)
 print("correlation:")
-print(cor(da))
+print(cor(dat))
