@@ -8,13 +8,14 @@ source("runGSEA.R")
 pathway_file <- "../Data/KEGG_metabolism.gmt"
 hall_gmt <- '../Data/h.all.v6.1.symbols.gmt'
 
-args <- commandArgs()
-tumor <- args[6]
-outDir <- file.path("dataset",tumor)
+# args <- commandArgs()
+# tumor <- args[6]
+tumor <- "melanoma"
+outDir <- file.path("datasets",tumor)
 if(!dir.exists(outDir) ) dir.create(outDir,recursive=TRUE)
 
 #1. Loading the data
-selected_sce <- readRDS(file.path("../1-ReadData/dataset/",tumor,"selected_sce.rds"))
+selected_sce <- readRDS(file.path("../1-ReadData/datasets/",tumor,"filtered_sce.rds"))
 selected_nontumor_sce <- selected_sce[,selected_sce$cellType!="Malignant"]
 selected_nontumor_metabolic_sce <- selected_nontumor_sce[rowData(selected_nontumor_sce)$metabolic,]
 #=========================================================================
