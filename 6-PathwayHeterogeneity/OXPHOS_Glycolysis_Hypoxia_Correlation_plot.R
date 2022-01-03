@@ -14,13 +14,14 @@ oxphos_genes <- pathways[["Oxidative phosphorylation"]]
 glycolysis_genes <- pathways[["Glycolysis / Gluconeogenesis"]]
 hypoxia_genes <- all_pathways[["HALLMARK_HYPOXIA"]]
 
-args <- commandArgs()
-tumor <- args[6]
-outDir <- file.path("dataset",tumor)
+# args <- commandArgs()
+# tumor <- args[6]
+tumor <- "melanoma"
+outDir <- file.path("datasets",tumor)
 if(!dir.exists(outDir) ) dir.create(outDir,recursive=TRUE)
 
 #1. Loading the data
-selected_sce <- readRDS(file.path("../1-ReadData/dataset/",tumor,"selected_sce.rds"))
+selected_sce <- readRDS(file.path("../1-ReadData/datasets/",tumor,"filtered_sce.rds"))
 selected_tumor_sce <- selected_sce[,selected_sce$cellType=="Malignant"]
 #=========================================================================
 tumors <- unique(selected_tumor_sce$tumor)
