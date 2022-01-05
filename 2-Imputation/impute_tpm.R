@@ -19,6 +19,7 @@ num_cores <- 6                               # Usar 1 en Windows (scImpute usa m
 # de él creamos un objeto `sce` con sólo las células tumorales y otro con sólo
 # las células no tumorales
 filtered_sce <- readRDS(file.path("../1-ReadData/datasets",argumento,"filtered_sce.rds"))
+filtered_sce$cellType <- droplevels(filtered_sce$cellType)
 filtered_sce_tumor <- filtered_sce[, filtered_sce$cellType == "Malignant"]
 filtered_sce_nontumor <- filtered_sce[, filtered_sce$cellType != "Malignant"]
 
