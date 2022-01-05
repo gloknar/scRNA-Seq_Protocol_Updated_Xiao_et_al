@@ -62,3 +62,5 @@
 6-PathwayHeterogeneity/CCLE_RNAseq_rsem_genes_tpm_20180929.txt
 2-Imputation/datasets/melanoma/malignant.tpm
 2-Imputation/datasets/melanoma/non_malignant.tpm
+2-Imputation/datasets/melanoma/non_malignant/pars1.rds
+2-Imputation/datasets/melanoma/non_malignant/totalCounts_by_cell.rds
