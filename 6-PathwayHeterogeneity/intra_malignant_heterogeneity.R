@@ -68,8 +68,8 @@ dim(each_metabolic_tpm)
 View(each_metabolic_tpm)
 
 
-
 x <- each_metabolic_tpm
+
 ntop <- nrow(x)
 rv <- rowVars(x)
 select <- order(rv, decreasing=TRUE)[seq_len(min(ntop, length(rv)))]
