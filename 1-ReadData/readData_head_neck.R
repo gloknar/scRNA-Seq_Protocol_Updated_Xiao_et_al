@@ -2,14 +2,17 @@
 ###########     0. Carga de paquetes, opciones y funciones de interés      ###########
 ######################################################################################
 
-source("../utils.R") # Cargamos funciones definidas en el archivo `utils.R` 
+# Paquetes y funciones auxiliares
 library(scater)
 library(stringr)
 library(reshape2)
 library(plyr)
-options(stringsAsFactors=FALSE)
-outdir <- "datasets/head_neck"
-if(!dir.exists(outdir)) {dir.create(outdir)}  # Si no existe la carpeta `head_neck`, la creamos
+source("../utils.R") # Cargamos funciones definidas en el archivo `utils.R` 
+
+# Opciones
+options(stringsAsFactors = FALSE)
+outDir <- "datasets/head_neck"
+if(!dir.exists(outDir)) {dir.create(outDir)}  # Si no existe la carpeta `head_neck`, la creamos
 
 
 
@@ -32,15 +35,15 @@ temporary_data <- read.table(dataset_crudo, head = T, sep = "\t", row.names = 1,
                              quote = "\'", stringsAsFactors = F)
 
 # Obtenemos nombres de los tumores
-tumor_samples_names <- sapply(str_split(colnames(temporary_data),"_"),function(x) x[1], simplify = T) # Devuelve un vector con los nombres de las celulas (corta los nombres por las barrabajas y se queda con el primero de los cachitos, que tiene formas como "HN28" o "HNSCC26")
-tumor_samples_names <- str_sub(tumor_samples_names,-2,-1)  # Elimina lo de HN y HNSCC... se queda sólo con los 2 últimos caracteres, que son 2 números
+tumor_samples_names <- sapply(str_split(colnames(temporary_data),"_"), function(x) x[1], simplify = T) # Devuelve un vector con los nombres de las celulas (corta los nombres por las barrabajas y se queda con el primero de los cachitos, que tiene formas como "HN28" o "HNSCC26")
+tumor_samples_names <- str_sub(tumor_samples_names, -2, -1)  # Elimina lo de HN y HNSCC... se queda sólo con los 2 últimos caracteres, que son 2 números
 tumor_samples_names <- paste0("MEEI",str_replace(tumor_samples_names,"C","")) # Les añade el prefijo MEEI, de manera que se quedan MEEII26, MEEII28, etc... y si encuentra una C, la borra
 
 # Obtenemos los tipos celulares
 cell_type <- as.character(temporary_data[5,]) # Crea un vector de strings a partir de la fila 5, que contiene los tipos de célula (tiene mezclados números y strings, por eso lo castea todo a string)
 malignant_cells <- as.character(temporary_data[3,]) == "1"   # La fila 3 codifica si la célula es normal ("0") o tumoral ("1")
 cell_type[malignant_cells] <- "Malignant"  # Coge el vector de tipos celulares, y las que tengan en la fila 3 el valor 1, las recataloga como "Malignant"
-cell_type[cell_type==0] <- "Unknown" # Las células catalogadas como "0" se renombran a "Unknown" (tipo celular desconocido)
+cell_type[cell_type == 0] <- "Unknown" # Las células catalogadas como "0" se renombran a "Unknown" (tipo celular desconocido)
 
 # `metadatos` es un dataframe con los metadatos de las células y es necesario
 # para construir el objeto de tipo `sce` en el paso 3
@@ -67,7 +70,7 @@ rm(temporary_data) # Eliminamos el dataframe temporal, pues no lo usaremos más
 pathways <- gmtPathways("../Data/KEGG_metabolism.gmt") # Obtenemos una lista de rutas metabólicas a partir de un archivo .GMT
 metabolics <- unique(as.vector(unname(unlist(pathways)))) # Nos quedamos con los nombres únicos (=no repetidos) de los genes que participan en dichas rutas metabólicas, que son 1667 (los guardamos en un vector de strings)
 row_data <- data.frame(metabolic = rep(FALSE, nrow(quasilog2_tpm)), row.names = rownames(quasilog2_tpm)) # Creamos un dataframe que indica para cada gen si pertenece a las rutas de interés. Este objeto es necesario para crear el objeto de tipo `sce`
-row_data[rownames(row_data)%in%metabolics,"metabolic"] = TRUE  # Marcamos como TRUE los 1667 genes de interés, de un total de 23686 genes secuenciados... nos quedaremos sólo con los genes de interés en el paso de generar el objeto de tipo `Single Cell Experiment`
+row_data[rownames(row_data) %in% metabolics, "metabolic"] = TRUE  # Marcamos como TRUE los 1667 genes de interés, de un total de 23686 genes secuenciados... nos quedaremos sólo con los genes de interés en el paso de generar el objeto de tipo `Single Cell Experiment`
 
 
 
@@ -106,23 +109,23 @@ sce <- SingleCellExperiment(assays = list(tpm = raw_tpm, exprs = quasilog2_tpm),
 # Creamos 2 objetos `sce`: Uno que contiene las células tumorales y otro que
 # contiene las células sanas (las células de tipo Unknown no se usan)
 tumor_sce <- sce[,sce$cellType == "Malignant"]
-nontumor_sce <- sce[,!sce$cellType%in%c("Unknown","Malignant")]
+nontumor_sce <- sce[, !sce$cellType %in% c("Unknown", "Malignant")]
 
 # Nos quedamos con los tumores de más de 50 células
 tumor_sample_stats <- table(tumor_sce$tumor)
-tumor_sample_select <- names(tumor_sample_stats)[tumor_sample_stats>=50] # Eliminaron los tipos celulares con <50 células
-selected_tumor_sce <- tumor_sce[,tumor_sce$tumor %in% tumor_sample_select]
+tumor_sample_select <- names(tumor_sample_stats)[tumor_sample_stats >= 50] # Eliminaron los tipos celulares con <50 células
+selected_tumor_sce <- tumor_sce[, tumor_sce$tumor %in% tumor_sample_select]
 
 # Nos quedamos con los tipos celulares sanos con más de 50 células
 nontumor_stats <- table(nontumor_sce$cellType)
-nontumor_select <- names(nontumor_stats)[nontumor_stats>=50]    # Eliminaron los tipos celulares con <50 células
-selected_nontumor_sce <- nontumor_sce[,nontumor_sce$cellType %in% nontumor_select]
+nontumor_select <- names(nontumor_stats)[nontumor_stats >= 50]    # Eliminaron los tipos celulares con <50 células
+selected_nontumor_sce <- nontumor_sce[, nontumor_sce$cellType %in% nontumor_select]
 
 # Crea el objeto `filtered_sce`, con células de todos los tipos celulares
 # excepto los `Unknown` y los que tienen < 50 células. Básicamente filtramos las
 # células y pasamos de tener 5902 a 5502
-selected_columns <- unique(c(colnames(selected_tumor_sce),colnames(selected_nontumor_sce)))
-filtered_sce <- sce[,colnames(sce) %in% selected_columns]
+selected_columns <- unique(c(colnames(selected_tumor_sce), colnames(selected_nontumor_sce)))
+filtered_sce <- sce[, colnames(sce) %in% selected_columns]
 
 # Renombramos los tumores de MEEIX a HNSX
 filtered_sce$tumor <- factor(filtered_sce$tumor)
@@ -132,6 +135,7 @@ filtered_sce$tumor <- mapvalues(filtered_sce$tumor,
 
 # Nos aseguramos de que el factor contenga sólo tumores presentes en el dataset
 filtered_sce$tumor <- droplevels(filtered_sce$tumor)
+filtered_sce$cellType <- droplevels(filtered_sce$cellType) 
 
 
 
@@ -141,4 +145,4 @@ filtered_sce$tumor <- droplevels(filtered_sce$tumor)
 ###########   5. Guardamos los objetos sce resultantes   ###########
 ####################################################################
 
-saveRDS(filtered_sce,file.path(outdir,"filtered_sce.rds"))
+saveRDS(filtered_sce,file.path(outDir,"filtered_sce.rds"))
