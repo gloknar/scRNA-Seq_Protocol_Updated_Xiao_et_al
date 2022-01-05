@@ -1,40 +1,114 @@
+#######################################################################
+###########     0. Carga de paquetes, opciones y datos      ###########
+#######################################################################
+
+# Paquetes y funciones auxiliares
 library(scater)
 library(stringr)
 library(pheatmap)
 library(gtools)
 library(scran)
 source("../utils.R")
-options(stringsAsFactors=FALSE)
 source("runGSEA_preRank.R")
+
+# Opciones
+options(stringsAsFactors = FALSE)
+# argumento <- commandArgs()
+# argumento <- argumento[6]
+argumento <- "melanoma"
+outDir <- file.path("datasets",argumento)
+if (!dir.exists(outDir)) {
+  dir.create(outDir, recursive = T)
+}
+
 
 ###update:: using scran to quantify the technical component of the variance
 
+# Leemos el archivo con las rutas metabólicas de KEGG
+ruta_archivo_pathways <- "../Data/KEGG_metabolism.gmt"
 
 
-# args <- commandArgs()
-# tumor <- args[6]
-tumor = "melanoma"
-outDir <- file.path("datasets",tumor)
-if(!dir.exists(outDir) ) dir.create(outDir,recursive=TRUE)
-pathway_file <- "../Data/KEGG_metabolism.gmt"
+# Leemos el dataset del head_neck/melanoma con las células filtradas y a partir
+# de él creamos un objeto `sce` con las células tumorales y los genes
+# metabólicos
+filtered_sce <- readRDS(file.path("../1-ReadData/datasets/",argumento,"filtered_sce.rds"))
+filt_tumor_metab_sce <- filtered_sce[rowData(filtered_sce)$metabolic, filtered_sce$cellType == "Malignant"]
+
+# Cargamos los tipos de tumores presentes en el dataset
+filt_tumor_metab_sce$tumor <- droplevels(filt_tumor_metab_sce$tumor)
+tumors <- unique(filt_tumor_metab_sce$tumor)
 
 
-#1. Loading the data
-selected_sce <- readRDS(file.path("../1-ReadData/datasets/",tumor,"filtered_sce.rds"))
-selected_tumor_sce <- selected_sce[,selected_sce$cellType=="Malignant"]
-selected_tumor_metabolic_sce <- selected_tumor_sce[rowData(selected_tumor_sce)$metabolic,]
-#=========================================================================
-tumors <- unique(selected_tumor_sce$tumor)
+
+####################################################################################################
+
+####################################################################
+###########     1. Selección de genes de referencia      ###########
+####################################################################
+
 
 #2.Tumor cells
-enrich_data_df <- data.frame(x=NULL,y=NULL,NES=NULL,PVAL=NULL)
+enrich_data_df <- data.frame(x = numeric(), y = numeric(), 
+                             NES = numeric(), PVAL = numeric())
+str(enrich_data_df)
 
-pc_plotdata <- data.frame(x=numeric(),y=numeric(),
-                          sel=character(),tumor=character())
+pc_plotdata <- data.frame(x = numeric(), y = numeric(),
+                          sel = character(), tumor = character())
 
-t= "MEL7"
+################# PRUREBAS  ###########################
+t = "MEL7"
+each_metabolic_sce <- filt_tumor_metab_sce[,filt_tumor_metab_sce$tumor == t]
+each_metabolic_tpm <- assay(each_metabolic_sce, "exprs")
+dim(each_metabolic_tpm)
+View(each_metabolic_tpm)
+
+# Pasamos de 1566 a 1201 genes, eliminando genes con dropout del 100%
+each_metabolic_tpm <- each_metabolic_tpm[rowSums(each_metabolic_tpm) > 0,]
+dim(each_metabolic_tpm)
+View(each_metabolic_tpm)
+
+
+
+x <- each_metabolic_tpm
+ntop <- nrow(x)
+rv <- rowVars(x)
+select <- order(rv, decreasing=TRUE)[seq_len(min(ntop, length(rv)))]
+pca <- prcomp(t(x[select,]))
+percentVar <- pca$sdev^2 / sum( pca$sdev^2 )
+
+
+###select PCs that explain at least 80% of the variance
+cum_var <- cumsum(percentVar)
+select_pcs <- which(cum_var>0.8)[1]
+
+###plot the PCA and explained variances
+tmp_plotdata <- data.frame(x=1:length(percentVar),y=percentVar,
+                           sel=c(rep("y",select_pcs),rep("n",length(percentVar)-select_pcs)),
+                           tumor=rep(t,length(percentVar)))
+pc_plotdata <- rbind(pc_plotdata,tmp_plotdata)
+
+####
+pre_rank_matrix <- as.matrix(rowSums(abs(pca$rotation[,1:select_pcs])))
+# write.table(pre_rank_matrix, file = "cosa.txt")
+
+runGSEA_preRank(pre_rank_matrix,ruta_archivo_pathways,t)
+#get the result
+result_dir <- list.files(path="preRankResults",pattern = paste0("^",t,".GseaPreranked(.*)"),full.names=T)
+result_file <- list.files(path=result_dir,pattern="gsea_report_for_na_pos_(.*).xls",full.names=T)
+# gsea_result <- read.table(result_file,header = T,sep="\t",row.names=1)
+gsea_result <- read.table("prerank.rnk",header = T,sep="\t",row.names=1)
+gsea_pathways <- str_to_title(rownames(gsea_result))
+gsea_pathways <- str_replace(gsea_pathways,"Tca","TCA")
+gsea_pathways <- str_replace(gsea_pathways,"Gpi","GPI")
+
+enrich_data_df <- rbind(enrich_data_df,data.frame(x=t,y=gsea_pathways,NES=gsea_result$NES,PVAL=gsea_result$NOM.p.val))
+
+################# PRUREBAS  ###########################
+
+
+
 for (t in tumors){
-  each_metabolic_sce <- selected_tumor_metabolic_sce[,selected_tumor_metabolic_sce$tumor==t]
+  each_metabolic_sce <- filt_tumor_metab_sce[,filt_tumor_metab_sce$tumor==t]
   each_metabolic_tpm <- assay(each_metabolic_sce,"exprs")
   each_metabolic_tpm <- each_metabolic_tpm[rowSums(each_metabolic_tpm)>0,]
   x <- each_metabolic_tpm
@@ -57,8 +131,9 @@ for (t in tumors){
   
   ####
   pre_rank_matrix <- as.matrix(rowSums(abs(pca$rotation[,1:select_pcs])))
- 
-  runGSEA_preRank(pre_rank_matrix,pathway_file,t)
+  # write.table(pre_rank_matrix, file = "cosa.txt")
+  
+  runGSEA_preRank(pre_rank_matrix,ruta_archivo_pathways,t)
   #get the result
   result_dir <- list.files(path="preRankResults",pattern = paste0("^",t,".GseaPreranked(.*)"),full.names=T)
   result_file <- list.files(path=result_dir,pattern="gsea_report_for_na_pos_(.*).xls",full.names=T)

@@ -4,16 +4,16 @@
 
 # Paquetes y funciones auxiliares
 library(scater)
-source("../utils.R")
 library(ggplot2)
 library(pheatmap)
 library(reshape2)
+source("../utils.R")
 
 # Opciones
 options(stringsAsFactors = F)
-# argumento <- commandArgs()
-# argumento <- argumento[6]
-argumento <- "melanoma"
+argumento <- commandArgs()
+argumento <- argumento[6]
+# argumento <- "melanoma"
 outDir <- file.path("datasets",argumento)
 if(!dir.exists(outDir) ) {dir.create(outDir, recursive = TRUE)}
 

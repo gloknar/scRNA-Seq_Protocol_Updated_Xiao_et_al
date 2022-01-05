@@ -221,10 +221,11 @@ for(metodo in c("RLE","TMM","UpperQuartile","Deconvolution"))
   datos <- reshape2::melt(low_dropout_genes_tpm_ratio) # Aplanamos el dataframe para que ggplot2 pueda usarlo correctamente
   
   # Creamos los boxplots y los guardamos en un pdf
-  p <- ggplot(datos,aes(x=Var2,y=value)) +
+  TPM_norm_boxplot <- ggplot(datos,aes(x=Var2,y=value)) +
        geom_boxplot(outlier.alpha=0.1)+ theme_classic() + 
        ylab("Gene expression ratio") + xlab("") +    
        theme(axis.text.x = element_text(angle=45,hjust=1))
-  ggsave(file.path(outDir,paste0(metodo,"_ratio_distribution.pdf")), p, 
-         width = 3.5, height = 2.5)
+  
+  ggsave(file.path(outDir,paste0(metodo,"_ratio_distribution.pdf")), 
+         TPM_norm_boxplot, width = 3.5, height = 2.5)
 }

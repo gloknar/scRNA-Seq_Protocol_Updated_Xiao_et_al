@@ -5,12 +5,13 @@
 # Paquetes
 library(scater)
 library(Rtsne)
+library(ggplot2)
 
 # Opciones
 options(stringsAsFactors = FALSE)
 argumento <- commandArgs()
 argumento <- argumento[6]
-# argumento <- "head_neck"
+# argumento <- "melanoma"
 
 outDir <- file.path("./datasets",argumento)
 if(!dir.exists(outDir)) {                       # Crea la carpeta ./datasets/<head_neck o melanoma>/  si no existe
@@ -42,7 +43,7 @@ set.seed(12345)
 
 # Calculamos un t-SNE exacto (theta = 0)
 tsne_tumor <- Rtsne(t(assay(tumor_metabolic_sce,"exprs")),
-                    initial_dims = 20,theta = 0.0, perplexity = 30)
+                    initial_dims = 20, theta = 0.0, perplexity = 30)
 
 # Creamos un dataframe temporal con las coordenadas del t-SNE y el tumor de
 # procedencia de cada célula
@@ -66,7 +67,7 @@ ggsave(file.path(outDir,"tumor_metabolic_tsne.pdf"), visualizacion_tsne,
 
 # Calculamos un t-SNE exacto (theta = 0)
 tsne_no_tumor <- Rtsne(t(assay(healthy_metabolic_sce,"exprs")),
-                    initial_dims = 20,theta = 0.0, perplexity = 30)
+                    initial_dims = 20, theta = 0.0, perplexity = 30)
 
 # Creamos un dataframe temporal con las coordenadas del t-SNE, el tumor de
 # procedencia y la estirpe de cada célula
@@ -89,7 +90,3 @@ visualizacion_tsne <- ggplot(tmp) + geom_point(aes(x, y, colour = procedencia), 
 
 ggsave(file.path(outDir,"healthy_metabolic_tsne2.pdf"), visualizacion_tsne, 
        width = 7, height = 5)
-
-
-
-
