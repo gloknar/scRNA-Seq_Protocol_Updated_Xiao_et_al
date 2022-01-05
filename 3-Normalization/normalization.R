@@ -15,9 +15,9 @@ library(scran)
 
 # Opciones
 options(stringsAsFactors = FALSE)
-argumento <- commandArgs()
-argumento <- argumento[6]
-# argumento = "melanoma"
+# argumento <- commandArgs()
+# argumento <- argumento[6]
+argumento = "head_neck"
 outDir <- file.path("./datasets",argumento)
 if(!dir.exists(outDir)) {                 
   dir.create(outDir, recursive = TRUE)    # Crea la carpeta ./datasets/<head_neck o melanoma>/  si no existe
@@ -27,8 +27,8 @@ if(!dir.exists(outDir)) {
 # Leemos el dataset del head_neck/melanoma con la expresión génica imputada y el
 # dataset con las células filtradas. Cargamos también los tipos celulares
 # presentes en dichos dataset
-imputed_sce <- readRDS(file.path("../2-Imputation/datasets", argumento, "imputed_sce.rds"))
-imputed_sce$cellType <- droplevels(imputed_sce$cellType)
+imputed_sce <- readRDS(file.path("../2-Imputation/datasets",argumento,"imputed_sce.rds"))
+# imputed_sce$cellType <- droplevels(imputed_sce$cellType)
 linajes_celulares <- unique(imputed_sce$cellType)
 
 
@@ -55,7 +55,7 @@ matriz_seleccion_genes <- matrix(FALSE,
 
 
 # Iteramos sobre cada estirpe celular
-for(tipo in linajes_celulares){
+for (tipo in linajes_celulares){
   sce_linaje_celular <- imputed_sce[, imputed_sce$cellType == tipo] # hacemos un subset para cada tipo celular del objeto sce con la expresión génica imputada
   matriz_genica_log_linaje_celular <- assay(sce_linaje_celular, "exprs")  # Calculamos la expresión en log2(TPM+1) de los genes de las células seleccionadas
   tasa_deteccion_gen <- apply(matriz_genica_log_linaje_celular ,1, function(x) sum(x>0)/ncol(matriz_genica_log_linaje_celular))  # Calculamos para cada gen el % de células con expresión génica no nula
@@ -70,7 +70,7 @@ low_dropout_genes <- rownames(matriz_seleccion_genes)[rowSums(matriz_seleccion_g
 
 
 # Limpiamos RAM
-rm(sce_por_tipo_celular, matriz_genica_log_linaje_celular, tasa_deteccion_gen,
+rm(sce_linaje_celular, matriz_genica_log_linaje_celular, tasa_deteccion_gen,
    genes_seleccionados, tasa_deteccion_minima, tipo)
 gc(verbose = F)
 
@@ -208,8 +208,8 @@ gc(verbose = F)
 
 
 # Creamos los boxplots de los distintos métodos de normalizado probados
-for(metodo in c("RLE", "TMM", "UpperQuartile", "Deconvolution"))
-{
+for (metodo in c("RLE", "TMM", "UpperQuartile", "Deconvolution")) {
+  
   # Cargamos la matriz de TPM normalizada con el método en cuestión
   ruta_archivo_tpm <- file.path(outDir,paste0(metodo,"_tpm.rds"))
   matriz_tpm_norm <- readRDS(ruta_archivo_tpm) 
