@@ -4,7 +4,7 @@ Xiao _et al._ publicaron en 2019 un [artículo](https://www.nature.com/articles/
 
 Nosotros queremos replicar dicho protocolo en nuestras muestras del Karolinska Institutet, las cuales son bulk RNA-seq y scRNA-seq de ovarios. Para ello he creado el presente repositorio, en el cual se clarifica, refactoriza, optimiza y traduce el protocolo de Xiao y compañeros a la versión más actualizada de R a fecha de redacción de este documento, `R 4.1`.
 
-Este protocolo ha sido probado y confirmado que funciona en Kubuntu 20.04 LTS
+Este protocolo ha sido probado y confirmado que funciona en una estación de trabajo con Kubuntu 20.04 LTS, AMD Ryzen 9 3900X, 16GB de RAM y un HDD de 1TB
 
 <br>
 
