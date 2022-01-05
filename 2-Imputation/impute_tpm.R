@@ -49,8 +49,8 @@ filtered_sce_nontumor$cellType <- droplevels(filtered_sce_nontumor$cellType)
 labels_nontumor <- filtered_sce_nontumor$cellType
 
 # Guardamos las matrices de TPMs en archivos
-write.csv(filtered_sce_tumor_tpm,file.path(outDir,"tumor.tpm"))
-write.csv(filtered_sce_nontumor_tpm,file.path(outDir,"nontumor.tpm"))
+write.csv(filtered_sce_tumor_tpm,file.path(outDir,"malignant.tpm"))
+write.csv(filtered_sce_nontumor_tpm,file.path(outDir,"non_malignant.tpm"))
 
 
 
@@ -88,7 +88,7 @@ genelen <- as.numeric(as.vector(genelen))
 ####################################################################################
 
 # Imputamos genes con dropout >= 0.5 para evitar sobre-imputación
-scimpute(count_path = file.path(outDir, "tumor.tpm"), infile = "csv", 
+scimpute(count_path = file.path(outDir, "malignant.tpm"), infile = "csv", 
          outfile = "csv", out_dir = paste(outDir,"malignant/", sep = "/"), 
          labeled = TRUE, labels = as.vector(labels_tumor), type = "TPM", 
          genelen = genelen, drop_thre = 0.5, ncores = num_cores)
@@ -113,8 +113,8 @@ assay(filtered_sce_tumor,"exprs") <- data.matrix(log2(imputed_tpm_tumor + 1)) # 
 # Imputamos genes con dropout >= 0.5 (expresión nula en 50% o más de las
 # células) para evitar sobre-imputación. Nótese que los genes con un dropout del
 # 100% no se imputarán
-scimpute(count_path = file.path(outDir, "nontumor.tpm"), infile = "csv", 
-         outfile = "csv", out_dir = paste(outDir,"non-malignant/", sep = "/"), 
+scimpute(count_path = file.path(outDir, "non_malignant.tpm"), infile = "csv", 
+         outfile = "csv", out_dir = paste(outDir,"non_malignant/", sep = "/"), 
          labeled = TRUE, labels = as.vector(labels_nontumor),	type = "TPM", 
          genelen = genelen, drop_thre = 0.5, ncores = num_cores)
 
@@ -122,7 +122,7 @@ scimpute(count_path = file.path(outDir, "nontumor.tpm"), infile = "csv",
 # Con la imputación ya hecha, la cargamos en memoria y actualizamos los
 # bolsillos `filtered_sce_nontumor@assays@data$exprs` y
 # `filtered_sce_nontumor@assays@data$tpm`
-imputed_tpm_nontumor <- read.csv(file.path(outDir,"non-malignant/scimpute_count.csv"),
+imputed_tpm_nontumor <- read.csv(file.path(outDir,"non_malignant/scimpute_count.csv"),
                                  header = T, row.names = 1)
 tpm(filtered_sce_nontumor) <- data.matrix(imputed_tpm_nontumor) 
 assay(filtered_sce_nontumor,"exprs") <- data.matrix(log2(imputed_tpm_nontumor + 1))
