@@ -7,28 +7,29 @@ library(scImpute)
 library(scater)
 
 # Opciones
-argumento <- commandArgs()[6]
+argumento <- "melanoma"
+# argumento <- commandArgs()[6]
 outDir <- file.path("./datasets", argumento) # Carpeta donde guardaremos todos los archivos relacionados con la imputación del objeto `sce`
 if(!dir.exists(outDir)) {                    # Crea la carpeta ./datasets/<nombre del tumor>/  si no existe
   dir.create(outDir,recursive = TRUE)
 } 
 num_cores <- 6                               # Usar 1 en Windows (scImpute usa mc.apply...)
 
-# Leemos el dataset del head_neck/melanoma con las células filtradas
+# Leemos el dataset del head_neck/melanoma con las células filtradas y a partir
+# de él creamos un objeto `sce` con sólo las células tumorales y otro con sólo
+# las células no tumorales
 filtered_sce <- readRDS(file.path("../1-ReadData/datasets",argumento,"filtered_sce.rds"))
+filtered_sce_tumor <- filtered_sce[, filtered_sce$cellType == "Malignant"]
+filtered_sce_nontumor <- filtered_sce[, filtered_sce$cellType != "Malignant"]
 
 
 
 ####################################################################################################
 
-###########################################################################
-###########     1. Preparado de datasets y matrices de TPM      ###########
-###########################################################################
+####################################################################
+###########     1. Preparado de las matrices de TPM      ###########
+####################################################################
 
-# Creamos 2 objetos `sce`: Uno que contiene las células tumorales y otro que
-# contiene las células sanas (las imputaremos por separado)
-filtered_sce_tumor <- filtered_sce[,filtered_sce$cellType=="Malignant"]
-filtered_sce_nontumor <- filtered_sce[,filtered_sce$cellType!="Malignant"]
 
 # Creamos las matrices de TPMs de ambos subconjuntos celulares
 # NOTA: el bolsillo `filtered_sce_(non)tumor@assays@data$exprs` contiene la
@@ -37,7 +38,14 @@ filtered_sce_nontumor <- filtered_sce[,filtered_sce$cellType!="Malignant"]
 # génica en formato TPM
 filtered_sce_tumor_tpm <- tpm(filtered_sce_tumor)        # sinónimo de filtered_sce_tumor@assays@data$tpm y de assay(filtered_sce_tumor,"tpm")
 filtered_sce_nontumor_tpm <- tpm(filtered_sce_nontumor)  # sinónimo de filtered_sce_nontumor@assays@data$tpm y de assay(filtered_sce_nontumor,"tpm")
+
+
+# NOTA: Debemos eliminar los niveles no usados de los factores tumor y cellType
+# cada vez que los usemos... Lo hice en el paso 1 del protocolo, pero por algún
+# motivo no se guarda
+filtered_sce_tumor$tumor <- droplevels(filtered_sce_tumor$tumor)
 labels_tumor <- filtered_sce_tumor$tumor
+filtered_sce_nontumor$cellType <- droplevels(filtered_sce_nontumor$cellType)
 labels_nontumor <- filtered_sce_nontumor$cellType
 
 # Guardamos las matrices de TPMs en archivos
@@ -123,9 +131,9 @@ assay(filtered_sce_nontumor,"exprs") <- data.matrix(log2(imputed_tpm_nontumor + 
 
 ####################################################################################################
 
-###################################################################################
-###########     4 Construcción del nuevo objeto `sce` imputado      ###############
-###################################################################################
+##############################################################################
+###########     4. Construcción del objeto `sce` imputado      ###############
+##############################################################################
 
 # Concatenamos los TPMs de las células sanas y las tumorales y los ordenamos
 # como estaban en el objeto original `filtered sce`. Repetimos el proceso para
