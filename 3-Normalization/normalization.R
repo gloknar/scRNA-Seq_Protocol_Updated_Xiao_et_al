@@ -19,8 +19,8 @@ argumento <- commandArgs()
 argumento <- argumento[6]
 # argumento = "melanoma"
 outDir <- file.path("./datasets",argumento)
-if(!dir.exists(outDir)) {                 # Crea la carpeta ./datasets/<head_neck o melanoma>/  si no existe
-  dir.create(outDir,recursive = TRUE)
+if(!dir.exists(outDir)) {                 
+  dir.create(outDir, recursive = TRUE)    # Crea la carpeta ./datasets/<head_neck o melanoma>/  si no existe
 }
 
 
@@ -51,16 +51,16 @@ tasa_deteccion_minima <- 0.75
 matriz_seleccion_genes <- matrix(FALSE,
                                  nrow = nrow(imputed_sce),
                                  ncol = length(linajes_celulares),
-                                 dimnames = list(rownames(imputed_sce),linajes_celulares))
+                                 dimnames = list(rownames(imputed_sce), linajes_celulares))
 
 
 # Iteramos sobre cada estirpe celular
 for(tipo in linajes_celulares){
-  sce_linaje_celular <- imputed_sce[,imputed_sce$cellType == tipo] # hacemos un subset para cada tipo celular del objeto sce con la expresión génica imputada
-  matriz_genica_log_linaje_celular <- assay(sce_linaje_celular,"exprs")  # Calculamos la expresión en log2(TPM+1) de los genes de las células seleccionadas
-  tasa_deteccion_gen <- apply(matriz_genica_log_linaje_celular,1, function(x) sum(x>0)/ncol(matriz_genica_log_linaje_celular))  # Calculamos para cada gen el % de células con expresión génica no nula
+  sce_linaje_celular <- imputed_sce[, imputed_sce$cellType == tipo] # hacemos un subset para cada tipo celular del objeto sce con la expresión génica imputada
+  matriz_genica_log_linaje_celular <- assay(sce_linaje_celular, "exprs")  # Calculamos la expresión en log2(TPM+1) de los genes de las células seleccionadas
+  tasa_deteccion_gen <- apply(matriz_genica_log_linaje_celular ,1, function(x) sum(x>0)/ncol(matriz_genica_log_linaje_celular))  # Calculamos para cada gen el % de células con expresión génica no nula
   genes_seleccionados <- tasa_deteccion_gen >= tasa_deteccion_minima # Seleccionamos como TRUE aquellos genes con expresion no nula en >= 75% de las células de la estirpe en cuestión (tasa dropout < 25%)
-  matriz_seleccion_genes[genes_seleccionados,tipo] <- TRUE
+  matriz_seleccion_genes[genes_seleccionados, tipo] <- TRUE
 }
 
 
@@ -90,7 +90,7 @@ all_gene_lengths <- read.table(file.path("../Data/","gene_length.txt"),
 
 # Comprobamos que dicho archivo tenga los nombres correctos de los genes y
 # contenga el mismo nº de genes que en nuestro objeto sce
-comprobacion <- intersect(rownames(all_gene_lengths),rownames(imputed_sce))
+comprobacion <- intersect(rownames(all_gene_lengths), rownames(imputed_sce))
 if (length(comprobacion) != nrow(imputed_sce)){
   warning("check the length file")
 }
@@ -208,7 +208,7 @@ gc(verbose = F)
 
 
 # Creamos los boxplots de los distintos métodos de normalizado probados
-for(metodo in c("RLE","TMM","UpperQuartile","Deconvolution"))
+for(metodo in c("RLE", "TMM", "UpperQuartile", "Deconvolution"))
 {
   # Cargamos la matriz de TPM normalizada con el método en cuestión
   ruta_archivo_tpm <- file.path(outDir,paste0(metodo,"_tpm.rds"))
@@ -221,10 +221,10 @@ for(metodo in c("RLE","TMM","UpperQuartile","Deconvolution"))
   datos <- reshape2::melt(low_dropout_genes_tpm_ratio) # Aplanamos el dataframe para que ggplot2 pueda usarlo correctamente
   
   # Creamos los boxplots y los guardamos en un pdf
-  TPM_norm_boxplot <- ggplot(datos,aes(x=Var2,y=value)) +
-       geom_boxplot(outlier.alpha=0.1)+ theme_classic() + 
+  TPM_norm_boxplot <- ggplot(datos, aes(x = Var2, y = value)) +
+       geom_boxplot(outlier.alpha = 0.1) + theme_classic() + 
        ylab("Gene expression ratio") + xlab("") +    
-       theme(axis.text.x = element_text(angle=45,hjust=1))
+       theme(axis.text.x = element_text(angle = 45, hjust = 1))
   
   ggsave(file.path(outDir,paste0(metodo,"_ratio_distribution.pdf")), 
          TPM_norm_boxplot, width = 3.5, height = 2.5)
