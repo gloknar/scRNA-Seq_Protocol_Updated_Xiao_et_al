@@ -7,13 +7,13 @@ library(scImpute)
 library(scater)
 
 # Opciones
-argumento <- "head_neck"
-# argumento <- commandArgs()[6]
+# argumento <- "melanoma"
+argumento <- commandArgs()[6]
 outDir <- file.path("./datasets", argumento) # Carpeta donde guardaremos todos los archivos relacionados con la imputación del objeto `sce`
 if(!dir.exists(outDir)) {                    # Crea la carpeta ./datasets/<nombre del tumor>/  si no existe
   dir.create(outDir,recursive = TRUE)
 } 
-num_cores <- 1                               # Usar 1 en Windows (scImpute usa mc.apply...)
+num_cores <- 6                               # Usar 1 en Windows (scImpute usa mc.apply...)
 
 # Leemos el dataset del head_neck/melanoma con las células filtradas y a partir
 # de él creamos un objeto `sce` con sólo las células tumorales y otro con sólo
