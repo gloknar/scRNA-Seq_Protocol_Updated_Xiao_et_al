@@ -135,6 +135,7 @@ filtered_sce$tumor <- mapvalues(filtered_sce$tumor,
 
 # Nos aseguramos de que los factores contengan sólo los niveles presentes en el dataset
 filtered_sce$tumor <- droplevels(filtered_sce$tumor)
+filtered_sce$cellType <- factor(filtered_sce$cellType) 
 filtered_sce$cellType <- droplevels(filtered_sce$cellType) 
 
 
