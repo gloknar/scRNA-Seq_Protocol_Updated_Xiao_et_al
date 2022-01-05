@@ -132,27 +132,27 @@ nontumor_sce <- sce[,!sce$cellType %in% c("Unknown", "Malignant")]
 
 # Nos quedamos con los tumores de más de 50 células
 tumor_sample_stats <- table(tumor_sce$tumor)
-tumor_sample_select <- names(tumor_sample_stats)[tumor_sample_stats>=50]
-selected_tumor_sce <- tumor_sce[,tumor_sce$tumor %in% tumor_sample_select]
+tumor_sample_select <- names(tumor_sample_stats)[tumor_sample_stats >= 50]
+selected_tumor_sce <- tumor_sce[, tumor_sce$tumor %in% tumor_sample_select]
 
 # Nos quedamos con los tipos celulares sanos con más de 50 células
 nontumor_sample_stats <- table(nontumor_sce$cellType)
-nontumor_sample_select <- names(nontumor_sample_stats)[nontumor_sample_stats>=50]
-selected_nontumor_sce <- nontumor_sce[,nontumor_sce$cellType %in% nontumor_sample_select]
+nontumor_sample_select <- names(nontumor_sample_stats)[nontumor_sample_stats >= 50]
+selected_nontumor_sce <- nontumor_sce[, nontumor_sce$cellType %in% nontumor_sample_select]
 
 # Crea el objeto `filtered_sce`, con células de todos los tipos celulares
 # excepto los `Unknown` y los que tienen < 50 células. Básicamente filtramos las
 # células y pasamos de tener 5902 a 5502
-selected_columns <- unique(c(colnames(selected_tumor_sce),colnames(selected_nontumor_sce)))
-filtered_sce <- sce[,colnames(sce) %in% selected_columns]
+selected_columns <- unique(c(colnames(selected_tumor_sce), colnames(selected_nontumor_sce)))
+filtered_sce <- sce[, colnames(sce) %in% selected_columns]
 
 # Renombramos los tumores de TXX a MELXX
 unique_tumors <- unique(filtered_sce$tumor)
 levels(filtered_sce$tumor) = paste0("MEL",seq(1,length(unique_tumors)))
 
-# Nos aseguramos de que el factor contenga sólo tumores presentes en el dataset
+# Nos aseguramos de que los factores contengan sólo los niveles presentes en el dataset
 filtered_sce$tumor <- droplevels(filtered_sce$tumor)
-
+filtered_sce$cellType <- droplevels(filtered_sce$cellType)
 
 
 ####################################################################################################
