@@ -68,10 +68,10 @@ all_gene_lengths <- read.table("../Data/gene_length.txt", sep = "\t",
 
 # Comprobamos si tenemos el mismo nº de genes en nuestro dataset y en el archivo
 # con las longitudes de los genes
-temporary <- intersect(rownames(all_gene_lengths),rownames(filtered_sce_tumor_tpm)) # La intersección busca nombres de genes compartidos en ambos conjuntos de nombres de genes
+temporary <- intersect(rownames(all_gene_lengths), rownames(filtered_sce_tumor_tpm)) # La intersección busca nombres de genes compartidos en ambos conjuntos de nombres de genes
 if (length(temporary) != nrow(filtered_sce_tumor_tpm)){ # Compara si el nº de genes en filtered_sce_tumor_tpm y all_gene_lengths es igual. Si todo está bien, no pasa nada, pero si no, emite una advertencia y termina el programa
   warning("check the length file")
-  print(setdiff(rownames(filtered_sce_tumor_tpm),rownames(all_gene_lengths)))
+  print(setdiff(rownames(filtered_sce_tumor_tpm), rownames(all_gene_lengths)))
   q()
 }
 
@@ -140,7 +140,7 @@ assay(filtered_sce_nontumor,"exprs") <- data.matrix(log2(imputed_tpm_nontumor + 
 # los log2(TPM+1)
 imputed_tpm_total <- cbind(tpm(filtered_sce_tumor), tpm(filtered_sce_nontumor)) # Unimos en una sola matriz la expresión de células tumorales y sanas
 imputed_tpm_total <- imputed_tpm_total[,colnames(filtered_sce)] # Ordenan las células para que se queden en el orden que estaban en el objeto original `filtered_sce`
-imputed_exprs_total <- cbind(assay(filtered_sce_tumor,"exprs"),assay(filtered_sce_nontumor,"exprs"))
+imputed_exprs_total <- cbind(assay(filtered_sce_tumor, "exprs"), assay(filtered_sce_nontumor, "exprs"))
 imputed_exprs_total <- imputed_exprs_total[,colnames(filtered_sce)] # Ordenan las células para que se queden en el orden que estaban en el objeto original `filtered_sce`
 
 # Creamos el nuevo objeto de tipo `sce` con la expresión génica imputada
@@ -148,5 +148,13 @@ imputed_sce <- SingleCellExperiment(
   assays = list(tpm = imputed_tpm_total, exprs = imputed_exprs_total),
   colData = colData(filtered_sce),
   rowData = rowData(filtered_sce))
+
+
+
+####################################################################################################
+
+##################################################################
+###########   5. Guardamos el objetos sce resultante   ###########
+##################################################################
 
 saveRDS(imputed_sce,file.path(outDir,"imputed_sce.rds"))
