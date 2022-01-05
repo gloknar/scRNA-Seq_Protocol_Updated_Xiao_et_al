@@ -141,7 +141,7 @@ assay(filtered_sce_nontumor,"exprs") <- data.matrix(log2(imputed_tpm_nontumor + 
 imputed_tpm_total <- cbind(tpm(filtered_sce_tumor), tpm(filtered_sce_nontumor)) # Unimos en una sola matriz la expresión de células tumorales y sanas
 imputed_tpm_total <- imputed_tpm_total[,colnames(filtered_sce)] # Ordenan las células para que se queden en el orden que estaban en el objeto original `filtered_sce`
 imputed_exprs_total <- cbind(assay(filtered_sce_tumor, "exprs"), assay(filtered_sce_nontumor, "exprs"))
-imputed_exprs_total <- imputed_exprs_total[,colnames(filtered_sce)] # Ordenan las células para que se queden en el orden que estaban en el objeto original `filtered_sce`
+imputed_exprs_total <- imputed_exprs_total[, colnames(filtered_sce)] # Ordenan las células para que se queden en el orden que estaban en el objeto original `filtered_sce`
 
 # Creamos el nuevo objeto de tipo `sce` con la expresión génica imputada
 imputed_sce <- SingleCellExperiment(
