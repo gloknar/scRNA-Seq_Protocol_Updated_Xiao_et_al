@@ -130,6 +130,9 @@ filtered_sce$tumor <- mapvalues(filtered_sce$tumor,
                                 from = c("MEEI5","MEEI6","MEEI7","MEEI8","MEEI10","MEEI12","MEEI13","MEEI16","MEEI17","MEEI18","MEEI20","MEEI22","MEEI23","MEEI24","MEEI25","MEEI26","MEEI28","MEEIC"),
                                 to = paste0("HNS",seq(18))) # mapvalues sustituye los valores que tu le digas de un vector/factor por otros
 
+# Nos aseguramos de que el factor contenga sólo tumores presentes en el dataset
+filtered_sce$tumor <- droplevels(filtered_sce$tumor)
+
 
 
 ####################################################################################################

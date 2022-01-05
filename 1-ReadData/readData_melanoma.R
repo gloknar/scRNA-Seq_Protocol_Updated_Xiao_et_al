@@ -147,6 +147,9 @@ filtered_sce <- sce[,colnames(sce) %in% selected_columns]
 unique_tumors <- unique(filtered_sce$tumor)
 levels(filtered_sce$tumor) = paste0("MEL",seq(1,length(unique_tumors)))
 
+# Nos aseguramos de que el factor contenga sólo tumores presentes en el dataset
+filtered_sce$tumor <- droplevels(filtered_sce$tumor)
+
 
 
 ####################################################################################################
