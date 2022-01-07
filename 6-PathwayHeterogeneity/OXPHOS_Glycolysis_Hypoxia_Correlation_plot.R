@@ -75,23 +75,34 @@ data <- data.frame(OXPHOS = oxphos, Glycolysis = glycolysis, Hypoxia = hypoxia)
 
 # Calculamos la matriz de correlación para las 3 rutas metabólicas
 print("Correlación de las rutas metabólicas de interés:")
-print(cor(data))
+print(cor(data, method = "pearson"))
 
-#correlation plot for each two of them
-dat_min <- 0
-dat_max <- 4
-p=ggplot(data,aes(x=OXPHOS,y=Glycolysis)) + 
-  geom_point(size=0.5) +
-  geom_smooth(method="lm",color="red") +
-  xlim(dat_min,dat_max) + ylim(dat_min,dat_max) +
-  theme_classic()  + theme(aspect.ratio = 0.8) +
-  labs(x = "OXPHOS", y = "Glycolysis") +
-  theme(axis.line=element_line(size=0.3,colour="black"),
-       axis.ticks = element_line(size=0.3,color="black"),
-       axis.text.x=element_text(size=6),
-       axis.text.y=element_text(size=6),
-       axis.title.x=element_text(size=8),
-       axis.title.y=element_text(size=8))
+
+# Graficamos la matriz de correlaciones
+data_min <- 0
+data_max <- 4
+
+
+
+p = ggplot(data, aes(x = OXPHOS, y = Glycolysis)) + 
+    geom_point(size = 0.5) +
+    geom_smooth(method = "lm", color = "red") +
+    xlim(data_min, data_max) + ylim(data_min, data_max) +
+    theme_classic()  + theme(aspect.ratio = 0.8) +
+    labs(x = "OXPHOS", y = "Glycolysis") +
+    theme(axis.line=element_line(size = 0.3, colour = "black"),
+       axis.ticks = element_line(size = 0.3, color = "black"),
+       axis.text.x = element_text(size = 6),
+       axis.text.y = element_text(size = 6),
+       axis.title.x = element_text(size = 8),
+       axis.title.y = element_text(size = 8))
+
+
+# Ver como calcular el R2 y ponerlo en la gráfica, o ponert toda la formula + el R2
+objeto <- lm(Glycolysis ~ OXPHOS, data)
+objeto$coefficients[[2]] 
+
+p <- p + geom_text(aes(x = 1, y = 3, label = lm_eqn(lm(Glycolysis ~ OXPHOS, data))), parse = TRUE)
 
 ggsave(filename = file.path(outDir,"malignant_oxphos_glycolysis.pdf"),p,device = "pdf",width=2,height=1.5,units="in",useDingbats=FALSE)
 
