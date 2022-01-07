@@ -11,7 +11,7 @@ library(RColorBrewer)
 options(stringsAsFactors = FALSE)
 argumento <- commandArgs()
 argumento <- argumento[6]
-# argumento <- "melanoma"
+# argumento <- "head_neck"
 
 outDir <- file.path("./datasets",argumento)
 if(!dir.exists(outDir)) {                    # Crea la carpeta ./datasets/<head_neck o melanoma>/  si no existe
@@ -65,8 +65,6 @@ colores_heatmap = colorRampPalette(rev(brewer.pal(n = 7, name ="RdYlBu")))(8) # 
 metadatos_heatmap <- as.data.frame(colData(tumor_metabolic_sce)[,"tumor", drop = F]) # Creamos un dataframe con cada célula y su tumor de procedencia
 metadatos_heatmap$tumor <- factor(metadatos_heatmap$tumor) # Al castear de nuevo este factor, eliminamos niveles no usados. Sinónimo de usar `droplevels()`
 
-
-
 # Creamos un pdf de 5x4 pulgadas donde guardaremos el heatmap
 pdf(file.path(outDir,"malignant_metabolic_correlationMatrix.pdf"), 
     width = 7, height = 5, onefile = T) 
@@ -119,5 +117,3 @@ if (argumento == "melanoma"){
    # Guardamos el heatmap en el disco duro
    dev.off()
 }
-
-

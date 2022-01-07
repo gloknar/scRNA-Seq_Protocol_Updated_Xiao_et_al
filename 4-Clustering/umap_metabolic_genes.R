@@ -10,7 +10,7 @@ library(umap)
 options(stringsAsFactors = FALSE)
 argumento <- commandArgs()
 argumento <- argumento[6]
-# argumento <- "melanoma"
+# argumento <- "head_neck"
 
 outDir <- file.path("./datasets",argumento)
 if(!dir.exists(outDir)) {                       # Crea la carpeta ./datasets/<head_neck o melanoma>/  si no existe
@@ -46,7 +46,7 @@ umap_config$n_components <- 2
 umap_config$random_state <- 12345
 umap_config$metric <- "euclidean"
 
-umap_tumor <- umap(t(assay(tumor_metabolic_sce,"exprs")),
+umap_tumor <- umap(t(assay(tumor_metabolic_sce, "exprs")),
                    config = umap_config, 
                    method = "naive")
 
@@ -71,7 +71,7 @@ ggsave(file.path(outDir,"tumor_metabolic_umap.pdf"), visualizacion_umap,
 #############################################################
 
 # Computamos el UMAP
-umap_no_tumor <- umap(t(assay(healthy_metabolic_sce,"exprs")),
+umap_no_tumor <- umap(t(assay(healthy_metabolic_sce, "exprs")),
                    config = umap_config, 
                    method = "naive")
 
@@ -96,6 +96,4 @@ visualizacion_umap <- ggplot(tmp) + geom_point(aes(x, y, colour = procedencia), 
 
 ggsave(file.path(outDir,"healthy_metabolic_umap2.pdf"), visualizacion_umap, 
        width = 7, height = 5)
-
-
 

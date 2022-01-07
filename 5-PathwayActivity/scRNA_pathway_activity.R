@@ -13,7 +13,7 @@ source("../utils.R")
 options(stringsAsFactors = F)
 argumento <- commandArgs()
 argumento <- argumento[6]
-# argumento <- "melanoma"
+# argumento <- "head_neck"
 outDir <- file.path("datasets",argumento)
 if(!dir.exists(outDir) ) {dir.create(outDir, recursive = TRUE)}
 

@@ -18,7 +18,8 @@ num_of_pathways <- function (gmtfile, overlapgenes){
   #
   # Argumentos:
   #   gmtfile: Ruta (relativa o absoluta) al archivo .gmt con las rutas metabólicas
-  #   overlapgenes: vector de tipo "character" con los nombres de los genes a buscar en el archivo .gmt
+  #   overlapgenes: vector de tipo "character" con los nombres de los genes a buscar en el archivo .gmt. 
+  #       Deben ser genes presentes tanto en el objeto sce de interés como en el archivo gmtfile
   #
   # Output:
   #   Un dataframe de dimensiones overlapgenes X 1 que contiene el nº de rutas en las que participa

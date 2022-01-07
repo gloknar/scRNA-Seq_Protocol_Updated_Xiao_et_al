@@ -11,7 +11,7 @@ library(ggplot2)
 options(stringsAsFactors = FALSE)
 argumento <- commandArgs()
 argumento <- argumento[6]
-# argumento <- "melanoma"
+# argumento <- "head_neck"
 
 outDir <- file.path("./datasets",argumento)
 if(!dir.exists(outDir)) {                       # Crea la carpeta ./datasets/<head_neck o melanoma>/  si no existe
@@ -42,7 +42,7 @@ gc(verbose = FALSE)
 set.seed(12345)
 
 # Calculamos un t-SNE exacto (theta = 0)
-tsne_tumor <- Rtsne(t(assay(tumor_metabolic_sce,"exprs")),
+tsne_tumor <- Rtsne(t(assay(tumor_metabolic_sce, "exprs")),
                     initial_dims = 20, theta = 0.0, perplexity = 30)
 
 # Creamos un dataframe temporal con las coordenadas del t-SNE y el tumor de
