@@ -94,7 +94,7 @@ p = ggplot(data, aes(x = OXPHOS, y = Glycolysis)) +
     xlim(data_min, data_max) + ylim(data_min, data_max) +
     theme_classic()  + theme(aspect.ratio = 0.8) +
     labs(x = "OXPHOS", y = "Glycolysis") +
-    geom_text(x = .75, y = 3.5, label = formula) +
+    geom_text(x = 1, y = 3.5, label = formula) +
     theme(axis.line = element_line(size = 0.3, colour = "black"),
           axis.ticks = element_line(size = 0.3, color = "black"),
           axis.text.x = element_text(size = 6),
@@ -103,7 +103,7 @@ p = ggplot(data, aes(x = OXPHOS, y = Glycolysis)) +
           axis.title.y = element_text(size = 8))
 
 ggsave(filename = file.path(outDir,"malignant_oxphos_glycolysis.pdf"), p, 
-       device = "pdf", width = 2, height = 1.5, units = "in",
+       device = "pdf", width = 6, height = 4, units = "in",
        useDingbats = FALSE)   # Evitamos usar la fuente Dingbats porque según la documentación de ggplot2, a veces da problemas
 
 
@@ -119,7 +119,7 @@ p = ggplot(data, aes(x = OXPHOS, y = Hypoxia)) +
     xlim(data_min, data_max) + ylim(data_min, data_max) +
     theme_classic()  + theme(aspect.ratio = 0.8) +
     labs(x = "OXPHOS", y = "Hypoxia") +
-    geom_text(x = .75, y = 3, label = formula) +
+    geom_text(x = 1, y = 3, label = formula) +
     theme(axis.line = element_line(size = 0.3, colour = "black"),
           axis.ticks = element_line(size = 0.3, color = "black"),
           axis.text.x = element_text(size = 6),
@@ -128,7 +128,7 @@ p = ggplot(data, aes(x = OXPHOS, y = Hypoxia)) +
           axis.title.y = element_text(size = 8))
   
 ggsave(filename = file.path(outDir,"malignant_oxphos_hypoxia.pdf"), p, 
-       device = "pdf", width = 2, height = 1.5, units = "in",
+       device = "pdf", width = 6, height = 4, units = "in",
        useDingbats = FALSE)
 
 
@@ -143,7 +143,7 @@ p = ggplot(data, aes(x = Glycolysis, y = Hypoxia)) +
     xlim(data_min, data_max) + ylim(data_min, data_max) +
     labs(x = "Glycolysis", y = "Hypoxia") +
     theme_classic()  + theme(aspect.ratio = 0.8) +
-    geom_text(x = .75, y = 3, label = formula) +
+    geom_text(x = 1, y = 3, label = formula) +
     theme(axis.line = element_line(size = 0.3, colour = "black"),
           axis.ticks = element_line(size = 0.3, color = "black"),
           axis.text.x = element_text(size = 6),
@@ -152,7 +152,7 @@ p = ggplot(data, aes(x = Glycolysis, y = Hypoxia)) +
           axis.title.y = element_text(size = 8))
 
 ggsave(filename = file.path(outDir,"malignant_glycolysis_hypoxia.pdf"), p, 
-       device = "pdf", width = 2, height = 1.5, units = "in",
+       device = "pdf", width = 6, height = 4, units = "in",
        useDingbats = FALSE)
 
 
