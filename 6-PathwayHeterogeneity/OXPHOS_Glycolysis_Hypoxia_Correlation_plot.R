@@ -75,67 +75,86 @@ data <- data.frame(OXPHOS = oxphos, Glycolysis = glycolysis, Hypoxia = hypoxia)
 
 # Calculamos la matriz de correlación para las 3 rutas metabólicas
 print("Correlación de las rutas metabólicas de interés:")
-print(cor(data, method = "pearson"))
+print(cor(data, method = "pearson"))  # Usa pearson porque tenemos más de 30 células, y podemos asumir que ambas distribuciones se aproximan a una normal
 
 
-# Graficamos la matriz de correlaciones
-data_min <- 0
+# Graficamos la regresión lineal para OXPHOS y glicólisis
+data_min <- 0   # Rangos máximos y mínimos de dataframe
 data_max <- 4
 
+# Calculamos la ecuación de la regresión lineal para mostrarla en el gráfico
+a <- lm(Glycolysis ~ OXPHOS, data)
+b <- summary(a)
+formula <- paste0("y = ",round(a$coefficients[[1]], 3), " + ", round(a$coefficients[[2]], 3), "x ;  R^2 = ", round(b$r.squared,3))
 
-
+# Generamos el gráfico y lo guardamos en un pdf
 p = ggplot(data, aes(x = OXPHOS, y = Glycolysis)) + 
     geom_point(size = 0.5) +
     geom_smooth(method = "lm", color = "red") +
     xlim(data_min, data_max) + ylim(data_min, data_max) +
     theme_classic()  + theme(aspect.ratio = 0.8) +
     labs(x = "OXPHOS", y = "Glycolysis") +
-    theme(axis.line=element_line(size = 0.3, colour = "black"),
-       axis.ticks = element_line(size = 0.3, color = "black"),
-       axis.text.x = element_text(size = 6),
-       axis.text.y = element_text(size = 6),
-       axis.title.x = element_text(size = 8),
-       axis.title.y = element_text(size = 8))
+    geom_text(x = .75, y = 3.5, label = formula) +
+    theme(axis.line = element_line(size = 0.3, colour = "black"),
+          axis.ticks = element_line(size = 0.3, color = "black"),
+          axis.text.x = element_text(size = 6),
+          axis.text.y = element_text(size = 6),
+          axis.title.x = element_text(size = 8),
+          axis.title.y = element_text(size = 8))
+
+ggsave(filename = file.path(outDir,"malignant_oxphos_glycolysis.pdf"), p, 
+       device = "pdf", width = 2, height = 1.5, units = "in",
+       useDingbats = FALSE)   # Evitamos usar la fuente Dingbats porque según la documentación de ggplot2, a veces da problemas
 
 
-# Ver como calcular el R2 y ponerlo en la gráfica, o ponert toda la formula + el R2
-objeto <- lm(Glycolysis ~ OXPHOS, data)
-objeto$coefficients[[2]] 
 
-p <- p + geom_text(aes(x = 1, y = 3, label = lm_eqn(lm(Glycolysis ~ OXPHOS, data))), parse = TRUE)
+# Ídem para OXPHOS e hipoxia
+a <- lm(Hypoxia ~ OXPHOS, data)
+b <- summary(a)
+formula <- paste0("y = ",round(a$coefficients[[1]], 3), " + ", round(a$coefficients[[2]], 3), "x ;  R^2 = ", round(b$r.squared,3))
 
-ggsave(filename = file.path(outDir,"malignant_oxphos_glycolysis.pdf"),p,device = "pdf",width=2,height=1.5,units="in",useDingbats=FALSE)
-
-p=ggplot(data,aes(x=OXPHOS,y=Hypoxia)) + 
-  geom_point(size=0.5) +
-  geom_smooth(method="lm",color="red") +
-  xlim(dat_min,dat_max) + ylim(dat_min,dat_max) +
-  theme_classic()  + theme(aspect.ratio = 0.8) +
-  labs(x = "OXPHOS", y = "Hypoxia") +
-  theme(axis.line=element_line(size=0.3,colour="black"),
-        axis.ticks = element_line(size=0.3,color="black"),
-        axis.text.x=element_text(size=6),
-        axis.text.y=element_text(size=6),
-        axis.title.x=element_text(size=8),
-        axis.title.y=element_text(size=8))
+p = ggplot(data, aes(x = OXPHOS, y = Hypoxia)) + 
+    geom_point(size = 0.5) +
+    geom_smooth(method = "lm", color = "red") +
+    xlim(data_min, data_max) + ylim(data_min, data_max) +
+    theme_classic()  + theme(aspect.ratio = 0.8) +
+    labs(x = "OXPHOS", y = "Hypoxia") +
+    geom_text(x = .75, y = 3, label = formula) +
+    theme(axis.line = element_line(size = 0.3, colour = "black"),
+          axis.ticks = element_line(size = 0.3, color = "black"),
+          axis.text.x = element_text(size = 6),
+          axis.text.y = element_text(size = 6),
+          axis.title.x = element_text(size = 8),
+          axis.title.y = element_text(size = 8))
   
+ggsave(filename = file.path(outDir,"malignant_oxphos_hypoxia.pdf"), p, 
+       device = "pdf", width = 2, height = 1.5, units = "in",
+       useDingbats = FALSE)
 
-ggsave(filename = file.path(outDir,"malignant_oxphos_hypoxia.pdf"),p,device = "pdf",width=2,height=1.5,units="in",useDingbats=FALSE)
 
-p=ggplot(data,aes(x=Glycolysis,y=Hypoxia)) + 
-  geom_point(size=0.5) +
-  geom_smooth(method="lm",color="red") +
-  xlim(dat_min,dat_max) + ylim(dat_min,dat_max) +
-  labs(x = "Glycolysis", y = "Hypoxia") +
-  theme_classic()  + theme(aspect.ratio = 0.8) +
-  theme(axis.line=element_line(size=0.3,colour="black"),
-        axis.ticks = element_line(size=0.3,color="black"),
-        axis.text.x=element_text(size=6),
-        axis.text.y=element_text(size=6),
-        axis.title.x=element_text(size=8),
-        axis.title.y=element_text(size=8))
+# Ídem para glicólisis e hipoxia
+a <- lm(Hypoxia ~ Glycolysis, data)
+b <- summary(a)
+formula <- paste0("y = ",round(a$coefficients[[1]], 3), " + ", round(a$coefficients[[2]], 3), "x ;  R^2 = ", round(b$r.squared,3))
 
-ggsave(filename = file.path(outDir,"malignant_glycolysis_hypoxia.pdf"),p,device = "pdf",width=2,height=1.5,units="in",useDingbats=FALSE)
+p = ggplot(data, aes(x = Glycolysis, y = Hypoxia)) + 
+    geom_point(size = 0.5) +
+    geom_smooth(method = "lm",color = "red") +
+    xlim(data_min, data_max) + ylim(data_min, data_max) +
+    labs(x = "Glycolysis", y = "Hypoxia") +
+    theme_classic()  + theme(aspect.ratio = 0.8) +
+    geom_text(x = .75, y = 3, label = formula) +
+    theme(axis.line = element_line(size = 0.3, colour = "black"),
+          axis.ticks = element_line(size = 0.3, color = "black"),
+          axis.text.x = element_text(size = 6),
+          axis.text.y = element_text(size = 6),
+          axis.title.x = element_text(size = 8),
+          axis.title.y = element_text(size = 8))
+
+ggsave(filename = file.path(outDir,"malignant_glycolysis_hypoxia.pdf"), p, 
+       device = "pdf", width = 2, height = 1.5, units = "in",
+       useDingbats = FALSE)
+
 
 # #correlation in each tumor
 # for( i in neoplasias){
@@ -152,6 +171,10 @@ ggsave(filename = file.path(outDir,"malignant_glycolysis_hypoxia.pdf"),p,device 
 #   print(cor(data))
 # }
 
+
+# Limpieza RAM
+rm(tumor_sce)
+gc(verbose = F)
 
 
 
