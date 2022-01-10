@@ -11,9 +11,9 @@ source("../utils.R")
 
 # Opciones
 options(stringsAsFactors = FALSE)
-# argumento <- commandArgs()
-# argumento <- argumento[6]
-argumento <- "melanoma"
+argumento <- commandArgs()
+argumento <- argumento[6]
+# argumento <- "melanoma"
 outDir <- file.path("./datasets",argumento,"oxphos-gly-hyp-corr")
 if (!dir.exists(outDir)) {
   dir.create(outDir, recursive = TRUE)
@@ -203,7 +203,7 @@ gc(verbose = F)
 # Hacemos un subset del objeto sce original para quedarnos sólo con las células
 # sanas
 healthy_sce <- filtered_sce[,filtered_sce$cellType != "Malignant"]
-healthy_sce$cellType <-  droplevels(healthy_sce$cellType)
+healthy_sce$cellType <-  factor(healthy_sce$cellType)
 cell_types <- unique(healthy_sce$cellType)
 
 # Limpieza RAM, ya no necesitamos el objeto filtered_sce
