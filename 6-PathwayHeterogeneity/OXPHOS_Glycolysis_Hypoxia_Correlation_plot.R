@@ -5,6 +5,7 @@
 # Paquetes y funciones auxiliares
 library(scater)
 library(stringr)
+library(pheatmap)
 library(RColorBrewer)
 source("../utils.R")
 
@@ -281,7 +282,7 @@ sorted_columns <- names(sorted_columns)
 # (fold change = 1)
 matriz_corr[is.na(matriz_corr)] <- 1 
 
-pheatmap::pheatmap(matriz_corr[sorted_rows, sorted_columns], cluster_cols = F,
+pheatmap(matriz_corr[sorted_rows, sorted_columns], cluster_cols = F,
          cluster_rows = F, color = color, breaks = mybreaks)
 
 dev.off()
