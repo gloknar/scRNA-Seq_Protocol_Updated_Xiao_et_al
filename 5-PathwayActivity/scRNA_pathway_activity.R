@@ -12,7 +12,7 @@ source("../utils.R")
 # Opciones
 options(stringsAsFactors = F)
 argumento <- commandArgs()
-argumento <- "head_neck"
+# argumento <- "head_neck"
 argumento <- argumento[6]
 outDir <- file.path("datasets",argumento)
 if(!dir.exists(outDir) ) {dir.create(outDir, recursive = TRUE)}
@@ -334,14 +334,14 @@ View(scRNA_data_flattened)
 
 # scRNA_data_flattened <- scRNA_data_flattened[!is.na(scRNA_data_flattened$value),]  # Otra manera de eliminar los NA
 
-anyNA(scRNA_data)
-scRNA_data <- scRNA_data[!is.na(scRNA_data)]
-anyNA(scRNA_data)
-scRNA_data
-length(is.na(scRNA_data))
-nrow(scRNA_data)
-ncol(scRNA_data)
-dim(scRNA_data_flattened)
+# anyNA(scRNA_data)
+# scRNA_data <- scRNA_data[!is.na(scRNA_data)]
+# anyNA(scRNA_data)
+# scRNA_data
+# length(is.na(scRNA_data))
+# nrow(scRNA_data)
+# ncol(scRNA_data)
+# dim(scRNA_data_flattened)
 
 graf_violin <- ggplot(scRNA_data_flattened, aes(x = variable, y = value, fill = variable)) +
   scale_y_continuous(limits = c(0, 3), breaks = 0:3, labels = 0:3) +   # Establecemos el ylim en 0-3
