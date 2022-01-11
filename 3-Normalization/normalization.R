@@ -15,9 +15,9 @@ library(scran)
 
 # Opciones
 options(stringsAsFactors = FALSE)
-# argumento <- commandArgs()
-# argumento <- argumento[6]
+argumento <- commandArgs()
 argumento = "head_neck"
+argumento <- argumento[6]
 outDir <- file.path("./datasets",argumento)
 if(!dir.exists(outDir)) {                 
   dir.create(outDir, recursive = TRUE)    # Crea la carpeta ./datasets/<head_neck o melanoma>/  si no existe

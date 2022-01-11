@@ -7,20 +7,22 @@ library(scImpute)
 library(scater)
 
 # Opciones
-argumento <- commandArgs()[6]
-# argumento <- "melanoma"
-outDir <- file.path("./datasets", argumento) # Carpeta donde guardaremos todos los archivos relacionados con la imputación del objeto `sce`
-if(!dir.exists(outDir)) {                    # Crea la carpeta ./datasets/<nombre del tumor>/  si no existe
-  dir.create(outDir,recursive = TRUE)
-} 
-num_cores <- 6                               # Usar 1 en Windows (scImpute usa mc.apply...)
+options(stringsAsFactors = F)
+argumento <- commandArgs()
+# argumento <- "head_neck"
+argumento <- argumento[6]
+outDir <- file.path("datasets",argumento)   # Crea la carpeta ./datasets/<head_neck o melanoma>/  si no existe. Aquí guardaremos los resultados
+if(!dir.exists(outDir) ) {dir.create(outDir, recursive = TRUE)}
+
+num_cores <- 1                               # Usar 1 en Windows y/o en máquinas con poca RAM, ya que scImpute usa mc.apply()
+
 
 # Leemos el dataset del head_neck/melanoma con las células filtradas y a partir
 # de él creamos un objeto `sce` con sólo las células tumorales y otro con sólo
 # las células no tumorales
 filtered_sce <- readRDS(file.path("../1-ReadData/datasets",argumento,"filtered_sce.rds"))
 filtered_sce$cellType <- factor(filtered_sce$cellType)
-filtered_sce$cellType <- droplevels(filtered_sce$cellType)
+# filtered_sce$cellType <- droplevels(filtered_sce$cellType)
 filtered_sce_tumor <- filtered_sce[, filtered_sce$cellType == "Malignant"]
 filtered_sce_nontumor <- filtered_sce[, filtered_sce$cellType != "Malignant"]
 
@@ -31,7 +33,6 @@ filtered_sce_nontumor <- filtered_sce[, filtered_sce$cellType != "Malignant"]
 ####################################################################
 ###########     1. Preparado de las matrices de TPM      ###########
 ####################################################################
-
 
 # Creamos las matrices de TPMs de ambos subconjuntos celulares
 # NOTA: el bolsillo `filtered_sce_(non)tumor@assays@data$exprs` contiene la
@@ -45,8 +46,8 @@ filtered_sce_nontumor_tpm <- tpm(filtered_sce_nontumor)  # sinónimo de filtered
 # NOTA: Debemos eliminar los niveles no usados de los factores tumor y cellType
 # cada vez que los usemos... Lo hice en el paso 1 del protocolo, pero por algún
 # motivo no se guarda
-labels_tumor <- droplevels(filtered_sce_tumor$tumor)
-labels_nontumor <- droplevels(filtered_sce_nontumor$cellType)
+labels_tumor  <- factor(filtered_sce_tumor$tumor)
+labels_nontumor <- factor(filtered_sce_nontumor$cellType)  # Mejor asegurarnos de que casteamos el objeto con factor() que eliminar los niveles del factor con droplevels()
 
 # Guardamos las matrices de TPMs en archivos
 write.csv(filtered_sce_tumor_tpm,file.path(outDir,"malignant.tpm"))
@@ -78,7 +79,6 @@ if (length(temporary) != nrow(filtered_sce_tumor_tpm)){ # Compara si el nº de g
 # Preparamos el vector de longitudes de genes necesario para scImpute
 genelen <- all_gene_lengths[rownames(filtered_sce_tumor_tpm),]
 genelen <- as.numeric(as.vector(genelen))
-
 
 
 ####################################################################################################

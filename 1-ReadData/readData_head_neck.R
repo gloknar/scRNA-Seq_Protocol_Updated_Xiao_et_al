@@ -95,7 +95,7 @@ sce <- SingleCellExperiment(assays = list(tpm = raw_tpm, exprs = quasilog2_tpm),
                             colData = metadatos,
                             rowData = row_data)
 
-
+16
 
 ####################################################################################################
 

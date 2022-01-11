@@ -12,8 +12,8 @@ source("../utils.R")
 # Opciones
 options(stringsAsFactors = F)
 argumento <- commandArgs()
+argumento <- "head_neck"
 argumento <- argumento[6]
-# argumento <- "head_neck"
 outDir <- file.path("datasets",argumento)
 if(!dir.exists(outDir) ) {dir.create(outDir, recursive = TRUE)}
 
@@ -305,6 +305,7 @@ mybreaks <- c(
 pheatmap(data[sorted_rows, sorted_columns], cluster_cols = F,
          cluster_rows = F, color = color, breaks = mybreaks)
 
+# anyNA(data)  # No contiene NAs
 # Guardamos heatmap en pdf a disco duro
 dev.off()
 
@@ -326,10 +327,21 @@ write.table(matriz_pvalues, file = file.path(outDir,"KEGGpathway_activity_pvalue
 
 # Creamos un violinplot para comparar la actividad metabólica global entre tipos
 # celulares
+
 scRNA_data <- as.data.frame(distribucion_empirica_actividad_pathways)
 scRNA_data_flattened <- melt(scRNA_data, na.rm = T)
+View(scRNA_data_flattened)
+
 # scRNA_data_flattened <- scRNA_data_flattened[!is.na(scRNA_data_flattened$value),]  # Otra manera de eliminar los NA
 
+anyNA(scRNA_data)
+scRNA_data <- scRNA_data[!is.na(scRNA_data)]
+anyNA(scRNA_data)
+scRNA_data
+length(is.na(scRNA_data))
+nrow(scRNA_data)
+ncol(scRNA_data)
+dim(scRNA_data_flattened)
 
 graf_violin <- ggplot(scRNA_data_flattened, aes(x = variable, y = value, fill = variable)) +
   scale_y_continuous(limits = c(0, 3), breaks = 0:3, labels = 0:3) +   # Establecemos el ylim en 0-3
