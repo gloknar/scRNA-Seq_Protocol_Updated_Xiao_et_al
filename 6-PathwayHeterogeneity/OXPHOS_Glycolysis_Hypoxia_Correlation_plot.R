@@ -51,7 +51,7 @@ genes_hipoxia <- all_pathways[["HALLMARK_HYPOXIA"]]
 # Hacemos un subset del objeto sce original para quedarnos sólo con las células
 # tumorales
 tumor_sce <- filtered_sce[, filtered_sce$cellType == "Malignant"]
-tumor_sce$tumor <- droplevels(tumor_sce$tumor)
+tumor_sce$tumor <- factor(tumor_sce$tumor)  # El código es más robusto si hacemos volvemos a castear a factor en vez de usar droplevels() para eliminar niveles no usados del factor en cuestión
 neoplasias <- unique(tumor_sce$tumor)
 
 
@@ -108,7 +108,7 @@ p = ggplot(data, aes(x = OXPHOS, y = Glicolisis)) +
           axis.title.x = element_text(size = 8),
           axis.title.y = element_text(size = 8))
 
-ggsave(filename = file.path(outDir,"malignant_Oxphos_Glicolisis.pdf"), p, 
+ggsave(filename = file.path(outDir,"malignant_OXPHOS_Glycolysis.pdf"), p, 
        device = "pdf", width = 6, height = 4, units = "in",
        useDingbats = FALSE)   # Evitamos usar la fuente Dingbats porque según la documentación de ggplot2, a veces da problemas
 
@@ -138,7 +138,7 @@ p = ggplot(data, aes(x = OXPHOS, y = Hipoxia)) +
           axis.title.x = element_text(size = 8),
           axis.title.y = element_text(size = 8))
   
-ggsave(filename = file.path(outDir,"malignant_Oxphos_Hipoxia.pdf"), p, 
+ggsave(filename = file.path(outDir,"malignant_OXPHOS_Hypoxia.pdf"), p, 
        device = "pdf", width = 6, height = 4, units = "in",
        useDingbats = FALSE)
 
@@ -168,7 +168,7 @@ p = ggplot(data, aes(x = Glicolisis, y = Hipoxia)) +
           axis.title.x = element_text(size = 8),
           axis.title.y = element_text(size = 8))
 
-ggsave(filename = file.path(outDir,"malignant_Glicolisis_Hipoxia.pdf"), p, 
+ggsave(filename = file.path(outDir,"malignant_Glycolysis_Hypoxia.pdf"), p, 
        device = "pdf", width = 6, height = 4, units = "in",
        useDingbats = FALSE)
 
@@ -241,28 +241,27 @@ for (c in cell_types) {
 # Guardamos las correlaciones entre las 3 rutas de interés en cada linaje
 # celular en un archivo tsv
 write.table(matriz_corr, 
-    file.path(outDir,"non-malignant_Oxphos_Glicolisis_Hipoxia_corr.tsv"),
+    file.path(outDir,"non-malignant_OXPHOS_Glycolysis_Hypoxia_corr.tsv"),
     row.names = T, col.names = NA, sep = "\t")
 
 
-
-# Generamos el PDF donde guardaremos el heatmap
-pdf(file.path(outDir,"KEGGpathway_activity_heatmap_Non-malignant.pdf"), onefile = T,
+# Generamos el archivo PDF donde guardaremos el heatmap
+pdf(file.path(outDir,"non-malignant_pathways_corr_heatmap.pdf"), onefile = T,
     width = 6, height = 9)
 
 # Generamos la paleta de colores: un gradiente de azul a rojo (pasando por el
 # blanco) de 100 pasos
-color <- colorRampPalette(c("blue", "white", "red"))(100)
+color <- colorRampPalette(c("white", "red"))(50)
 
 # Le decimos al heatmap que use esa paleta de manera gradual, siendo el 2 rojo,
 # el 1 blanco y el 0 azul
 mybreaks <- c(
-  seq(0, 0.5, length.out = 33),
-  seq(0.51, 1.5, length.out = 33),
-  seq(1.51, max(data), length.out = 34)
-)
+  seq(0, 0.5, length.out = 25),
+  seq(0.51, max(matriz_corr), length.out = 25))
 
-pheatmap(matriz_corr, cluster_cols = F,
-         cluster_rows = F, color = color, breaks = mybreaks)
+# Computamos el heatmap
+pheatmap(matriz_corr, cluster_cols = F, cluster_rows = F, 
+         color = color, breaks = mybreaks)
 
+# Lo guardamos en el disco duro
 dev.off()

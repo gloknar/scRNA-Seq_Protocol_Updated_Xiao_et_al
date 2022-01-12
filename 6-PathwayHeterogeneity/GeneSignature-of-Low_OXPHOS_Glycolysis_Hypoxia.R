@@ -1,8 +1,23 @@
+#######################################################################
+###########     0. Carga de paquetes, opciones y datos      ###########
+#######################################################################
+
+# Paquetes y funciones auxiliares
 library(scater)
 library(stringr)
 library(pheatmap)
 library(gtools)
 source("../utils.R")
+
+# Opciones
+options(stringsAsFactors = FALSE)
+# argumento <- commandArgs()
+# argumento <- argumento[6]
+argumento <- "melanoma"
+outDir <- file.path("./datasets",argumento,"oxphos-gly-hyp-corr")
+if (!dir.exists(outDir)) {
+  dir.create(outDir, recursive = TRUE)
+}
 options(stringsAsFactors=FALSE)
 
 # args <- commandArgs()
