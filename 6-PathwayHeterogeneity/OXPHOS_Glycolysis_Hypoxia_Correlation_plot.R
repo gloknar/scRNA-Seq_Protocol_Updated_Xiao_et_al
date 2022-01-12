@@ -212,7 +212,6 @@ rm(filtered_sce)
 gc(verbose = F)
 
 
-
 # Inicializamos una matriz de correlaciones vacía de tipos celulares X
 # correlaciones
 matriz_corr <- matrix(NA, nrow = length(cell_types), ncol = 3,
@@ -248,7 +247,7 @@ write.table(matriz_corr,
 
 
 # Generamos el PDF donde guardaremos el heatmap
-pdf(file.path(outDir,"KEGGpathway_activity_heatmap_permutation_Non-malignant.pdf"), onefile = T,
+pdf(file.path(outDir,"KEGGpathway_activity_heatmap_Non-malignant.pdf"), onefile = T,
     width = 6, height = 9)
 
 # Generamos la paleta de colores: un gradiente de azul a rojo (pasando por el
@@ -263,26 +262,7 @@ mybreaks <- c(
   seq(1.51, max(data), length.out = 34)
 )
 
-# Ordenamos la actividad máxima de las rutas en cada tipo celular para que
-# salgan escalonadas en el heatmap
-sorted_rows <- c()
-for(i in colnames(matriz_corr)){
-  select_row <- which(rowMaxs(matriz_corr, na.rm = T) == matriz_corr[,i])  # Seleciona las rutas en las que el tipo celular i presenta la actividad máxima de entre todos los tipos celulares
-  tmp <- rownames(matriz_corr)[select_row][order(matriz_corr[select_row,i], decreasing = T)] # Ordenamos dichas rutas, de mayor a menor actividad
-  sorted_rows <- c(sorted_rows, tmp)
-}
-
-# Correr o no estas dos líneas no parece tener efectos en el heatmap ...
-sorted_columns <- c()
-sorted_columns <- apply(matriz_corr[sorted_rows,], 2, function(x) order(x)[nrow(matriz_corr)])
-sorted_columns <- names(sorted_columns)
-
-
-# Las casillas del heatmap sin información se marcan como no significativas
-# (fold change = 1)
-matriz_corr[is.na(matriz_corr)] <- 1 
-
-pheatmap(matriz_corr[sorted_rows, sorted_columns], cluster_cols = F,
+pheatmap(matriz_corr, cluster_cols = F,
          cluster_rows = F, color = color, breaks = mybreaks)
 
 dev.off()
