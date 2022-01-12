@@ -14,7 +14,7 @@ options(stringsAsFactors = FALSE)
 # argumento <- commandArgs()
 # argumento <- argumento[6]
 argumento <- "melanoma"
-outDir <- file.path("./datasets",argumento,"oxphos-gly-hyp-corr")
+outDir <- file.path("./datasets",argumento,"low-OXPHOS-gly-hyp-activity-genes")
 if (!dir.exists(outDir)) {
   dir.create(outDir, recursive = TRUE)
 }
