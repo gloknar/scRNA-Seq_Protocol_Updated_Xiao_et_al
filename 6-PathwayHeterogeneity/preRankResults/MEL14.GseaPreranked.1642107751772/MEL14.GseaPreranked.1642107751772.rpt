@@ -1,0 +1,20 @@
+producer_class	xtools.gsea.GseaPreranked
+producer_timestamp	1642107751772
+param	rpt_label	MEL14
+param	rnd_seed	123456
+param	set_min	15
+param	zip_report	false
+param	create_svgs	true
+param	scoring_scheme	weighted
+param	rnk	/home/acm/Desktop/trabajo_UGR/Proyectos Activos/Proyecto-scRNA-Ovarios/Protocolo-actualizado-R4/6-PathwayHeterogeneity/prerank.rnk
+param	norm	meandiv
+param	out	/home/acm/Desktop/trabajo_UGR/Proyectos Activos/Proyecto-scRNA-Ovarios/Protocolo-actualizado-R4/6-PathwayHeterogeneity/preRankResults
+param	help	false
+param	set_max	500
+param	gmx	../Data/KEGG_metabolism.gmt
+param	make_sets	true
+param	plot_top_x	20
+param	gui	false
+param	nperm	1000
+
+file	preRankResults/MEL14.GseaPreranked.1642107751772/index.html
