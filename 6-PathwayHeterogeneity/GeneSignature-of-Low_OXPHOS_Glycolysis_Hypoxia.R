@@ -98,7 +98,8 @@ for(t in tumores){
    message('Tenemos menos de 5 células outliers en cada extremo del tumor ',t,', pasamos al siguiente tumor. Omitiendo dicho tumor...')
    next
  }
- 
+
+  
  condition <- factor(c(rep("oxphos_low", length(oxphos_low)), 
                        rep("oxphos_high", length(oxphos_high))), 
                        levels = c("oxphos_low", "oxphos_high"))
