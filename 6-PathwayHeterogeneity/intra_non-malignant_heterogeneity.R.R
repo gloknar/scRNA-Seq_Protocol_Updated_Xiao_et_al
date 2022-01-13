@@ -9,7 +9,7 @@ source("runGSEA_preRank.R")
 
 args <- commandArgs()
 tumor <- args[6]
-outDir <- file.path("datasets",tumor)
+outDir <- file.path("datasets",tumor,"intra_non_malignant")
 if(!dir.exists(outDir) ) dir.create(outDir,recursive=TRUE)
 pathway_file <- "../Data/KEGG_metabolism.gmt"
 
