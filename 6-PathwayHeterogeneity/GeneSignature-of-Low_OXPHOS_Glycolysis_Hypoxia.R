@@ -31,7 +31,8 @@ tumor_metabolic_sce <- filtered_sce[rowData(filtered_sce)$metabolic,
 tumor_metabolic_sce$tumor <- factor(tumor_metabolic_sce$tumor)
 tumores <- unique(tumor_metabolic_sce$tumor)
 
-# Creamos otro subset del objeto sce con las células malignas y todos los genes (23.684)
+# Creamos otro subset del objeto sce con todas las células malignas y todos los
+# genes (23.684)
 tumor_sce <- filtered_sce[,filtered_sce$cellType == "Malignant"]
 tumor_sce$tumor <- factor(tumor_sce$tumor)
 
@@ -102,36 +103,45 @@ for(t in tumores){
                        rep("oxphos_high", length(oxphos_high))), 
                        levels = c("oxphos_low", "oxphos_high"))
  
- each_tumor_tpm_selected <- each_tumor_tpm[,c(oxphos_low,oxphos_high)] 
+ # Matriz TPM de todos los genes expresados en todos los tumores, cogiendo sólo
+ # las células del tumor t
+ each_tumor_tpm_selected <- each_tumor_tpm[, c(oxphos_low,oxphos_high)] 
  
- pvalues <- sapply(X = 1:nrow(each_tumor_tpm_selected),
-                   FUN = function(x) {
-                     return(wilcox.test(each_tumor_tpm_selected[x,] ~ condition, alternative="greater")$p.value)
-                   })
- pvalues_df <- data.frame(pvalues,row.names=rownames(each_tumor_tpm_selected))
+ # El p-valor de cada gen expresado en cualquier tumor/paciente
+ pvalues <- sapply(X = 1 : nrow(each_tumor_tpm_selected),  # Esto son los genes
+                   FUN = function(x) { # Les hacemos un wilcox test (t-test no parmetrico) con alternativa "greater"
+                     return(wilcox.test(each_tumor_tpm_selected[x,] ~ condition, alternative = "greater")$p.value)
+                   }) # Aparecen 50 advertencias o más porque no computa valores en empates
+ 
+ pvalues_df <- data.frame(pvalues, row.names = rownames(each_tumor_tpm_selected))
  
  # Guardamos aquellos genes con un p-valor < 0.01 en un archivo
- write.table(rownames(pvalues_df[pvalues_df$pvalues<=0.01,,drop=F]),
-             file=file.path(outDir,paste0(t,"_low_OXPHOS_glycolysis_hypoxia_signature.genes.txt")),
-             quote=F,row.names=F,col.names=F)
+ write.table(file = file.path(outDir,paste0(t,"_low_OXPHOS_glycolysis_hypoxia_signature.genes.txt")),
+             rownames(pvalues_df[pvalues_df$pvalues <= 0.01, ,drop = F]),
+             quote = F, row.names = F, col.names = F)
 }
+
 ##all together
-selected_tumor_tpm <- assay(tumor_sce, "exprs")
-selected_tumor_tpm <- selected_tumor_tpm[rowSums(selected_tumor_tpm) > 0,]
+selected_tumor_tpm <- assay(tumor_sce, "exprs")   # Todo el genoma de todas las células tumorales
+selected_tumor_tpm <- selected_tumor_tpm[rowSums(selected_tumor_tpm) > 0,]  # Eliminamos genes con dropout rate 100% en todas las células malignas
 
 
-condition <- factor(c(rep("oxphos_low",length(all_low_cells)),rep("oxphos_high",length(all_high_cells))),levels = c("oxphos_low","oxphos_high"))
+condition <- factor(c(rep("oxphos_low", length(all_low_cells)), 
+                      rep("oxphos_high", length(all_high_cells))), 
+                      levels = c("oxphos_low", "oxphos_high"))
 
-selected_tumor_tpm_selected <- selected_tumor_tpm[,c(all_low_cells,all_high_cells)] 
+# Obtenemos la matriz TPM de las células outliers
+selected_tumor_tpm_selected <- selected_tumor_tpm[, c(all_low_cells,all_high_cells)] 
 
 pvalues <- sapply(X = 1:nrow(selected_tumor_tpm_selected),
                   FUN = function(x) {
                     return(wilcox.test(selected_tumor_tpm_selected[x,] ~ condition, alternative="greater")$p.value)
                   })
-pvalues_df <- data.frame(pvalues,row.names=rownames(selected_tumor_tpm_selected))
+pvalues_df <- data.frame(pvalues, 
+                         row.names = rownames(selected_tumor_tpm_selected))
 
 
 # Guardamos aquellos genes con un p-valor < 0.01 en un archivo
-write.table(rownames(pvalues_df[pvalues_df$pvalues<=0.01,,drop=F]),
-            file=file.path(outDir,paste0("ALL","_low_OXPHOS_glycolysis_hypoxia_signature.txt")),
-            quote=F,row.names=F,col.names=F)
+write.table(rownames(pvalues_df[pvalues_df$pvalues <= 0.01,,drop = F]),
+            file = file.path(outDir,"ALL_low_OXPHOS_glycolysis_hypoxia_signature.txt"),
+            quote = F, row.names = F, col.names = F)
