@@ -11,9 +11,9 @@ source("../utils.R")
 
 # Opciones
 options(stringsAsFactors = FALSE)
-# argumento <- commandArgs()
-# argumento <- argumento[6]
-argumento <- "melanoma"
+argumento <- commandArgs()
+argumento <- argumento[6]
+# argumento <- "melanoma"
 outDir <- file.path("./datasets",argumento,"low-OXPHOS-gly-hyp-activity-genes")
 if (!dir.exists(outDir)) {
   dir.create(outDir, recursive = TRUE)
@@ -122,27 +122,29 @@ for(t in tumores){
              quote = F, row.names = F, col.names = F)
 }
 
-##all together
+
+## all together
 selected_tumor_tpm <- assay(tumor_sce, "exprs")   # Todo el genoma de todas las células tumorales
 selected_tumor_tpm <- selected_tumor_tpm[rowSums(selected_tumor_tpm) > 0,]  # Eliminamos genes con dropout rate 100% en todas las células malignas
 
-
+# Etiquetas de todas las células outliers de todos los tumores/pacientes0
 condition <- factor(c(rep("oxphos_low", length(all_low_cells)), 
                       rep("oxphos_high", length(all_high_cells))), 
                       levels = c("oxphos_low", "oxphos_high"))
 
-# Obtenemos la matriz TPM de las células outliers
+# Obtenemos la matriz TPM de todo el genoma de todas las células outliers
 selected_tumor_tpm_selected <- selected_tumor_tpm[, c(all_low_cells,all_high_cells)] 
 
-pvalues <- sapply(X = 1:nrow(selected_tumor_tpm_selected),
+pvalues <- sapply(X = 1 : nrow(selected_tumor_tpm_selected),
                   FUN = function(x) {
-                    return(wilcox.test(selected_tumor_tpm_selected[x,] ~ condition, alternative="greater")$p.value)
+                    return(wilcox.test(selected_tumor_tpm_selected[x,] ~ condition, alternative = "greater")$p.value)
                   })
+
 pvalues_df <- data.frame(pvalues, 
                          row.names = rownames(selected_tumor_tpm_selected))
 
 
 # Guardamos aquellos genes con un p-valor < 0.01 en un archivo
-write.table(rownames(pvalues_df[pvalues_df$pvalues <= 0.01,,drop = F]),
+write.table(x = rownames(pvalues_df[pvalues_df$pvalues <= 0.01, , drop = F]), 
             file = file.path(outDir,"ALL_low_OXPHOS_glycolysis_hypoxia_signature.txt"),
             quote = F, row.names = F, col.names = F)
