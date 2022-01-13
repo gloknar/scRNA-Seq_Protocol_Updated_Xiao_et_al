@@ -33,12 +33,12 @@ pathways <- gmtPathways(ruta_archivo_pathways)
 # Este contiene 50 rutas metabólicas (parece que contiene los genes que
 # participan en respuesta a hipoxia)
 hallmark_gmt <- '../Data/h.all.v6.1.symbols.gmt'
-all_pathways <- gmtPathways(hallmark_gmt)
+hallmarks <- gmtPathways(hallmark_gmt)
 
 # Cargamos las rutas metabólicas a estudiar
 genes_OXPHOS <- pathways[["Oxidative phosphorylation"]]
 genes_glicolisis <- pathways[["Glycolysis / Gluconeogenesis"]]
-genes_hipoxia <- all_pathways[["HALLMARK_HYPOXIA"]]
+genes_hipoxia <- hallmarks[["HALLMARK_HYPOXIA"]]
 
 
 
