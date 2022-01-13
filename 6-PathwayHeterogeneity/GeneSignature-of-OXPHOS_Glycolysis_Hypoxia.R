@@ -108,7 +108,7 @@ for(t in tumores){
  
  # Matriz TPM de todos los genes expresados en todos los tumores, cogiendo sólo
  # las células del tumor t
- each_tumor_tpm_selected <- each_tumor_tpm[, c(oxphos_low,oxphos_high)] 
+ each_tumor_tpm_selected <- each_tumor_tpm[, c(oxphos_low, oxphos_high)] 
  
  # El p-valor de cada gen expresado en cualquier tumor/paciente
  pvalues <- sapply(X = 1 : nrow(each_tumor_tpm_selected),  # Esto son los genes
@@ -152,7 +152,7 @@ condition <- factor(c(rep("oxphos_low", length(all_low_cells)),
                       levels = c("oxphos_low", "oxphos_high"))
 
 # Obtenemos la matriz TPM de todo el genoma de todas las células outliers
-selected_tumor_tpm_selected <- selected_tumor_tpm[, c(all_low_cells,all_high_cells)] 
+selected_tumor_tpm_selected <- selected_tumor_tpm[, c(all_low_cells, all_high_cells)] 
 
 # Limpieza RAM
 rm(selected_tumor_tpm)
