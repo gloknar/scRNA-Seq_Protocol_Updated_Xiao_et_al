@@ -54,11 +54,9 @@ hallmarks <- gmtPathways(hallmark_gmt)
 
 ####################################################################################################
 
-##############################################
-###########     1. PLACEHOLDER     ###########
-##############################################
-
-#2.Tumor cells
+################################################
+###########     1. Tumor a tumor     ###########
+################################################
 
 # Inicializamos 2 vectores vacíos
 all_low_cells <- c()
@@ -131,13 +129,20 @@ rm(tumor_metabolic_sce)
 gc(verbose = F)
 
 
+
+####################################################################################################
+
+####################################################
+###########     2. Todos los tumores     ###########
+####################################################
+
 # Analizamos todas las células tumorales, o sea de cualquier tumor/paciente
 selected_tumor_tpm <- assay(tumor_sce, "exprs")   # Todo el genoma de todas las células tumorales
 selected_tumor_tpm <- selected_tumor_tpm[rowSums(selected_tumor_tpm) > 0,]  # Eliminamos genes con dropout rate 100% en todas las células malignas
 
 
 # Limpieza RAM
-rm(tumor_sce, tumor_metabolic_sce)
+rm(tumor_sce)
 gc(verbose = F)
 
 
@@ -149,10 +154,16 @@ condition <- factor(c(rep("oxphos_low", length(all_low_cells)),
 # Obtenemos la matriz TPM de todo el genoma de todas las células outliers
 selected_tumor_tpm_selected <- selected_tumor_tpm[, c(all_low_cells,all_high_cells)] 
 
+# Limpieza RAM
+rm(selected_tumor_tpm)
+gc(verbose = F)
+
+
 pvalues <- sapply(X = 1 : nrow(selected_tumor_tpm_selected),
                   FUN = function(x) {
                     return(wilcox.test(selected_tumor_tpm_selected[x,] ~ condition, alternative = "greater")$p.value)
                   })
+
 
 pvalues_df <- data.frame(pvalues, 
                          row.names = rownames(selected_tumor_tpm_selected))
