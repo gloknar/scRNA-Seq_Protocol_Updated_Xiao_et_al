@@ -13,7 +13,7 @@ source("../utils.R")
 options(stringsAsFactors = FALSE)
 argumento <- commandArgs()
 argumento <- argumento[6]
-# argumento <- "melanoma"
+# argumento <- "head_neck"
 outDir <- file.path("./datasets",argumento,"low-OXPHOS-gly-hyp-activity-genes")
 if (!dir.exists(outDir)) {
   dir.create(outDir, recursive = TRUE)
@@ -36,6 +36,9 @@ tumores <- unique(tumor_metabolic_sce$tumor)
 tumor_sce <- filtered_sce[,filtered_sce$cellType == "Malignant"]
 tumor_sce$tumor <- factor(tumor_sce$tumor)
 
+# Limpieza RAM
+rm(filtered_sce)
+gc(verbose = F)
 
 # Leemos el archivo de las rutas en las que participan los 1566 genes
 # metabólicos (este contiene 85 rutas metabólicas)
@@ -61,7 +64,8 @@ hallmarks <- gmtPathways(hallmark_gmt)
 all_low_cells <- c()
 all_high_cells <- c()
 
-# t <- tumores[1]
+
+# Iteramos sobre cada tumor/paciente
 for(t in tumores){
   
  # Para cada paciente/tumor, creamos un subset con sólo dichas células
@@ -122,10 +126,20 @@ for(t in tumores){
              quote = F, row.names = F, col.names = F)
 }
 
+# Limpieza RAM
+rm(tumor_metabolic_sce)
+gc(verbose = F)
 
-## all together
+
+# Analizamos todas las células tumorales, o sea de cualquier tumor/paciente
 selected_tumor_tpm <- assay(tumor_sce, "exprs")   # Todo el genoma de todas las células tumorales
 selected_tumor_tpm <- selected_tumor_tpm[rowSums(selected_tumor_tpm) > 0,]  # Eliminamos genes con dropout rate 100% en todas las células malignas
+
+
+# Limpieza RAM
+rm(tumor_sce, tumor_metabolic_sce)
+gc(verbose = F)
+
 
 # Etiquetas de todas las células outliers de todos los tumores/pacientes0
 condition <- factor(c(rep("oxphos_low", length(all_low_cells)), 
