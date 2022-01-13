@@ -20,15 +20,20 @@ if (!dir.exists(outDir)) {
 }
 
 
-# Leemos el dataset del head_neck/melanoma
+# Leemos el dataset del head_neck/melanoma filtrado
 filtered_sce <- readRDS(file.path("../1-ReadData/datasets/",argumento,"filtered_sce.rds"))
 
 
-tumor_sce <- filtered_sce[,filtered_sce$cellType == "Malignant"]
-tumor_metabolic_sce <- tumor_sce[rowData(tumor_sce)$metabolic,]
+# Creamos un subset del objeto sce con las células malignas y los 1566 genes
+# metabólicos
+tumor_metabolic_sce <- filtered_sce[rowData(filtered_sce)$metabolic,
+                                    filtered_sce$cellType == "Malignant"]
+tumor_metabolic_sce$tumor <- factor(tumor_metabolic_sce$tumor)
+tumores <- unique(tumor_metabolic_sce$tumor)
 
+# Creamos otro subset del objeto sce con las células malignas y todos los genes (23.684)
+tumor_sce <- filtered_sce[,filtered_sce$cellType == "Malignant"]
 tumor_sce$tumor <- factor(tumor_sce$tumor)
-tumores <- unique(tumor_sce$tumor)
 
 
 # Leemos el archivo de las rutas en las que participan los 1566 genes
@@ -50,43 +55,52 @@ hallmarks <- gmtPathways(hallmark_gmt)
 ##############################################
 
 #2.Tumor cells
+
+# Inicializamos 2 vectores vacíos
 all_low_cells <- c()
 all_high_cells <- c()
 
-
+# t <- tumores[1]
 for(t in tumores){
- # Usando los genes metabólicos
+  
+ # Para cada paciente/tumor, creamos un subset con sólo dichas células
  each_metabolic_sce <- tumor_metabolic_sce[,tumor_metabolic_sce$tumor == t] # sce con células malignas que pertenecen al tumor t y los 1566 genes metabólicos
- each_metabolic_tpm <- assay(each_metabolic_sce, "exprs")
+ each_metabolic_tpm <- assay(each_metabolic_sce, "exprs") # Obtenemos la matriz de TPM de esas células
  each_metabolic_tpm <- each_metabolic_tpm[rowSums(each_metabolic_tpm) > 0,] # Eliminamos los genes con dropout del 100%
  
- # Usando todos los genes
+ # Usando todo el genoma de las células cancerosas
  each_tumor_sce <- tumor_sce[,tumor_sce$tumor == t]
  each_tumor_tpm <- assay(each_tumor_sce, "exprs")
  each_tumor_tpm <- each_tumor_tpm[rowSums(each_tumor_tpm) > 0,]
  
- oxphos_genes <- intersect(pathways[["Oxidative phosphorylation"]], rownames(each_tumor_tpm))
- glycolysis_genes <- intersect(pathways[["Glycolysis / Gluconeogenesis"]], rownames(each_tumor_tpm))
- hypoxia_genes <- intersect(hallmarks[["HALLMARK_HYPOXIA"]], rownames(each_tumor_tpm))
+ # Obtenemos los genes que participan en las rutas de interés
+ genes_oxphos <- intersect(pathways[["Oxidative phosphorylation"]], rownames(each_tumor_tpm))
+ genes_glicolisis <- intersect(pathways[["Glycolysis / Gluconeogenesis"]], rownames(each_tumor_tpm))
+ genes_hipoxia <- intersect(hallmarks[["HALLMARK_HYPOXIA"]], rownames(each_tumor_tpm))
+ three_all <- unique(c(genes_oxphos,genes_glicolisis,genes_hipoxia))
  
- three_all <- unique(c(oxphos_genes,glycolysis_genes,hypoxia_genes))
-
+ # Calculamos la actividad media de todos los genes que participan en cualquiera
+ # de las 3 rutas
  oxphos_mean_exprs <- colMeans(each_tumor_tpm[three_all,], na.rm = T)
  
- oxphos_mean_exprs_quantile <- quantile(oxphos_mean_exprs,seq(0,1,0.2))
+ oxphos_mean_exprs_quantile <- quantile(oxphos_mean_exprs, seq(0, 1, 0.2))
  low_cutoff <- oxphos_mean_exprs_quantile[["20%"]]
  high_cutoff <- oxphos_mean_exprs_quantile[["80%"]]
  oxphos_low <- which(oxphos_mean_exprs < low_cutoff)
  oxphos_high <- which(oxphos_mean_exprs > high_cutoff)
  
- all_low_cells <- c(all_low_cells, colnames(each_tumor_tpm)[oxphos_low])
+ all_low_cells <- c(all_low_cells, colnames(each_tumor_tpm)[oxphos_low]) # Append a los vector vacíos los nombres de las células
  all_high_cells <- c(all_high_cells, colnames(each_tumor_tpm)[oxphos_high])
 
+ # Comprobación de cantidad suficiente de células outlier
  if(length(oxphos_low) < 5 | length(oxphos_high) < 5){
-   # Meter aquí un message
+   message('Tenemos menos de 5 células outliers en cada extremo del tumor ',t,', pasamos al siguiente tumor. Omitiendo dicho tumor...')
    next
  }
- condition <- factor(c(rep("oxphos_low",length(oxphos_low)),rep("oxphos_high",length(oxphos_high))),levels = c("oxphos_low","oxphos_high"))
+ 
+ condition <- factor(c(rep("oxphos_low", length(oxphos_low)), 
+                       rep("oxphos_high", length(oxphos_high))), 
+                       levels = c("oxphos_low", "oxphos_high"))
  
  each_tumor_tpm_selected <- each_tumor_tpm[,c(oxphos_low,oxphos_high)] 
  
