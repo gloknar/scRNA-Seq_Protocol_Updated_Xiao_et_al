@@ -13,10 +13,10 @@ source("runGSEA_preRank.R")
 
 # Opciones
 options(stringsAsFactors = FALSE)
-# argumento <- commandArgs()
-# argumento <- argumento[6]
-argumento <- "melanoma"
-outDir <- file.path("datasets",argumento)
+argumento <- commandArgs()
+argumento <- argumento[6]
+# argumento <- "melanoma"
+outDir <- file.path("datasets",argumento,"intra_malignant")
 if (!dir.exists(outDir)) {
   dir.create(outDir, recursive = T)
 }
