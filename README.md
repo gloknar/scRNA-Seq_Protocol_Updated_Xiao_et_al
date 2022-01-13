@@ -117,15 +117,21 @@ Metabolic pathway heterogeneity
 -------------------------------
 ``` bash
 cd 6-PathwayHeterogeneity
+
 Rscript intra_malignant_heterogeneity.R melanoma
 Rscript intra_malignant_heterogeneity.R head_neck
+
 Rscript intra_non-malignant_heterogeneity.R melanoma
 Rscript intra_non-malignant_heterogeneity.R head_neck
+
+# PH
 Rscript OXPHOS_Glycolysis_Hypoxia_Correlation_plot.R melanoma
 Rscript OXPHOS_Glycolysis_Hypoxia_Correlation_plot.R head_neck
-Rscript OXPHOS_Glycolysis_Hypoxia_Correlation_plot-CCLE.R
-Rscirpt GeneSignature-of-Low_OXPHOS_Glycolysis_Hypoxia.R melanoma
-Rscript GeneSignature-of-Low_OXPHOS_Glycolysis_Hypoxia.R head_neck
+
+# Obtenemos los genes infra y sobreexpresados de las 3 rutas metabólicas de interés  todos los tumores/pacientes
+Rscirpt GeneSignature-of-OXPHOS_Glycolysis_Hypoxia melanoma
+Rscript GeneSignature-of-OXPHOS_Glycolysis_Hypoxia head_neck
+
 cd ..
 ```
 In this step, the PCA and GSEA analysis will be performed to investigate the metabolic pathway heterogeneity across single cells in malignant and non-malignant cell populations. The scatter plots will be performed to compare activities of OXPHOS, glycolysis and response to hypoxia in single malignant cells and cultured cell lines from CCLE database. The gene signatures in single cells with low OXPHOS/glycolysis/hypoxia activity will be identified and stored as the text files, which can be used as the input of GO analysis on the website: http://metascape.org
