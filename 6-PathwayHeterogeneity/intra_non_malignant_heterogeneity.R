@@ -16,7 +16,7 @@ options(stringsAsFactors = FALSE)
 argumento <- commandArgs()
 argumento <- argumento[6]
 # argumento <- "melanoma"
-outDir <- file.path("datasets",argumento,"intra_non_malignant")
+outDir <- file.path("datasets",argumento,"intra_malignant")
 if (!dir.exists(outDir)) {
   dir.create(outDir, recursive = TRUE)
 }
@@ -29,17 +29,16 @@ pathway_file <- "../Data/KEGG_metabolism.gmt"
 # las células malignas
 filtered_sce <- readRDS(file.path("../1-ReadData/datasets/",argumento,"filtered_sce.rds"))
 filtered_sce$cellType <- factor(filtered_sce$cellType)
-
-tumor_sce <- filtered_sce[, filtered_sce$cellType != "Malignant"]
-tumor_metabolic_sce <- tumor_sce[rowData(tumor_sce)$metabolic,]
+healthy_sce <- filtered_sce[, filtered_sce$cellType != "Malignant"]
+healthy_metabolic_sce <- healthy_sce[rowData(healthy_sce)$metabolic,]
 
 # Limpieza RAM
-rm(filtered_sce, tumor_sce)
+rm(filtered_sce, healthy_sce)
 invisible(gc())
 
 #=========================================================================
-tumor_metabolic_sce$tumor <- factor(tumor_metabolic_sce$tumor)
-neoplasias <- unique(tumor_metabolic_sce$tumor)
+healthy_metabolic_sce$tumor <- factor(healthy_metabolic_sce$tumor)
+neoplasias <- unique(healthy_metabolic_sce$cellType)
 
 #2.Tumor cells
 enrich_data_df <- data.frame(x = NULL, y = NULL,
@@ -50,7 +49,7 @@ pc_plotdata <- data.frame(x = numeric(), y = numeric(),
 
 for (t in neoplasias){
   t2 <- str_replace(t," ","")
-  each_metabolic_sce <- tumor_metabolic_sce[,tumor_metabolic_sce$tumor == t]
+  each_metabolic_sce <- healthy_metabolic_sce[,healthy_metabolic_sce$cellType == t]
   each_metabolic_tpm <- assay(each_metabolic_sce, "exprs")
   each_metabolic_tpm <- each_metabolic_tpm[rowSums(each_metabolic_tpm) > 0,]
 
@@ -107,7 +106,7 @@ pathway_order <- names(pathway_pv_sum)[order(pathway_pv_sum, decreasing = T)]
 pathway_order <- pathway_order[1:length(pathway_order)]
 select_enrich_data_df <- select_enrich_data_df[select_enrich_data_df$y %in% pathway_order,]
 ########################################
-select_enrich_data_df$y <- factor(select_enrich_data_df$y, levels = pathway_order)
+select_enrich_data_df$y <- factor(select_enrich_data_df$y,levels = pathway_order)
 
 # #buble plot
 p <- ggplot(select_enrich_data_df, aes(x = x, y = y, size = PVAL, color = NES)) +
@@ -132,7 +131,7 @@ p <- ggplot(select_enrich_data_df, aes(x = x, y = y, size = PVAL, color = NES)) 
   theme(plot.margin = unit(rep(1,4),"lines"))
 
 ggsave(file.path(outDir,"malignant_enriched_pathway.pdf"), p,
-       width = 4, height = 3, units = "in", device = "pdf",
+       width = 5, height = 4, units = "in", device = "pdf",
        useDingbats = FALSE)
 
 ##plot variance
