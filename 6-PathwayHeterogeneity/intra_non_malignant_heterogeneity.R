@@ -16,7 +16,7 @@ options(stringsAsFactors = FALSE)
 argumento <- commandArgs()
 argumento <- argumento[6]
 # argumento <- "melanoma"
-outDir <- file.path("datasets",argumento,"intra_malignant")
+outDir <- file.path("datasets",argumento,"intra_non_malignant")
 if (!dir.exists(outDir)) {
   dir.create(outDir, recursive = TRUE)
 }
@@ -28,7 +28,9 @@ pathway_file <- "../Data/KEGG_metabolism.gmt"
 # Leemos el dataset filtrado y a partir de él creamos un objeto sce con todas
 # las células malignas
 filtered_sce <- readRDS(file.path("../1-ReadData/datasets/",argumento,"filtered_sce.rds"))
-tumor_sce <- filtered_sce[, filtered_sce$cellType == "Malignant"]
+filtered_sce$cellType <- factor(filtered_sce$cellType)
+
+tumor_sce <- filtered_sce[, filtered_sce$cellType != "Malignant"]
 tumor_metabolic_sce <- tumor_sce[rowData(tumor_sce)$metabolic,]
 
 # Limpieza RAM
@@ -105,7 +107,7 @@ pathway_order <- names(pathway_pv_sum)[order(pathway_pv_sum, decreasing = T)]
 pathway_order <- pathway_order[1:length(pathway_order)]
 select_enrich_data_df <- select_enrich_data_df[select_enrich_data_df$y %in% pathway_order,]
 ########################################
-select_enrich_data_df$y <- factor(select_enrich_data_df$y,levels = pathway_order)
+select_enrich_data_df$y <- factor(select_enrich_data_df$y, levels = pathway_order)
 
 # #buble plot
 p <- ggplot(select_enrich_data_df, aes(x = x, y = y, size = PVAL, color = NES)) +
