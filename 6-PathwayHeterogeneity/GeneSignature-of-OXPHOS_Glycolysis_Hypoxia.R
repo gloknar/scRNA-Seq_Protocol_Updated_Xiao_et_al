@@ -38,7 +38,7 @@ tumor_sce$tumor <- factor(tumor_sce$tumor)
 
 # Limpieza RAM
 rm(filtered_sce)
-gc(verbose = F)
+invisible(gc(verbose = F))
 
 # Leemos el archivo de las rutas en las que participan los 1566 genes
 # metabólicos (este contiene 85 rutas metabólicas)
@@ -126,8 +126,7 @@ for(t in tumores){
 
 # Limpieza RAM
 rm(tumor_metabolic_sce)
-gc(verbose = F)
-
+invisible(gc(verbose = F))
 
 
 ####################################################################################################
@@ -143,7 +142,8 @@ selected_tumor_tpm <- selected_tumor_tpm[rowSums(selected_tumor_tpm) > 0,]  # El
 
 # Limpieza RAM
 rm(tumor_sce)
-gc(verbose = F)
+invisible(gc(verbose = F))
+
 
 
 # Etiquetas de todas las células outliers de todos los tumores/pacientes0
@@ -156,7 +156,7 @@ selected_tumor_tpm_selected <- selected_tumor_tpm[, c(all_low_cells, all_high_ce
 
 # Limpieza RAM
 rm(selected_tumor_tpm)
-gc(verbose = F)
+invisible(gc(verbose = F))
 
 
 pvalues <- sapply(X = 1 : nrow(selected_tumor_tpm_selected),

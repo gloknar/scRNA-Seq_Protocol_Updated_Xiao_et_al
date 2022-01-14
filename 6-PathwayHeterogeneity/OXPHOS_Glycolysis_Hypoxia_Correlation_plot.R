@@ -194,7 +194,6 @@ rm(tumor_sce)
 gc(verbose = F)
 
 
-
 ####################################################################################################
 
 ##################################################################################################
@@ -213,13 +212,12 @@ gc(verbose = F)
 
 
 # Inicializamos una matriz de correlaciones vacía de tipos celulares X
-# correlaciones
+# correlaciones y la rellenamos
 matriz_corr <- matrix(NA, nrow = length(cell_types), ncol = 3,
                      dimnames = list(cell_types, c("oxphos_glicolosis","oxphos_hipoxia","glicolisis_hipoxia")))
 
-
 for (c in cell_types) {
-  each_expr <- assay(healthy_sce[,healthy_sce$cellType == c], "exprs")   # Obtenemos la matriz TPM de las células del linaje de interés
+  each_expr <- assay(healthy_sce[,healthy_sce$cellType == c], "exprs")     # Obtenemos la matriz TPM de las células del linaje de interés
   expr_oxphos <- each_expr[rownames(each_expr) %in% genes_OXPHOS,]         # Obtenemos de ahi la matriz TPM de los genes de OXPHOS
   expr_glicolisis <- each_expr[rownames(each_expr) %in% genes_glicolisis,] # Ídem para glicólisis
   expr_hipoxia <- each_expr[rownames(each_expr) %in% genes_hipoxia,]       # Y para hipoxia
@@ -261,7 +259,8 @@ mybreaks <- c(
 
 # Computamos el heatmap
 pheatmap(matriz_corr, cluster_cols = F, cluster_rows = F, 
-         color = color, breaks = mybreaks)
+         color = color, breaks = mybreaks,
+         main = "Persistencia de la correlación en células sanas")
 
 # Lo guardamos en el disco duro
 dev.off()
