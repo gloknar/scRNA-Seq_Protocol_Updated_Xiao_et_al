@@ -14,7 +14,7 @@ source("runGSEA_preRank.R")
 # Opciones
 options(stringsAsFactors = FALSE)
 argumento <- commandArgs()
-argumento <- args[6]
+argumento <- argumento[6]
 # argumento <- "melanoma"
 outDir <- file.path("datasets",argumento,"intra_malignant")
 if (!dir.exists(outDir)) {
@@ -45,7 +45,7 @@ enrich_data_df <- data.frame(x = NULL, y = NULL,
 
 pc_plotdata <- data.frame(x = numeric(), y = numeric(),
                           sel = character(), types = character())
-neoplasias[1]
+
 for (t in neoplasias){
   t2 <- str_replace(t," ","")
   each_metabolic_sce <- tumor_metabolic_sce[,tumor_metabolic_sce$tumor == t]
@@ -68,13 +68,12 @@ for (t in neoplasias){
                              types = rep(t, length(percentVar)))
   
   pc_plotdata <- rbind(pc_plotdata,tmp_plotdata)
-  ###
   
   # Matriz del PCA con las dimensiones seleccionadas (72)
   pre_rank_matrix <- as.matrix(rowSums(abs(pca$rotation[, 1:select_pcs])))
   runGSEA_preRank(pre_rank_matrix, pathway_file, t2)
 
-  #get the result
+  # Get the results
   result_dir <- list.files(path = "preRankResults", pattern = paste0("^",t2,".GseaPreranked(.*)"), full.names = T)
   result_file <- list.files(path = result_dir, pattern = "gsea_report_for_na_pos_(.*).xls", full.names = T)
   gsea_result <- read.table(result_file, header = T, sep = "\t", row.names = 1)
@@ -84,7 +83,7 @@ for (t in neoplasias){
   enrich_data_df <- rbind(enrich_data_df,data.frame(x = t2, 
                                                     y = gsea_pathways, 
                                                     NES = gsea_result$NES,
-                                                    PVAL = gsea_result$NOM.p.val))
+                                                    PVAL = gsea_result$NOM.p.val))  # POSIBLE MEJORA: ¿Usar fdr-value?
 }
 
 
@@ -103,7 +102,7 @@ pathway_pv_sum <- by(select_enrich_data_df$PVAL, select_enrich_data_df$y, FUN = 
 pathway_order <- names(pathway_pv_sum)[order(pathway_pv_sum, decreasing = T)]
 ###########################top 10
 ##check before doing this 
-pathway_order <- pathway_order[1:10]
+pathway_order <- pathway_order[1:9]
 select_enrich_data_df <- select_enrich_data_df[select_enrich_data_df$y %in% pathway_order,]
 ########################################
 select_enrich_data_df$y <- factor(select_enrich_data_df$y,levels = pathway_order)
@@ -151,10 +150,10 @@ p <- ggplot(pc_plotdata) + geom_point(aes(x,y,colour=factor(sel)),size=0.5) +
 ggsave(file.path(outDir,"malignant_PC_variance_plot.pdf"), p,
        width = 7.5, height = 2.7, units = "in", device = "pdf",
        useDingbats = FALSE)
-
+  
 # unlink deletes the file(s) or directories specified by x.
 unlink("preRankResults", recursive = T)  # ¿Eliminar archivos temporales?
 unlink("prerank.rnk")
 date_string <- Sys.Date()
 date_split <- strsplit(as.character(date_string),"-")[[1]]
-unlink(paste0(tolower(month.abb[as.numeric(date_split[2])]),date_split[3]), recursive = T)
+unlink(paste0(tolower(month.abb[as.numeric(date_split[2])]), date_split[3]), recursive = T)
