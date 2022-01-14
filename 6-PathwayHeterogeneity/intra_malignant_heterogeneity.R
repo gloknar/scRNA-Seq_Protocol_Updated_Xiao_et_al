@@ -102,7 +102,7 @@ pathway_pv_sum <- by(select_enrich_data_df$PVAL, select_enrich_data_df$y, FUN = 
 pathway_order <- names(pathway_pv_sum)[order(pathway_pv_sum, decreasing = T)]
 ###########################top 10
 ##check before doing this 
-pathway_order <- pathway_order[1:9]
+pathway_order <- pathway_order[1:length(pathway_order)]
 select_enrich_data_df <- select_enrich_data_df[select_enrich_data_df$y %in% pathway_order,]
 ########################################
 select_enrich_data_df$y <- factor(select_enrich_data_df$y,levels = pathway_order)
@@ -130,7 +130,7 @@ p <- ggplot(select_enrich_data_df, aes(x = x, y = y, size = PVAL, color = NES)) 
   theme(plot.margin = unit(rep(1,4),"lines"))
 
 ggsave(file.path(outDir,"malignant_enriched_pathway.pdf"), p,
-       width = 3.6, height = 2.5, units = "in", device = "pdf",
+       width = 6, height = 4, units = "in", device = "pdf",
        useDingbats = FALSE)
 
 ##plot variance
@@ -156,4 +156,4 @@ unlink("preRankResults", recursive = T)  # ¿Eliminar archivos temporales?
 unlink("prerank.rnk")
 date_string <- Sys.Date()
 date_split <- strsplit(as.character(date_string),"-")[[1]]
-unlink(paste0(tolower(month.abb[as.numeric(date_split[2])]), date_split[3]), recursive = T)
+# unlink(paste0(tolower(month.abb[as.numeric(date_split[2])]), date_split[3]), recursive = T)
