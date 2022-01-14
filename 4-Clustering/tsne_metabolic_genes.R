@@ -28,7 +28,7 @@ healthy_metabolic_sce <- imputed_sce[rowData(imputed_sce)$metabolic, imputed_sce
 
 # Limpieza de RAM
 rm(imputed_sce)
-gc(verbose = FALSE)
+invisible(gc(verbose = FALSE))
 
 
 

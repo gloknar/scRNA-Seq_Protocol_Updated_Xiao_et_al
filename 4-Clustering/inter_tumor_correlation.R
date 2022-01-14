@@ -28,7 +28,7 @@ tumor_metabolic_sce <- imputed_sce[rowData(imputed_sce)$metabolic, imputed_sce$c
 
 # Limpieza RAM
 rm(imputed_sce)
-gc(verbose = F)
+invisible(gc(verbose = F))
 
 
 

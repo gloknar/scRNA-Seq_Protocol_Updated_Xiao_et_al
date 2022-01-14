@@ -72,7 +72,7 @@ low_dropout_genes <- rownames(matriz_seleccion_genes)[rowSums(matriz_seleccion_g
 # Limpiamos RAM
 rm(sce_linaje_celular, matriz_genica_log_linaje_celular, tasa_deteccion_gen,
    genes_seleccionados, tasa_deteccion_minima, tipo)
-gc(verbose = F)
+invisible(gc(verbose = F))
 
 
 
@@ -204,7 +204,7 @@ all_cell_type <- as.vector(imputed_sce$cellType)
 
 # Limpieza RAM
 rm(imputed_sce, matriz_conteos)
-gc(verbose = F)
+invisible(gc(verbose = F))
 
 
 # Creamos los boxplots de los distintos métodos de normalizado probados

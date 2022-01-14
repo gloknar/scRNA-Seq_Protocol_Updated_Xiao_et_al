@@ -191,7 +191,8 @@ ggsave(filename = file.path(outDir,"malignant_Glycolysis_Hypoxia.pdf"), p,
 
 # Limpieza RAM
 rm(tumor_sce)
-gc(verbose = F)
+invisible(gc(verbose = F))
+
 
 
 ####################################################################################################
@@ -208,7 +209,7 @@ cell_types <- unique(healthy_sce$cellType)
 
 # Limpieza RAM, ya no necesitamos el objeto filtered_sce
 rm(filtered_sce)
-gc(verbose = F)
+invisible(gc(verbose = F))
 
 
 # Inicializamos una matriz de correlaciones vacía de tipos celulares X
