@@ -9,7 +9,6 @@ library(pheatmap)
 library(gtools)
 library(ggplot2)
 source("../utils.R")
-source("runGSEA_preRank.R")
 
 # Opciones
 options(stringsAsFactors = FALSE)
@@ -91,7 +90,7 @@ for (t in neoplasias){
 min_pval <- by(enrich_data_df$PVAL, enrich_data_df$y, FUN = min)
 select_pathways <- names(min_pval)[(min_pval <= 0.01)]
 select_enrich_data_df <- enrich_data_df[enrich_data_df$y %in% select_pathways,]
-View(select_enrich_data_df)
+
 
 # Convertimos pvalue a formato -log10
 pvals <- select_enrich_data_df$PVAL

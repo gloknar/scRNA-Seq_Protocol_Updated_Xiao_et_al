@@ -9,7 +9,6 @@ library(pheatmap)
 library(gtools)
 library(ggplot2)
 source("../utils.R")
-source("runGSEA_preRank.R")
 
 # Opciones
 options(stringsAsFactors = FALSE)
