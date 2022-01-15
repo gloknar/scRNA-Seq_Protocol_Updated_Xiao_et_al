@@ -25,13 +25,13 @@ if (!dir.exists(outDir)) {
 pathway_file <- "../Data/KEGG_metabolism.gmt"
 
 # Leemos el dataset filtrado y a partir de él creamos un objeto sce con todas
-# las células malignas
+# las células malignas y los 1566 genes metabólicos
 filtered_sce <- readRDS(file.path("../1-ReadData/datasets/",argumento,"filtered_sce.rds"))
-tumor_sce <- filtered_sce[, filtered_sce$cellType == "Malignant"]
-tumor_metabolic_sce <- tumor_sce[rowData(tumor_sce)$metabolic,]
+tumor_metabolic_sce <- filtered_sce[rowData(filtered_sce)$metabolic, filtered_sce$cellType == "Malignant"]
+
 
 # Limpieza RAM
-rm(filtered_sce, tumor_sce)
+rm(filtered_sce)
 invisible(gc())
 
 #=========================================================================
@@ -92,12 +92,12 @@ select_pathways <- names(min_pval)[(min_pval <= 0.01)]
 select_enrich_data_df <- enrich_data_df[enrich_data_df$y %in% select_pathways,]
 
 
-# Convertimos pvalue a formato -log10
+# Transformamos pvalue a formato -log10
 pvals <- select_enrich_data_df$PVAL
 pvals[pvals <= 0] = 1e-10
 select_enrich_data_df$PVAL <- -log10(pvals)
 
-#sort
+# Sort
 pathway_pv_sum <- by(select_enrich_data_df$PVAL, select_enrich_data_df$y, FUN = sum)
 pathway_order <- names(pathway_pv_sum)[order(pathway_pv_sum, decreasing = T)]
 ###########################top 10
