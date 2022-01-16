@@ -1,56 +1,126 @@
+#######################################################################
+###########     0. Carga de paquetes, opciones y datos      ###########
+#######################################################################
+
+# Paquetes y funciones auxiliares
 library(scater)
 library(stringr)
-options(stringsAsFactors=FALSE)
 library(pheatmap)
 source("../utils.R")
-source("runGSEA.R")
+source("runGSEA.R")  # Pasar esta función a utils y cvambiarle bien los nombres a las dos y revisar los nombres de los argumentos
 
-pathway_file <- "../Data/KEGG_metabolism.gmt"
-hall_gmt <- '../Data/h.all.v6.1.symbols.gmt'
 
-# args <- commandArgs()
-# tumor <- args[6]
-tumor <- "melanoma"
-outDir <- file.path("datasets",tumor)
-if(!dir.exists(outDir) ) dir.create(outDir,recursive=TRUE)
+# Opciones
+options(stringsAsFactors = FALSE)
+argumentos <- commandArgs()
+tejido <- argumentos[6]
+# tejido <- "melanoma"
+outDir <- file.path("datasets",tejido)
+if (!dir.exists(outDir)) {
+  dir.create(outDir, recursive = TRUE)
+}
 
-#1. Loading the data
-selected_sce <- readRDS(file.path("../1-ReadData/datasets/",tumor,"filtered_sce.rds"))
-selected_nontumor_sce <- selected_sce[,selected_sce$cellType!="Malignant"]
-selected_nontumor_metabolic_sce <- selected_nontumor_sce[rowData(selected_nontumor_sce)$metabolic,]
-#=========================================================================
-celltypes <- unique(selected_nontumor_metabolic_sce$cellType)
 
-#2. T cell type
-tcell_sce <- selected_nontumor_sce[,selected_nontumor_sce$cellType=="T cell"]
-tcell_exp <- assay(tcell_sce,"exprs")
-tcell_metabolic_sce <- selected_nontumor_metabolic_sce[,selected_nontumor_metabolic_sce$cellType=="T cell"]
-tcell_metabolic_exp <- assay(tcell_metabolic_sce,"exprs")
+# Leemos el dataset del head_neck/melanoma y a partir de él creamos uno sólo
+# para las células sanas y los genes metabólicos y otro para las células sanas y
+# todos los genes
+filtered_sce <- readRDS(file.path("../1-ReadData/datasets/",tejido,"filtered_sce.rds"))
+filtered_sce$cellType <- factor(filtered_sce$cellType) # Casteamos a factor para eliminar niveles sobrantes
 
-#difference between CD4+ and CD8+
-#scatter CD4 and CD8
+healthy_sce <- filtered_sce[, filtered_sce$cellType != "Malignant"] # Este ya viene con el factor arreglado, no hace falta tocarlo
+healthy_metabolic_sce <- filtered_sce[rowData(filtered_sce)$metabolic, filtered_sce$cellType != "Malignant"]
+tipos_celulares <- unique(healthy_metabolic_sce$cellType)
+
+# Limpieza RAM
+rm(filtered_sce)
+invisible(gc())
+
+
+# Leemos el archivo de las rutas en las que participan los 1566 genes
+# metabólicos (este contiene 85 rutas metabólicas)
+ruta_archivo_pathways <- "../Data/KEGG_metabolism.gmt"
+
+# Este contiene 50 rutas metabólicas (parece que contiene los genes que
+# participan en respuesta a hipoxia)
+# hallmark_gmt <- '../Data/h.all.v6.1.symbols.gmt'
+
+
+
+####################################################################################################
+
+######################################################################
+###########     1. Genes biomarcadores de linfocitos T     ###########
+######################################################################
+
+
+# Reunimos todos los linfocitos T y los guardamos en dos objetos sce: uno con
+# todo el genoma y otro con sólo los 1566 genes metabólicos
+linfoT_sce <- healthy_sce[,healthy_metabolic_sce$cellType == "T cell"]  # De 2887 células sanas, 2068 son linfos T
+linfoT_metabolic_sce <- healthy_metabolic_sce[, healthy_metabolic_sce$cellType == "T cell"]
+
+# Matrices de TPM de todo el genoma y de los 1566 genes metabólicos
+linfoT_exprs <- assay(linfoT_sce, "exprs")
+linfoT_metabolic_exprs <- assay(linfoT_metabolic_sce, "exprs")
+
+length(linfoT_sce$cellType)  # 2068 Linfos T
+length(linfoT_metabolic_sce$cellType) # 2068 Linfos T
+
+dim(rowData(linfoT_sce))   # Todo el genoma de los linfos T
+dim(rowData(linfoT_metabolic_sce))   # Sólo los 1566 genes metabólicos de los linfos T
+
+
+# Separamos los linfocitos T CD4+ y los CD8+ ¡como cuando usamos el FACS!
+# (citómetro de flujo)
 pdf(file.path(outDir,"CD4_CD8_scatterplot.pdf"))
-plot(t(tcell_exp[c("CD4","CD8A"),]))
+plot(t(linfoT_expr[c("CD4","CD8A"),]), main = "Scatterplot de linfocitos T")
 dev.off()
-#select the cells
-col_annot <- data.frame(type=rep(NA,ncol(tcell_sce)),row.names=colnames(tcell_sce))
-col_annot[(tcell_exp["CD4",]>1)&(tcell_exp["CD8A",]<1),] <- "CD4"
-col_annot[(tcell_exp["CD8A",]>1)&(tcell_exp["CD4",]<1),] <- "CD8"
 
-select_tcell_sce <- tcell_sce[,!is.na(col_annot$type)]
-select_tcell_metabolic_sce <- tcell_metabolic_sce[,!is.na(col_annot$type)]
-select_col_annot <- col_annot[!is.na(col_annot$type),,drop=F]
-select_tcell_metabolic_sce$type <- select_col_annot$type
-select_tcell_sce$type <- select_col_annot$type
-runGSEA(select_tcell_metabolic_sce,"type","CD4","CD8","t",pathway_file,file.path(outDir,"CD4_CD8_GSEA"))
+# select the cells. Iniciamos un dataframe vacío de células x tipo
+metadata_celulas <- data.frame(type = rep(NA, ncol(linfoT_sce)), 
+                        row.names = colnames(linfoT_sce))
 
-#select CD4 cells, and sort to Tregs and Th cells
-cd4_tcell_sce <- select_tcell_sce[,select_tcell_sce$type=="CD4"]
-cd4_tcell_exp <- assay(cd4_tcell_sce,"exprs")
-tmp <- cd4_tcell_exp[c("FOXP3","IL2RA"),]
-cd4_col_annot <- data.frame(type=rep(NA,ncol(cd4_tcell_exp)),row.names=colnames(cd4_tcell_exp))
-cd4_col_annot[colSums(tmp)>=2,] <- "Tregs"
-cd4_col_annot[colSums(tmp)==0,] <- "Th"
+metadata_celulas[(linfoT_expr["CD4",] > 1) & (linfoT_expr["CD8A",] < 1),] <- "CD4"   # Catalogamos estas células como linfos T CD4+
+metadata_celulas[(linfoT_expr["CD8A",] > 1) & (linfoT_expr["CD4",] < 1),] <- "CD8"   # Y estas como T CD8+
+
+
+# Creamos un objeto sce para los linfos T CD4+ y los CD8+ 
+linfosTCD4_CD8_sce <- linfoT_sce[, !is.na(metadata_celulas$type)]  # Cribamos los linfos NA (los que están en la región central del scatter plot)
+linfosTCD4_CD8_metabolic_sce <- linfoT_metabolic_sce[, !is.na(metadata_celulas$type)]
+
+
+length(linfosTCD4_CD8_sce$cellType)  # 1624 son Linfocitos T CD4+ o CD8+
+length(linfosTCD4_CD8_metabolic_sce$cellType) # 1624 son Linfocitos T CD4+ o CD8+
+
+metadata_CD4_CD8 <- metadata_celulas[!is.na(metadata_celulas$type), , drop = F]
+linfosTCD4_CD8_metabolic_sce$type <- metadata_CD4_CD8$type
+
+# Hacemos el GSEA con los genes metabólicos de los linfos T CD4+ y los CD8+
+runGSEA(expr_data = linfosTCD4_CD8_metabolic_sce, 
+        covariate = "type", 
+        test = "CD4",
+        control = "CD8",
+        base.name = "t", 
+        gmt.file = ruta_archivo_pathways, 
+        outdir = file.path(outDir,"CD4_CD8_GSEA"))
+
+
+
+####################################################################################################
+
+######################################################################
+###########     1. Genes biomarcadores de linfocitos T     ###########
+######################################################################
+
+# Select CD4 cells, and sort to Tregs and Th cells
+cd4_tcell_sce <- linfosTCD4_CD8_sce[, linfosTCD4_CD8_sce$type == "CD4"]
+cd4_tcell_expr <- assay(cd4_tcell_sce, "exprs")
+tmp <- cd4_tcell_expr[c("FOXP3", "IL2RA"),]
+cd4_col_annot <- data.frame(type = rep(NA, ncol(cd4_tcell_exp)), 
+                            row.names = colnames(cd4_tcell_exp))
+
+
+cd4_col_annot[colSums(tmp) >= 2,] <- "Tregs"
+cd4_col_annot[colSums(tmp) == 0,] <- "Th"
 select_cd4_tcell_sce <- cd4_tcell_sce[,!is.na(cd4_col_annot$type)]
 select_cd4_tcell_metabolic_sce <- select_cd4_tcell_sce[rowData(select_cd4_tcell_sce)$metabolic,]
 cd4_col_annot <- cd4_col_annot[!is.na(cd4_col_annot$type),,drop=F]
@@ -60,8 +130,15 @@ tmp <- cd4_tcell_exp[c("FOXP3","IL2RA"),]
 pdf(file.path(outDir,"FOXP3_CD25_heatmap.pdf"),width=3,height=1)
 pheatmap(tmp[,order(colSums(tmp))],show_rownames =T,show_colnames = F,cluster_rows = F,cluster_cols = F)
 dev.off()
-runGSEA(select_cd4_tcell_metabolic_sce,"type","Tregs","Th","t",pathway_file,file.path(outDir,"Tregs_Ths_GSEA"))
+runGSEA(select_cd4_tcell_metabolic_sce,"type","Tregs","Th","t",ruta_archivo_pathways,file.path(outDir,"Tregs_Ths_GSEA"))
 
+
+
+####################################################################################################
+
+######################################################################
+###########     2. Genes biomarcadores de fibroblastos     ###########
+######################################################################
 
 #3 Fibroblast cells: only for head and neck tumors
 if (tumor == "head_neck"){
@@ -102,22 +179,31 @@ dev.off()
 #cluster to CAFs or myofibroblasts
 tmp = select_fib_exp2[c(CAFs_markers, myofib_markers),]
 kmeans_res <- kmeans(t(tmp), centers = 2)
-col_annot <- data.frame(type = rep(NA, ncol(select_fib_exp2)), row.names = colnames(select_fib_exp2))
+metadata_celulas <- data.frame(type = rep(NA, ncol(select_fib_exp2)), row.names = colnames(select_fib_exp2))
 
 if(sum(tmp[CAFs_markers, kmeans_res$cluster == 1]) > sum(tmp[CAFs_markers, kmeans_res$cluster == 2])){
-  col_annot[kmeans_res$cluster==1,] <- "CAF"
-  col_annot[kmeans_res$cluster==2,] <- "Myofib"
+  metadata_celulas[kmeans_res$cluster==1,] <- "CAF"
+  metadata_celulas[kmeans_res$cluster==2,] <- "Myofib"
 }else{
-  col_annot[kmeans_res$cluster==1,] <- "Myofib"
-  col_annot[kmeans_res$cluster==2,] <- "CAF"
+  metadata_celulas[kmeans_res$cluster==1,] <- "Myofib"
+  metadata_celulas[kmeans_res$cluster==2,] <- "CAF"
 }
 select_fib_metabolic_sce2 <- select_fib_sce2[rowData(select_fib_sce2)$metabolic,]
-select_fib_metabolic_sce2$type <- col_annot$type
+select_fib_metabolic_sce2$type <- metadata_celulas$type
 
-runGSEA(select_fib_metabolic_sce2,"type","CAF","Myofib","t",pathway_file,file.path(outDir,"CAF_Myofib_GSEA"))
+runGSEA(select_fib_metabolic_sce2,"type","CAF","Myofib","t",ruta_archivo_pathways,file.path(outDir,"CAF_Myofib_GSEA"))
 }
 
 
-date_string <- Sys.Date()
-date_split <- strsplit(as.character(date_string),"-")[[1]]
-unlink(paste0(tolower(month.abb[as.numeric(date_split[2])]), date_split[3]), recursive = T)
+
+####################################################################################################
+
+###################################################################
+###########     3. Limpieza de archivos temporales      ###########
+###################################################################
+
+fecha <- Sys.Date()
+fecha_split <- strsplit(as.character(fecha),"-")[[1]]   # Cortamos la string por los guiones
+mes <- tolower(month.abb[as.numeric(date_split[2])])   # Para poner uns string en minúscula, como en Python
+dia <- date_split[3]
+unlink(paste0(mes, dia), recursive = T) # Eliminamos la carpeta vacía con la fecha del análisis GSEA
