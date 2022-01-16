@@ -91,8 +91,8 @@ En este paso nos fijaremos en los 1566 genes metabólicos para agrupar y visuali
 
 También calcularemos la matriz de correlación de Spearman (no paramétrico) de los distintos tumores dentro de una misma patología para mostrar su heterogeneidad. Los distintos melanomas presentes en nuestro dataset están clasificados como melanomas, pero sus perfiles de expresión de genes metabólicos demuestran que son distintos entre sí (ídem para las neoplasias de HNSCC).
 
-## Heatmap y violinplot de la actividad metabólica en todos los tipos celulares (expresión bulk vs scRNA-seq)
 
+## Heatmap y violinplot de la actividad metabólica en todos los tipos celulares (expresión bulk vs scRNA-seq)
 
 ``` bash
 cd 5-PathwayActivity
@@ -115,7 +115,7 @@ Ver cómo es la metodología óptima para comparar bulk vs scRNA-seq y borrar to
 
 
 ## Metabolic pathway heterogeneity
--------------------------------
+
 ``` bash
 cd 6-PathwayHeterogeneity
 
@@ -138,7 +138,8 @@ cd ..
 In this step, the PCA and GSEA analysis will be performed to investigate the metabolic pathway heterogeneity across single cells in malignant and non-malignant cell populations. The scatter plots will be performed to compare activities of OXPHOS, glycolysis and response to hypoxia in single malignant cells and cultured cell lines from CCLE database. The gene signatures in single cells with low OXPHOS/glycolysis/hypoxia activity will be identified and stored as the text files, which can be used as the input of GO analysis on the website: http://metascape.org
 
 Metabolic features of nonmalignant cell subtypes
------------------------------------
+
+
 ``` bash
 cd 7-MetabolicFeatures
 Rscript non-malignant_subtype.R melanoma
