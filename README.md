@@ -91,7 +91,7 @@ En este paso nos fijaremos en los 1566 genes metabólicos para agrupar y visuali
 
 También calcularemos la matriz de correlación de Spearman (no paramétrico) de los distintos tumores dentro de una misma patología para mostrar su heterogeneidad. Los distintos melanomas presentes en nuestro dataset están clasificados como melanomas, pero sus perfiles de expresión de genes metabólicos demuestran que son distintos entre sí (ídem para las neoplasias de HNSCC).
 
-## Heatmap y violinplot de la actividad metabólica en los distintos tipos celulares
+## Heatmap y violinplot de la actividad metabólica en todos los tipos celulares (expresión bulk vs scRNA-seq)
 
 
 ``` bash
@@ -111,9 +111,10 @@ Con el script `scRNA_pathway_activity.R` creamos un heatmap donde desglosamos en
 
 Para calcular la actividad de cada ruta, se obtuvo en cada linaje celular la expresión media de los genes que la constituyen, luego se dividieron estas medias por la actividad media del gen a lo largo de todos los linajes celulares para calcular la actividad relativa (a lo fold change), se penalizaron con pesos los genes que participan en más de una ruta y se sumó la actividad de todos los genes de dicha ruta. 
 
-*The bulk RNA-seq data was downloaded from TCGA website, please see the instruction of data downloading and preprocessing in Data/TCGA/README.md* 
+Ver cómo es la metodología óptima para comparar bulk vs scRNA-seq y borrar todo lo de la metdología de estos chinos.
 
-Metabolic pathway heterogeneity
+
+## Metabolic pathway heterogeneity
 -------------------------------
 ``` bash
 cd 6-PathwayHeterogeneity
