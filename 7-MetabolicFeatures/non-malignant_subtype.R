@@ -7,7 +7,7 @@ library(scater)
 library(stringr)
 library(pheatmap)
 source("../utils.R")
-source("runGSEA.R")  # Pasar esta función a utils y cvambiarle bien los nombres a las dos y revisar los nombres de los argumentos
+source("runGSEA.R")  # Pasar esta función a utils o cambiarle el nombre y revisar los nombres de los argumentos
 
 
 # Opciones
