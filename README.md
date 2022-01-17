@@ -131,7 +131,7 @@ Rscript OXPHOS_Glycolysis_Hypoxia_Correlation_plot.R head_neck
 
 # Obtenemos los genes diferencialmente expresados en células tumorales con 
 # baja actividad en las 3 rutas metabólicas de interés
-Rscirpt GeneSignature-of-OXPHOS_Glycolysis_Hypoxia melanoma
+Rscript GeneSignature-of-OXPHOS_Glycolysis_Hypoxia melanoma
 Rscript GeneSignature-of-OXPHOS_Glycolysis_Hypoxia head_neck
 cd ..
 ```
