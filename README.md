@@ -44,8 +44,8 @@ Con el script de bash `download_dataset.sh` descargamos los datasets desde el GE
 
 ``` bash
 cd "2-Imputation"
-Rscript impute_tpm.R melanoma 
-Rscript impute_tpm.R head_neck
+Rscript impute_tpm.R melanoma 4 # el 2º parámetro es el nº de hilos a usar para el imputado, por defecto es 1
+Rscript impute_tpm.R head_neck 4
 cd ../
 ```
 

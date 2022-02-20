@@ -9,7 +9,7 @@ library(scater)
 # Opciones
 options(stringsAsFactors = F)
 argumento <- commandArgs()
-# argumento <- "head_neck"
+# argumento <- "melanoma"
 argumento <- argumento[6]
 outDir <- file.path("datasets",argumento)   # Crea la carpeta ./datasets/<head_neck o melanoma>/  si no existe. Aquí guardaremos los resultados
 if(!dir.exists(outDir) ) {dir.create(outDir, recursive = TRUE)}
@@ -158,3 +158,4 @@ imputed_sce <- SingleCellExperiment(
 ###############################################################
 
 saveRDS(imputed_sce,file.path(outDir,"imputed_sce.rds"))
+
