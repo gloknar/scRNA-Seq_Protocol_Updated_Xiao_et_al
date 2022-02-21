@@ -74,8 +74,8 @@ Tras normalizar los datos, graficamos los resultados para poder compararlos y se
 cd "4-Clustering"
 
 # t-SNE
-Rscript tsne_metabolic_genes.R melanoma
-Rscript tsne_metabolic_genes.R head_neck
+Rscript tsne_metabolic_genes.R melanoma 4 # nº cores por defecto: 1
+Rscript tsne_metabolic_genes.R head_neck 4
 
 # UMAP (Opcional)
 Rscript umap_metabolic_genes.R melanoma
