@@ -12,7 +12,7 @@ source("../utils.R") # Cargamos funciones definidas en el archivo `utils.R`
 options(stringsAsFactors = FALSE)
 outDir <- "datasets/melanoma"
 if(!dir.exists(outDir)) {
-  dir.create(outDir)     # Si no existe la carpeta `head_neck`, la creamos
+  dir.create(outDir)     # Si no existe la carpeta `melanoma`, la creamos
 }
 
 
