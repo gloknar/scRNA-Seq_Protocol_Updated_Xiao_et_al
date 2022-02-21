@@ -7,14 +7,20 @@ library(scImpute)
 library(scater)
 
 # Opciones
-options(stringsAsFactors = F)
-argumento <- commandArgs()
+options(stringsAsFactors = FALSE)
+argumentos <- commandArgs(trailingOnly = TRUE)
 # argumento <- "melanoma"
-argumento <- argumento[6]
+argumento <- argumentos[1]
+num_cores <- argumentos[2] 
+if (!num_cores %in% c(1:30)) { # Si no le pasamos un nº de hilos entre 1 y 30, ya sea porque no le pasamos nada o porque le pasamos un numero rarto, num_cores pasará a ser 1 por defecto
+  message('Argumento "num_cores" no especificado o fuera del rango [1,30], se procede a usar 1 hilo.')
+  num_cores <- 1
+}
+
 outDir <- file.path("datasets",argumento)   # Crea la carpeta ./datasets/<head_neck o melanoma>/  si no existe. Aquí guardaremos los resultados
 if(!dir.exists(outDir) ) {dir.create(outDir, recursive = TRUE)}
 
-num_cores <- 1                               # Usar 1 en Windows y/o en máquinas con poca RAM, ya que scImpute usa mc.apply()
+# num_cores <- 20                               # Usar 1 en Windows y/o en máquinas con poca RAM, ya que scImpute usa mc.apply()
 
 
 # Leemos el dataset del head_neck/melanoma con las células filtradas y a partir

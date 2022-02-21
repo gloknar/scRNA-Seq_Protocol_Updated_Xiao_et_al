@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+# Si te da errores al ejecutar este archivo, prueba a hacer un backup del
+# mismo y quitarle el retorno de carro (\r) con sed (o con dos2unix):
+#
+# sed -i 's/\r$//' download_dataset.sh
+
+
 ###### Descargamos el dataset del melanoma #####
 
 url='ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE72nnn/GSE72056/suppl/GSE72056_melanoma_single_cell_revised_v2.txt.gz'  # Recuerda que las single quotes en bash no interpretan metacarácteres, preservan el valor literal de la string
