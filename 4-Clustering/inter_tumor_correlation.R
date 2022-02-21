@@ -9,8 +9,8 @@ library(RColorBrewer)
 
 # Opciones
 options(stringsAsFactors = FALSE)
-argumento <- commandArgs()
-argumento <- argumento[6]
+argumento <- commandArgs(trailingOnly = T)
+argumento <- argumento[1]
 # argumento <- "head_neck"
 
 outDir <- file.path("./datasets",argumento)

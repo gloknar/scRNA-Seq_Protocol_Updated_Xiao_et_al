@@ -42,6 +42,12 @@ invisible(gc(verbose = FALSE))
 set.seed(12345)
 
 # Calculamos un t-SNE exacto (theta = 0)
+system.time(Rtsne(t(assay(tumor_metabolic_sce, "exprs")),
+                                initial_dims = 20, theta = 0.0, perplexity = 30, num_threads = 1))
+
+system.time(Rtsne(t(assay(tumor_metabolic_sce, "exprs")),
+                                initial_dims = 20, theta = 0.0, perplexity = 30, num_threads = 4))
+
 tsne_tumor <- Rtsne(t(assay(tumor_metabolic_sce, "exprs")),
                     initial_dims = 20, theta = 0.0, perplexity = 30)
 
