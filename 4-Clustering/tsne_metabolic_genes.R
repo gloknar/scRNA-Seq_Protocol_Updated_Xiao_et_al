@@ -9,9 +9,13 @@ library(ggplot2)
 
 # Opciones
 options(stringsAsFactors = FALSE)
-argumento <- commandArgs()
-argumento <- argumento[6]
-# argumento <- "head_neck"
+argumentos <- commandArgs(trailingOnly = T)
+argumento <- argumentos[1] # "head_neck" o "melanoma"
+num_cores <- as.numeric(argumentos[2])
+if (!num_cores %in% c(1:30)) { # Si no le pasamos un nº de hilos entre 1 y 30, ya sea porque no le pasamos nada o porque le pasamos un numero rarto, num_cores pasará a ser 1 por defecto
+  message('Argumento "num_cores" no especificado o fuera del rango [1,30], se procede a usar 1 hilo.')
+  num_cores <- as.numeric(1)
+}
 
 outDir <- file.path("./datasets",argumento)
 if(!dir.exists(outDir)) {                       # Crea la carpeta ./datasets/<head_neck o melanoma>/  si no existe
@@ -42,14 +46,9 @@ invisible(gc(verbose = FALSE))
 set.seed(12345)
 
 # Calculamos un t-SNE exacto (theta = 0)
-system.time(Rtsne(t(assay(tumor_metabolic_sce, "exprs")),
-                                initial_dims = 20, theta = 0.0, perplexity = 30, num_threads = 1))
-
-system.time(Rtsne(t(assay(tumor_metabolic_sce, "exprs")),
-                                initial_dims = 20, theta = 0.0, perplexity = 30, num_threads = 4))
-
 tsne_tumor <- Rtsne(t(assay(tumor_metabolic_sce, "exprs")),
-                    initial_dims = 20, theta = 0.0, perplexity = 30)
+                    initial_dims = 20, theta = 0.0, perplexity = 30,
+		    num_threads = num_cores)
 
 # Creamos un dataframe temporal con las coordenadas del t-SNE y el tumor de
 # procedencia de cada célula
@@ -73,7 +72,8 @@ ggsave(file.path(outDir,"tumor_metabolic_tsne.pdf"), visualizacion_tsne,
 
 # Calculamos un t-SNE exacto (theta = 0)
 tsne_no_tumor <- Rtsne(t(assay(healthy_metabolic_sce,"exprs")),
-                    initial_dims = 20, theta = 0.0, perplexity = 30)
+                    initial_dims = 20, theta = 0.0, perplexity = 30,
+                    num_threads = num_cores)
 
 # Creamos un dataframe temporal con las coordenadas del t-SNE, el tumor de
 # procedencia y la estirpe de cada célula

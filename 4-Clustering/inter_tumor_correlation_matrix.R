@@ -9,9 +9,8 @@ library(RColorBrewer)
 
 # Opciones
 options(stringsAsFactors = FALSE)
-argumento <- commandArgs(trailingOnly = T)
-argumento <- argumento[1]
-# argumento <- "head_neck"
+argumentos <- commandArgs(trailingOnly = T)
+argumento <- argumentos[1] # "head_neck" o "melanoma"
 
 outDir <- file.path("./datasets",argumento)
 if(!dir.exists(outDir)) {                    # Crea la carpeta ./datasets/<head_neck o melanoma>/  si no existe
