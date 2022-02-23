@@ -12,9 +12,8 @@ source("../utils.R")
 
 # Opciones
 options(stringsAsFactors = FALSE)
-argumento <- commandArgs()
-argumento <- argumento[6]
-# argumento <- "melanoma"
+argumentos <- commandArgs(trailingOnly = T)
+argumento <- argumentos[1]  # "head_neck" o "melanoma"
 outDir <- file.path("./datasets",argumento,"OXPHOS-gly-hyp-correlation")
 if (!dir.exists(outDir)) {
   dir.create(outDir, recursive = TRUE)
@@ -265,3 +264,8 @@ pheatmap(matriz_corr, cluster_cols = F, cluster_rows = F,
 
 # Lo guardamos en el disco duro
 dev.off()
+
+
+# Mensaje de fin
+print("")
+print("GRACIAS POR ASISTIR A MI CHARLA TED")

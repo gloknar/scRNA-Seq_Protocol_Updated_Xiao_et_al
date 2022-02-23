@@ -12,9 +12,8 @@ source("../utils.R")
 
 # Opciones
 options(stringsAsFactors = FALSE)
-argumento <- commandArgs()
-argumento <- argumento[6]
-# argumento <- "melanoma"
+argumentos <- commandArgs(trailingOnly = T)
+argumento <- argumentos[1]  # "head_neck" o "melanoma"
 outDir <- file.path("datasets",argumento,"intra_malignant")
 if (!dir.exists(outDir)) {
   dir.create(outDir, recursive = TRUE)
@@ -161,3 +160,9 @@ unlink("prerank.rnk")
 date_string <- Sys.Date()
 date_split <- strsplit(as.character(date_string),"-")[[1]]
 unlink(paste0(tolower(month.abb[as.numeric(date_split[2])]), date_split[3]), recursive = T)
+
+
+
+# Mensaje de fin
+print("")
+print("GRACIAS POR ASISTIR A MI CHARLA TED")

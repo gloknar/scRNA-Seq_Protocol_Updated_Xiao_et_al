@@ -11,9 +11,8 @@ source("../utils.R")
 
 # Opciones
 options(stringsAsFactors = FALSE)
-argumento <- commandArgs()
-argumento <- argumento[6]
-# argumento <- "head_neck"
+argumentos <- commandArgs(trailingOnly = T)
+argumento <- argumentos[1]  # "head_neck" o "melanoma"
 outDir <- file.path("./datasets",argumento,"low-OXPHOS-gly-hyp-activity-genes")
 if (!dir.exists(outDir)) {
   dir.create(outDir, recursive = TRUE)
@@ -173,3 +172,9 @@ pvalues_df <- data.frame(pvalues,
 write.table(x = rownames(pvalues_df[pvalues_df$pvalues <= 0.01, , drop = F]), 
             file = file.path(outDir,"ALL_low_OXPHOS_glycolysis_hypoxia_signature.txt"),
             quote = F, row.names = F, col.names = F)
+
+
+
+# Mensaje de fin
+print("")
+print("GRACIAS POR ASISTIR A MI CHARLA TED")
