@@ -19,6 +19,11 @@ before_imp$cellType <- as.factor(before_imp$cellType)
 after_imp <- readRDS(file.path("datasets",argumento,"imputed_sce.rds"))
 after_imp$cellType <- as.factor(after_imp$cellType)
 
+if (argumento == "head_neck") {    # Por algun motivo, algunas poblaciones celulares de head_neck tienen su minimo en 1 o así
+  before_imp@assays@data$tpm[before_imp@assays@data$tpm <= 1] = 0
+  after_imp@assays@data$tpm[after_imp@assays@data$tpm <= 1] = 0  
+}
+
 
 # Para calcular las gráficas ANTES del imputado
 for (celulas in levels(before_imp$cellType)) {
@@ -30,11 +35,7 @@ for (celulas in levels(before_imp$cellType)) {
   n_celulas <- dim(celulas_before_imp)[2]
   
   # Calculamos para todos los genes su % de dropout
-  zero <- as.numeric(0)
-  if( argumento == "head_neck") {          # Por algún motivo, el mínimo en head_neck es 1, no 0
-    zero <- as.numeric(1)
-  }
-  ratio_dropout_genes <- matrixStats::rowCounts(x = tpm_celulas, value = zero)/n_celulas
+  ratio_dropout_genes <- matrixStats::rowCounts(x = tpm_celulas, value = 0)/n_celulas
   
   # Computamos el histograma interino
   histograma_tmp = hist(ratio_dropout_genes, breaks = 10, plot = F) # or hist(x,plot=FALSE) to avoid the plot of the histogram
@@ -67,11 +68,7 @@ for (celulas in levels(after_imp$cellType)) {
   n_celulas <- dim(celulas_after_imp)[2]
   
   # Calculamos para todos los genes su % de dropout
-  zero <- as.numeric(0)
-  if( argumento == "head_neck") {          # Por algún motivo, el mínimo en head_neck es 1, no 0
-    zero <- as.numeric(1)
-  }
-  ratio_dropout_genes <- matrixStats::rowCounts(x = tpm_celulas, value = zero)/n_celulas
+  ratio_dropout_genes <- matrixStats::rowCounts(x = tpm_celulas, value = 0)/n_celulas
   
   # Computamos el histograma interino
   histograma_tmp = hist(ratio_dropout_genes, breaks = 10, plot = F) # or hist(x,plot=FALSE) to avoid the plot of the histogram
