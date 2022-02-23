@@ -7,7 +7,7 @@
 library(scImpute)
 library(scater)
 options(stringsAsFactors = F)
-argumento <- commandArgs(trailingOnly = T)[1]# "melanoma" o "head_neck"
+argumento <- commandArgs(trailingOnly = T)[1]   # "melanoma" o "head_neck"
 outDir <- file.path("graficos_imputacion",argumento)
 if(!dir.exists(outDir) ) {dir.create(outDir, recursive = TRUE)}
 
@@ -30,15 +30,19 @@ for (celulas in levels(before_imp$cellType)) {
   n_celulas <- dim(celulas_before_imp)[2]
   
   # Calculamos para todos los genes su % de dropout
-  ratio_dropout_genes <- matrixStats::rowCounts(x = tpm_celulas, value = 0)/n_celulas
+  zero <- as.numeric(0)
+  if( argumento == "head_neck") {          # Hicimos el cuasilogaritmo (log2(TPM+1)) en head_neck, entonces su zero es en realidad 1
+    zero <- as.numeric(1)
+  }
+  ratio_dropout_genes <- matrixStats::rowCounts(x = tpm_celulas, value = zero)/n_celulas
   
   # Computamos el histograma interino
-  histograma_tmp = hist(ratio_dropout_genes, breaks = 10) # or hist(x,plot=FALSE) to avoid the plot of the histogram
+  histograma_tmp = hist(ratio_dropout_genes, breaks = 10, plot = F) # or hist(x,plot=FALSE) to avoid the plot of the histogram
   histograma_tmp$density = histograma_tmp$counts/sum(histograma_tmp$counts)
   
   # Computamos y guardamos el histograma final
   nombre_grafico <- paste0("before_imputation_",celulas,".png")
-  png(filename=file.path(outDir,nombre_grafico, res = 300))
+  png(filename=file.path(outDir,nombre_grafico))
   
   plot(histograma_tmp, freq=FALSE, col = "cyan", ylim = c(0,1), 
        xlab = "Dropout rate", ylab = "Percentage of cell number", 
@@ -63,15 +67,19 @@ for (celulas in levels(after_imp$cellType)) {
   n_celulas <- dim(celulas_after_imp)[2]
   
   # Calculamos para todos los genes su % de dropout
-  ratio_dropout_genes <- matrixStats::rowCounts(x = tpm_celulas, value = 0)/n_celulas
+  zero <- as.numeric(0)
+  if( argumento == "head_neck") {          # Hicimos el cuasilogaritmo (log2(TPM+1)) en head_neck, entonces su zero es en realidad 1
+    zero <- as.numeric(1)
+  }
+  ratio_dropout_genes <- matrixStats::rowCounts(x = tpm_celulas, value = zero)/n_celulas
   
   # Computamos el histograma interino
-  histograma_tmp = hist(ratio_dropout_genes, breaks = 10) # or hist(x,plot=FALSE) to avoid the plot of the histogram
+  histograma_tmp = hist(ratio_dropout_genes, breaks = 10, plot = F) # or hist(x,plot=FALSE) to avoid the plot of the histogram
   histograma_tmp$density = histograma_tmp$counts/sum(histograma_tmp$counts)
   
   # Computamos y guardamos el histograma final
   nombre_grafico <- paste0("after_imputation_",celulas,".png")
-  png(filename=file.path(outDir,nombre_grafico, res = 300))
+  png(filename=file.path(outDir,nombre_grafico))
   
   plot(histograma_tmp, freq=FALSE, col = "cyan", ylim = c(0,1), 
        xlab = "Dropout rate", ylab = "Percentage of cell number", 
