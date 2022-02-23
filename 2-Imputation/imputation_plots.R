@@ -16,7 +16,7 @@ if(!dir.exists(outDir) ) {dir.create(outDir, recursive = TRUE)}
 before_imp <- readRDS(file.path("../1-ReadData/datasets",argumento,"filtered_sce.rds"))
 before_imp$cellType <- as.factor(before_imp$cellType)
 
-after_imp <- readRDS(file.path("../2-Imputation/datasets",argumento,"imputed_sce.rds"))
+after_imp <- readRDS(file.path("datasets",argumento,"imputed_sce.rds"))
 after_imp$cellType <- as.factor(after_imp$cellType)
 
 
@@ -31,7 +31,7 @@ for (celulas in levels(before_imp$cellType)) {
   
   # Calculamos para todos los genes su % de dropout
   zero <- as.numeric(0)
-  if( argumento == "head_neck") {          # Hicimos el cuasilogaritmo (log2(TPM+1)) en head_neck, entonces su zero es en realidad 1
+  if( argumento == "head_neck") {          # Por algún motivo, el mínimo en head_neck es 1, no 0
     zero <- as.numeric(1)
   }
   ratio_dropout_genes <- matrixStats::rowCounts(x = tpm_celulas, value = zero)/n_celulas
@@ -68,7 +68,7 @@ for (celulas in levels(after_imp$cellType)) {
   
   # Calculamos para todos los genes su % de dropout
   zero <- as.numeric(0)
-  if( argumento == "head_neck") {          # Hicimos el cuasilogaritmo (log2(TPM+1)) en head_neck, entonces su zero es en realidad 1
+  if( argumento == "head_neck") {          # Por algún motivo, el mínimo en head_neck es 1, no 0
     zero <- as.numeric(1)
   }
   ratio_dropout_genes <- matrixStats::rowCounts(x = tpm_celulas, value = zero)/n_celulas
