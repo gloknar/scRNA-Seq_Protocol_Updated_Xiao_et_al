@@ -33,6 +33,7 @@ Rscript install_requiredPackages.R
 ``` bash
 cd "1-ReadData"
 bash download_dataset.sh
+# /opt/R/4.1.2/bin/Rscript para Rscript 4.1.2 en halowan
 Rscript readData_head_neck.R
 Rscript readData_melanoma.R
 cd ../
