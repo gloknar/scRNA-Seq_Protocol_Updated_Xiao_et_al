@@ -146,3 +146,7 @@ filtered_sce$cellType <- droplevels(filtered_sce$cellType)
 ####################################################################
 
 saveRDS(filtered_sce,file.path(outDir,"filtered_sce.rds"))
+
+# Mensaje de fin
+print("")
+print("GRACIAS POR ASISTIR A MI CHARLA TED")
