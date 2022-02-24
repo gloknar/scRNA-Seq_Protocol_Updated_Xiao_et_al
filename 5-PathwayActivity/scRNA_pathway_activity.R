@@ -363,11 +363,3 @@ ggsave(file.path(outDir,"pathway_global_activity_violinplot.pdf"), graf_violin,
 # Mensaje de fin
 print("")
 print("GRACIAS POR ASISTIR A MI CHARLA TED")
-
-
-# PRUEBAS DESARROLLADOR
-nombre_archivo_toquetear = paste0("scRNA_data_flattened_",argumento,".rds")
-saveRDS(scRNA_data_flattened, file = nombre_archivo_toquetear)
-
-
-
