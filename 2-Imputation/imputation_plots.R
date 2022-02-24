@@ -16,14 +16,13 @@ if(!dir.exists(outDir) ) {dir.create(outDir, recursive = TRUE)}
 # Cargamos datos antes y despues del imputado
 before_imp <- readRDS(file.path("../1-ReadData/datasets",argumento,"filtered_sce.rds"))
 before_imp$cellType <- as.factor(before_imp$cellType)
+before_imp@assays@data$tpm[before_imp@assays@data$tpm <= 1] = 0   # Ponemos como no detectado (0) genes con menos de 1 TPM
 
 after_imp <- readRDS(file.path("datasets",argumento,"imputed_sce.rds"))
 after_imp$cellType <- as.factor(after_imp$cellType)
+after_imp@assays@data$tpm[after_imp@assays@data$tpm <= 1] = 0   # Ponemos como no detectado (0) genes con menos de 1 TPM
 
-if (argumento == "head_neck") {    # Por algun motivo, algunas poblaciones celulares de head_neck tienen su minimo en 1 o así
-  before_imp@assays@data$tpm[before_imp@assays@data$tpm <= 1] = 0
-  after_imp@assays@data$tpm[after_imp@assays@data$tpm <= 1] = 0  
-}
+
 
 
 # Para calcular las gráficas ANTES del imputado
