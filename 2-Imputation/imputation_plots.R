@@ -37,9 +37,6 @@ for (celulas in levels(before_imp$cellType)) {
   
   # Calculamos para todos los genes su % de dropout
   zero <- as.numeric(0)
-  if (argumento == "head_neck") {    # Por algun motivo, esto funciona 
-    zero <- as.numeric(1)
-  }
   ratio_dropout_genes <- matrixStats::rowCounts(x = tpm_celulas, value = zero)/n_celulas
   
   # Computamos el histograma interino
@@ -74,9 +71,6 @@ for (celulas in levels(after_imp$cellType)) {
   
   # Calculamos para todos los genes su % de dropout
   zero <- as.numeric(0)
-  if (argumento == "head_neck") {    # Por algun motivo, esto funciona 
-    zero <- as.numeric(1)
-  }
   ratio_dropout_genes <- matrixStats::rowCounts(x = tpm_celulas, value = zero)/n_celulas
   
   # Computamos el histograma interino
