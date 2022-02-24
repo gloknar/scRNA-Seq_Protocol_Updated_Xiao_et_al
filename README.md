@@ -32,10 +32,14 @@ Rscript install_requiredPackages.R
 
 ``` bash
 cd "1-ReadData"
+
+# Descargamos los datasets sucios
 bash download_dataset.sh
-# /opt/R/4.1.2/bin/Rscript para Rscript 4.1.2 en halowan
-Rscript readData_head_neck.R
-Rscript readData_melanoma.R
+
+# Preprocesamos los datasets
+/opt/R/4.1.2/bin/Rscript readData_head_neck.R
+/opt/R/4.1.2/bin/Rscript readData_melanoma.R
+
 cd ../
 ```
 
@@ -45,12 +49,17 @@ Con el script de bash `download_dataset.sh` descargamos los datasets desde el GE
 
 ``` bash
 cd "2-Imputation"
-Rscript impute_tpm.R melanoma 4 # el 2º parámetro es el nº de hilos a usar para el imputado, por defecto es 1
-Rscript impute_tpm.R head_neck 4
+
+# Imputamos
+/opt/R/4.1.2/bin/Rscript impute_tpm.R melanoma 16  # el 2º parámetro es el nº de hilos a usar para el imputado. Por defecto es 1
+/opt/R/4.1.2/bin/Rscript impute_tpm.R head_neck 16
+
 
 # Graficamos los resultados de antes y despues del imputado
-Rscript imputation_plots.R head_neck
-Rscript imputation_plots.R head_neck
+/opt/R/4.1.2/bin/Rscript imputation_plots.R melanoma
+/opt/R/4.1.2/bin/Rscript imputation_plots.R head_neck
+
+
 cd ../
 ```
 
@@ -60,8 +69,11 @@ Este paso utiliza el paquete ["scImpute"](https://github.com/Vivianstats/scImput
 
 ``` bash
 cd "3-Normalization"
-Rscript normalization.R melanoma
-Rscript normalization.R head_neck
+
+# Normalizado de datos mediante distintos métodos
+/opt/R/4.1.2/bin/Rscript normalization.R melanoma
+/opt/R/4.1.2/bin/Rscript normalization.R head_neck
+
 cd ../
 ```
 
@@ -79,16 +91,17 @@ Tras normalizar los datos, graficamos los resultados para poder compararlos y se
 cd "4-Clustering"
 
 # t-SNE
-Rscript tsne_metabolic_genes.R melanoma 4 # nº cores por defecto: 1
-Rscript tsne_metabolic_genes.R head_neck 4
+/opt/R/4.1.2/bin/Rscript tsne_metabolic_genes.R melanoma 18  # El 2º parámetro es el nº de hilos para paralelizar el tSNE. Por defecto es 1
+/opt/R/4.1.2/bin/Rscript tsne_metabolic_genes.R head_neck 18
 
 # UMAP (Opcional)
-Rscript umap_metabolic_genes.R melanoma
-Rscript umap_metabolic_genes.R head_neck
+/opt/R/4.1.2/bin/Rscript umap_metabolic_genes.R melanoma
+/opt/R/4.1.2/bin/Rscript umap_metabolic_genes.R head_neck
 
 # Matriz de correlación de Spearman
-Rscript inter_tumor_correlation.R melanoma
-Rscript inter_tumor_correlation.R head_neck
+/opt/R/4.1.2/bin/Rscript inter_tumor_correlation_matrix.R melanoma
+/opt/R/4.1.2/bin/Rscript inter_tumor_correlation_matrix.R head_neck
+
 cd ../
 ```
 
