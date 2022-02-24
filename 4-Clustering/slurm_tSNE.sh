@@ -10,5 +10,5 @@
 
 
 # t-SNE
-/opt/R/4.1.2/bin/Rscript tsne_metabolic_genes.R melanoma 18
+/opt/R/4.1.2/bin/Rscript tsne_metabolic_genes.R melanoma 18  # El 2º parámetro es el nº de nucleos para paralelizar el tSNE
 /opt/R/4.1.2/bin/Rscript tsne_metabolic_genes.R head_neck 18
