@@ -16,7 +16,7 @@ library(scran)
 # Opciones
 options(stringsAsFactors = FALSE)
 argumentos <- commandArgs(trailingOnly = T)
-argumento <- argumentos[1]  #"melanoma" o "head_neck"
+argumento <- argumentos[1]     # "melanoma" o "head_neck"
 outDir <- file.path("./datasets",argumento)
 if(!dir.exists(outDir)) {                 
   dir.create(outDir, recursive = TRUE)    # Crea la carpeta ./datasets/<head_neck o melanoma>/  si no existe
@@ -228,3 +228,9 @@ for (metodo in c("RLE", "TMM", "UpperQuartile", "Deconvolution")) {
   ggsave(file.path(outDir,paste0(metodo,"_ratio_distribution.pdf")), 
          TPM_norm_boxplot, width = 3.5, height = 2.5)
 }
+
+
+# Mensaje de fin
+print("")
+print("GRACIAS POR ASISTIR A MI CHARLA TED")
+
