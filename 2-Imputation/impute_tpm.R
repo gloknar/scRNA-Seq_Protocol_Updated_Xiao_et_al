@@ -161,3 +161,7 @@ imputed_sce <- SingleCellExperiment(
 
 saveRDS(imputed_sce,file.path(outDir,"imputed_sce.rds"))
 
+# Avisamos al usuario que hemos terminado
+print("")
+print("GRACIAS POR ASISTIR A MI CHARLA TED")
+
