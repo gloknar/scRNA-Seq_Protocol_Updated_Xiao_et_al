@@ -8,8 +8,7 @@
 #SBATCH --output=readData_dump_%j.out
 #SBATCH --get-user-env 
 
+
 # Preprocesamos los datasets
-/opt/R/4.1.2/bin/Rscript readData_head_neck.R && /opt/R/4.1.2/bin/Rscript readData_melanoma.R
-
-
-
+/opt/R/4.1.2/bin/Rscript readData_head_neck.R
+/opt/R/4.1.2/bin/Rscript readData_melanoma.R

@@ -10,11 +10,8 @@
 
 
 # UMAP (Opcional)
-/opt/R/4.1.2/bin/Rscript umap_metabolic_genes.R melanoma &&
+/opt/R/4.1.2/bin/Rscript umap_metabolic_genes.R melanoma
 /opt/R/4.1.2/bin/Rscript umap_metabolic_genes.R head_neck
-
-
-
 
 
 

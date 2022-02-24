@@ -10,10 +10,5 @@
 
 
 # Matriz de correlación de Spearman
-/opt/R/4.1.2/bin/Rscript inter_tumor_correlation_matrix.R melanoma &&
+/opt/R/4.1.2/bin/Rscript inter_tumor_correlation_matrix.R melanoma
 /opt/R/4.1.2/bin/Rscript inter_tumor_correlation_matrix.R head_neck
-
-
-
-
-

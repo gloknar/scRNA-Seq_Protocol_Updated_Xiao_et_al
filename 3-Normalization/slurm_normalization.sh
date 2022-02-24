@@ -10,9 +10,5 @@
 
 
 # Normalizado de datos mediante distintos métodos
-/opt/R/4.1.2/bin/Rscript normalization.R melanoma && 
+/opt/R/4.1.2/bin/Rscript normalization.R melanoma
 /opt/R/4.1.2/bin/Rscript normalization.R head_neck
-
-
-
-

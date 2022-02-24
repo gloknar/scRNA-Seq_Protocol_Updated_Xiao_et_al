@@ -10,10 +10,5 @@
 
 
 # t-SNE
-/opt/R/4.1.2/bin/Rscript tsne_metabolic_genes.R melanoma 20 &&
-/opt/R/4.1.2/bin/Rscript tsne_metabolic_genes.R head_neck 20
-
-
-
-
-
+/opt/R/4.1.2/bin/Rscript tsne_metabolic_genes.R melanoma 18
+/opt/R/4.1.2/bin/Rscript tsne_metabolic_genes.R head_neck 18

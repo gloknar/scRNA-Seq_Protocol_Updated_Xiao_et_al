@@ -10,7 +10,7 @@ library(ggplot2)
 # Opciones
 options(stringsAsFactors = FALSE)
 argumentos <- commandArgs(trailingOnly = T)
-argumento <- argumentos[1] # "head_neck" o "melanoma"
+argumento <- as.character(argumentos[1])    # "head_neck" o "melanoma"
 num_cores <- as.numeric(argumentos[2])
 if (!num_cores %in% c(1:30)) { # Si no le pasamos un nº de hilos entre 1 y 30, ya sea porque no le pasamos nada o porque le pasamos un numero rarto, num_cores pasará a ser 1 por defecto
   message('Argumento "num_cores" no especificado o fuera del rango [1,30], se procede a usar 1 hilo.')

@@ -9,10 +9,5 @@
 #SBATCH --get-user-env 
 
 # Imputamos
-/opt/R/4.1.2/bin/Rscript impute_tpm.R melanoma 20
-/opt/R/4.1.2/bin/Rscript impute_tpm.R head_neck 20
-
-
-# Comprobamos los resultados de la imputación
-/opt/R/4.1.2/bin/Rscript imputation_plots.R melanoma
-/opt/R/4.1.2/bin/Rscript imputation_plots.R head_neck
+/opt/R/4.1.2/bin/Rscript impute_tpm.R melanoma 16
+/opt/R/4.1.2/bin/Rscript impute_tpm.R head_neck 16

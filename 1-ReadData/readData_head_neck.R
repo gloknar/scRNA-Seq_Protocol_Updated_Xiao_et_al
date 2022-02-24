@@ -87,6 +87,7 @@ row_data[rownames(row_data) %in% metabolics, "metabolic"] = TRUE  # Marcamos com
 # log2(TPM+1) entre [0,16]
 
 quasilog2_tpm <- data.matrix(quasilog2_tpm)
+quasilog2_tpm[quasilog2_tpm <= 1] = 0   # Eliminamos ruido técnico en el espectro inferior, o sea TPMs muy cercanas a 0
 quasilog2_tpm[quasilog2_tpm > 20] <- 20 # Eliminamos ruido técnico en el espectro superior, es decir, con esta acotación deberíamos evitar crear valores infinitos
 raw_tpm <- (2^quasilog2_tpm) - 1 # Ahora no deberían introducirse infinitos y el paso de la imputación debería funcionar
 # hist(apply(raw_tpm, 2, sum)) # La mayoría de células deberían sumar 1 millón de TPMs. Si no, está mal

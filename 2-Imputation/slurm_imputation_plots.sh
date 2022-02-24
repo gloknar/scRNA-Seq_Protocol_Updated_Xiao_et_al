@@ -11,5 +11,3 @@
 # Comprobamos los resultados de la imputación
 /opt/R/4.1.2/bin/Rscript imputation_plots.R melanoma
 /opt/R/4.1.2/bin/Rscript imputation_plots.R head_neck
-
-
