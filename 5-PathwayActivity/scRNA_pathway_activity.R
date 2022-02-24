@@ -11,11 +11,10 @@ source("../utils.R")
 
 # Opciones
 options(stringsAsFactors = F)
-argumento <- commandArgs()
-# argumento <- "head_neck"
-argumento <- argumento[6]
+argumentos <- commandArgs(trailingOnly = T)
+argumento <- as.character(argumentos[1])    # "head_neck" o "melanoma"
 outDir <- file.path("datasets",argumento)
-if(!dir.exists(outDir) ) {dir.create(outDir, recursive = TRUE)}
+if (!dir.exists(outDir)) {dir.create(outDir, recursive = TRUE)}
 
 
 # Leemos el dataset del head_neck/melanoma con la expresión génica imputada
@@ -309,6 +308,14 @@ pheatmap(data[sorted_rows, sorted_columns], cluster_cols = F,
 # Guardamos heatmap en pdf a disco duro
 dev.off()
 
+##### PRUEBAS ####
+saveRDS(data, "data.rds")
+saveRDS(sorted_rows, "sorted_rows.rds")
+saveRDS(sorted_columns, "sorted_columns.rds")
+saveRDS(color, "color.rds")
+saveRDS(mybreaks, "mybreaks.rds")
+
+#####################
 
 # Guardamos las matrices de actividad de las rutas metabólicas y las de sus
 # p-valores
@@ -327,21 +334,8 @@ write.table(matriz_pvalues, file = file.path(outDir,"KEGGpathway_activity_pvalue
 
 # Creamos un violinplot para comparar la actividad metabólica global entre tipos
 # celulares
-
 scRNA_data <- as.data.frame(distribucion_empirica_actividad_pathways)
 scRNA_data_flattened <- melt(scRNA_data, na.rm = T)
-View(scRNA_data_flattened)
-
-# scRNA_data_flattened <- scRNA_data_flattened[!is.na(scRNA_data_flattened$value),]  # Otra manera de eliminar los NA
-
-# anyNA(scRNA_data)
-# scRNA_data <- scRNA_data[!is.na(scRNA_data)]
-# anyNA(scRNA_data)
-# scRNA_data
-# length(is.na(scRNA_data))
-# nrow(scRNA_data)
-# ncol(scRNA_data)
-# dim(scRNA_data_flattened)
 
 graf_violin <- ggplot(scRNA_data_flattened, aes(x = variable, y = value, fill = variable)) +
   scale_y_continuous(limits = c(0, 3), breaks = 0:3, labels = 0:3) +   # Establecemos el ylim en 0-3
@@ -363,4 +357,17 @@ graf_violin <- ggplot(scRNA_data_flattened, aes(x = variable, y = value, fill = 
 ggsave(file.path(outDir,"pathway_global_activity_violinplot.pdf"), graf_violin, 
        width = 2.5, height = 1.5, units = "in", device = "pdf",
        useDingbats = FALSE)
+
+
+
+# Mensaje de fin
+print("")
+print("GRACIAS POR ASISTIR A MI CHARLA TED")
+
+
+# PRUEBAS DESARROLLADOR
+nombre_archivo_toquetear = paste0("scRNA_data_flattened_",argumento,".rds")
+saveRDS(scRNA_data_flattened, file = nombre_archivo_toquetear)
+
+
 
