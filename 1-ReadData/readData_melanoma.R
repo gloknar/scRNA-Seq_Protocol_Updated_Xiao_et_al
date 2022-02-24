@@ -109,7 +109,6 @@ row_data[rownames(row_data) %in% metabolics, "metabolic"] = TRUE  # Marcamos com
 # calcular los TPM
 
 quasilog2_tpm <- data.matrix(quasilog2_tpm)
-quasilog2_tpm[quasilog2_tpm <= 1] = 0   # Eliminamos ruido técnico en el espectro inferior, o sea TPMs muy cercanas a 0
 raw_tpm <- (2^quasilog2_tpm) - 1
 # hist(apply(raw_tpm, 2, sum)) # La mayoría de células deberían sumar 1 millón de TPMs. Si no, está mal
 sce <- SingleCellExperiment(assays = list(tpm = raw_tpm, exprs = quasilog2_tpm),

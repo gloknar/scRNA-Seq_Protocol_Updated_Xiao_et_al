@@ -1,0 +1,1063 @@
+Loading required package: SingleCellExperiment
+Loading required package: SummarizedExperiment
+Loading required package: MatrixGenerics
+Loading required package: matrixStats
+
+Attaching package: ‘MatrixGenerics’
+
+The following objects are masked from ‘package:matrixStats’:
+
+    colAlls, colAnyNAs, colAnys, colAvgsPerRowSet, colCollapse,
+    colCounts, colCummaxs, colCummins, colCumprods, colCumsums,
+    colDiffs, colIQRDiffs, colIQRs, colLogSumExps, colMadDiffs,
+    colMads, colMaxs, colMeans2, colMedians, colMins, colOrderStats,
+    colProds, colQuantiles, colRanges, colRanks, colSdDiffs, colSds,
+    colSums2, colTabulates, colVarDiffs, colVars, colWeightedMads,
+    colWeightedMeans, colWeightedMedians, colWeightedSds,
+    colWeightedVars, rowAlls, rowAnyNAs, rowAnys, rowAvgsPerColSet,
+    rowCollapse, rowCounts, rowCummaxs, rowCummins, rowCumprods,
+    rowCumsums, rowDiffs, rowIQRDiffs, rowIQRs, rowLogSumExps,
+    rowMadDiffs, rowMads, rowMaxs, rowMeans2, rowMedians, rowMins,
+    rowOrderStats, rowProds, rowQuantiles, rowRanges, rowRanks,
+    rowSdDiffs, rowSds, rowSums2, rowTabulates, rowVarDiffs, rowVars,
+    rowWeightedMads, rowWeightedMeans, rowWeightedMedians,
+    rowWeightedSds, rowWeightedVars
+
+Loading required package: GenomicRanges
+Loading required package: stats4
+Loading required package: BiocGenerics
+
+Attaching package: ‘BiocGenerics’
+
+The following objects are masked from ‘package:stats’:
+
+    IQR, mad, sd, var, xtabs
+
+The following objects are masked from ‘package:base’:
+
+    anyDuplicated, append, as.data.frame, basename, cbind, colnames,
+    dirname, do.call, duplicated, eval, evalq, Filter, Find, get, grep,
+    grepl, intersect, is.unsorted, lapply, Map, mapply, match, mget,
+    order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank,
+    rbind, Reduce, rownames, sapply, setdiff, sort, table, tapply,
+    union, unique, unsplit, which.max, which.min
+
+Loading required package: S4Vectors
+
+Attaching package: ‘S4Vectors’
+
+The following objects are masked from ‘package:base’:
+
+    expand.grid, I, unname
+
+Loading required package: IRanges
+Loading required package: GenomeInfoDb
+Loading required package: Biobase
+Welcome to Bioconductor
+
+    Vignettes contain introductory material; view with
+    'browseVignettes()'. To cite Bioconductor, see
+    'citation("Biobase")', and for packages 'citation("pkgname")'.
+
+
+Attaching package: ‘Biobase’
+
+The following object is masked from ‘package:MatrixGenerics’:
+
+    rowMedians
+
+The following objects are masked from ‘package:matrixStats’:
+
+    anyMissing, rowMedians
+
+Loading required package: scuttle
+Loading required package: ggplot2
+[1] 2068
+[1] 2068
+[1] 23684     1
+[1] 1566    1
+null device 
+          1 
+[1] 1624
+[1] 1624
+5830 [INFO ] Made Vdb dir JIT: /mnt/beegfs/acasas/PROTOCOLO-R_CHINAMEN/7-MetabolicFeatures/feb23
+5954 [INFO ] Begun importing: Dataset from: expr.txt
+7102 [INFO ] Your current version of GSEA is 3.0. A newer version (4.2.2) is available.
+To update, please download from http://gsea-msigdb.org/gsea/downloads.jsp
+(build date: Thu, 20 Jan 2022 21:50:21 -0500)
+7103 [INFO ] Note: GenePattern users should update through GenePattern.
+# of elements = 1
+pheno.cls#CD4_versus_CD8 
+7181 [INFO ] Begun importing: Template from: pheno.cls
+7248 [INFO ] No dataset collapsing was done .. using original as is
+to parse>../Data/KEGG_metabolism.gmt< got: [../Data/KEGG_metabolism.gmt]
+7250 [INFO ] Begun importing: GeneSetMatrix from: KEGG_metabolism.gmt
+7263 [INFO ] Got gsets: 85 now preprocessing them ... min: 5 max: 10000
+7271 [INFO ] Done preproc for smaller than: 5
+7295 [INFO ] Already a synched dataset-template -- NO extracting done
+shuffleGeneSet for GeneSet 1/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 6/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 11/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 16/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 21/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 26/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 31/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 36/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 41/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 46/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 51/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 56/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 61/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 66/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 71/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 76/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+Finished permutations ... creating reports
+9725 [INFO ] Already a synched dataset-template -- NO extracting done
+Creating marker selection reports ...
+Creating FDR reports ...
+4629 [INFO ] File found in local file cache; will process /mnt/beegfs/acasas/gsea_home/file_cache/chip/GENE_SYMBOL.chip in place of ftp://gseaftp.broadinstitute.org/pub/gsea/annotations/GENE_SYMBOL.chip.  Ignore any following message(s) about this URL.
+4630 [INFO ] Begun importing: Chip from: ftp://gseaftp.broadinstitute.org/pub/gsea/annotations/GENE_SYMBOL.chip
+4745 [INFO ] Parsed from unigene / gene symbol: 38870
+18206 [ERROR] Error making details: GLYCOSAMINOGLYCAN BIOSYNTHESIS - HEPARAN SULFATE / HEPARIN	at edu.mit.broad.genome.reports.ChartHelper.createReport(EnrichmentReports.java:658)
+java.io.FileNotFoundException: datasets/melanoma/CD4_CD8_GSEA/t_CD4_vs_CD8.Gsea.1645654187108/GLYCOSAMINOGLYCAN BIOSYNTHESIS - HEPARAN SULFATE / HEPARIN.html (No such file or directory)
+	at java.io.FileOutputStream.open0(Native Method)
+	at java.io.FileOutputStream.open(FileOutputStream.java:270)
+	at java.io.FileOutputStream.<init>(FileOutputStream.java:213)
+	at java.io.FileOutputStream.<init>(FileOutputStream.java:162)
+	at edu.mit.broad.genome.reports.EnrichmentReports.createReport(EnrichmentReports.java:649)
+	at edu.mit.broad.genome.reports.EnrichmentReports.createGseaLikeReport(EnrichmentReports.java:351)
+	at edu.mit.broad.genome.reports.EnrichmentReports.createGseaLikeReport(EnrichmentReports.java:175)
+	at xtools.gsea.AbstractGsea2Tool.execute_one_with_reporting(AbstractGsea2Tool.java:171)
+	at xtools.gsea.Gsea.execute(Gsea.java:116)
+	at xtools.api.AbstractTool.tool_main(AbstractTool.java:406)
+	at xtools.gsea.Gsea.main(Gsea.java:140)
+Done FDR reports for positive phenotype
+63729 [ERROR] Error making details: GLYCOLYSIS / GLUCONEOGENESIS	at edu.mit.broad.genome.reports.ChartHelper.createReport(EnrichmentReports.java:658)
+java.io.FileNotFoundException: datasets/melanoma/CD4_CD8_GSEA/t_CD4_vs_CD8.Gsea.1645654187108/GLYCOLYSIS / GLUCONEOGENESIS.html (No such file or directory)
+	at java.io.FileOutputStream.open0(Native Method)
+	at java.io.FileOutputStream.open(FileOutputStream.java:270)
+	at java.io.FileOutputStream.<init>(FileOutputStream.java:213)
+	at java.io.FileOutputStream.<init>(FileOutputStream.java:162)
+	at edu.mit.broad.genome.reports.EnrichmentReports.createReport(EnrichmentReports.java:649)
+	at edu.mit.broad.genome.reports.EnrichmentReports.createGseaLikeReport(EnrichmentReports.java:360)
+	at edu.mit.broad.genome.reports.EnrichmentReports.createGseaLikeReport(EnrichmentReports.java:175)
+	at xtools.gsea.AbstractGsea2Tool.execute_one_with_reporting(AbstractGsea2Tool.java:171)
+	at xtools.gsea.Gsea.execute(Gsea.java:116)
+	at xtools.api.AbstractTool.tool_main(AbstractTool.java:406)
+	at xtools.gsea.Gsea.main(Gsea.java:140)
+76025 [ERROR] Error making details: GLYCOSAMINOGLYCAN BIOSYNTHESIS - CHONDROITIN SULFATE / DERMATAN SULFATE	at edu.mit.broad.genome.reports.ChartHelper.createReport(EnrichmentReports.java:658)
+java.io.FileNotFoundException: datasets/melanoma/CD4_CD8_GSEA/t_CD4_vs_CD8.Gsea.1645654187108/GLYCOSAMINOGLYCAN BIOSYNTHESIS - CHONDROITIN SULFATE / DERMATAN SULFATE.html (No such file or directory)
+	at java.io.FileOutputStream.open0(Native Method)
+	at java.io.FileOutputStream.open(FileOutputStream.java:270)
+	at java.io.FileOutputStream.<init>(FileOutputStream.java:213)
+	at java.io.FileOutputStream.<init>(FileOutputStream.java:162)
+	at edu.mit.broad.genome.reports.EnrichmentReports.createReport(EnrichmentReports.java:649)
+	at edu.mit.broad.genome.reports.EnrichmentReports.createGseaLikeReport(EnrichmentReports.java:360)
+	at edu.mit.broad.genome.reports.EnrichmentReports.createGseaLikeReport(EnrichmentReports.java:175)
+	at xtools.gsea.AbstractGsea2Tool.execute_one_with_reporting(AbstractGsea2Tool.java:171)
+	at xtools.gsea.Gsea.execute(Gsea.java:116)
+	at xtools.api.AbstractTool.tool_main(AbstractTool.java:406)
+	at xtools.gsea.Gsea.main(Gsea.java:140)
+Done FDR reports for negative phenotype
+Creating global reports ...
+Done all reports!!
+Time taken: 80 secs
+null device 
+          1 
+0182 [INFO ] Begun importing: Dataset from: expr.txt
+1251 [INFO ] Your current version of GSEA is 3.0. A newer version (4.2.2) is available.
+To update, please download from http://gsea-msigdb.org/gsea/downloads.jsp
+(build date: Thu, 20 Jan 2022 21:50:21 -0500)
+1251 [INFO ] Note: GenePattern users should update through GenePattern.
+# of elements = 1
+pheno.cls#Tregs_versus_Th 
+1330 [INFO ] Begun importing: Template from: pheno.cls
+1372 [INFO ] No dataset collapsing was done .. using original as is
+to parse>../Data/KEGG_metabolism.gmt< got: [../Data/KEGG_metabolism.gmt]
+1374 [INFO ] Begun importing: GeneSetMatrix from: KEGG_metabolism.gmt
+1387 [INFO ] Got gsets: 85 now preprocessing them ... min: 5 max: 10000
+1395 [INFO ] Done preproc for smaller than: 5
+1430 [INFO ] Already a synched dataset-template -- NO extracting done
+shuffleGeneSet for GeneSet 1/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 6/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 11/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 16/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 21/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 26/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 31/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 36/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 41/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 46/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 51/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 56/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 61/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 66/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 71/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 76/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+Finished permutations ... creating reports
+3849 [INFO ] Already a synched dataset-template -- NO extracting done
+Creating marker selection reports ...
+Creating FDR reports ...
+5542 [INFO ] File found in local file cache; will process /mnt/beegfs/acasas/gsea_home/file_cache/chip/GENE_SYMBOL.chip in place of ftp://gseaftp.broadinstitute.org/pub/gsea/annotations/GENE_SYMBOL.chip.  Ignore any following message(s) about this URL.
+5543 [INFO ] Begun importing: Chip from: ftp://gseaftp.broadinstitute.org/pub/gsea/annotations/GENE_SYMBOL.chip
+5653 [INFO ] Parsed from unigene / gene symbol: 38870
+8576 [ERROR] Error making details: GLYCOLYSIS / GLUCONEOGENESIS	at edu.mit.broad.genome.reports.ChartHelper.createReport(EnrichmentReports.java:658)
+java.io.FileNotFoundException: datasets/melanoma/CD4_CD8_GSEA/t_Tregs_vs_Th.Gsea.1645654271257/GLYCOLYSIS / GLUCONEOGENESIS.html (No such file or directory)
+	at java.io.FileOutputStream.open0(Native Method)
+	at java.io.FileOutputStream.open(FileOutputStream.java:270)
+	at java.io.FileOutputStream.<init>(FileOutputStream.java:213)
+	at java.io.FileOutputStream.<init>(FileOutputStream.java:162)
+	at edu.mit.broad.genome.reports.EnrichmentReports.createReport(EnrichmentReports.java:649)
+	at edu.mit.broad.genome.reports.EnrichmentReports.createGseaLikeReport(EnrichmentReports.java:351)
+	at edu.mit.broad.genome.reports.EnrichmentReports.createGseaLikeReport(EnrichmentReports.java:175)
+	at xtools.gsea.AbstractGsea2Tool.execute_one_with_reporting(AbstractGsea2Tool.java:171)
+	at xtools.gsea.Gsea.execute(Gsea.java:116)
+	at xtools.api.AbstractTool.tool_main(AbstractTool.java:406)
+	at xtools.gsea.Gsea.main(Gsea.java:140)
+Done FDR reports for positive phenotype
+Done FDR reports for negative phenotype
+Creating global reports ...
+Done all reports!!
+Time taken: 26 secs
+[1] ""
+[1] "GRACIAS POR ASISTIR A MI CHARLA TED"
+Loading required package: SingleCellExperiment
+Loading required package: SummarizedExperiment
+Loading required package: MatrixGenerics
+Loading required package: matrixStats
+
+Attaching package: ‘MatrixGenerics’
+
+The following objects are masked from ‘package:matrixStats’:
+
+    colAlls, colAnyNAs, colAnys, colAvgsPerRowSet, colCollapse,
+    colCounts, colCummaxs, colCummins, colCumprods, colCumsums,
+    colDiffs, colIQRDiffs, colIQRs, colLogSumExps, colMadDiffs,
+    colMads, colMaxs, colMeans2, colMedians, colMins, colOrderStats,
+    colProds, colQuantiles, colRanges, colRanks, colSdDiffs, colSds,
+    colSums2, colTabulates, colVarDiffs, colVars, colWeightedMads,
+    colWeightedMeans, colWeightedMedians, colWeightedSds,
+    colWeightedVars, rowAlls, rowAnyNAs, rowAnys, rowAvgsPerColSet,
+    rowCollapse, rowCounts, rowCummaxs, rowCummins, rowCumprods,
+    rowCumsums, rowDiffs, rowIQRDiffs, rowIQRs, rowLogSumExps,
+    rowMadDiffs, rowMads, rowMaxs, rowMeans2, rowMedians, rowMins,
+    rowOrderStats, rowProds, rowQuantiles, rowRanges, rowRanks,
+    rowSdDiffs, rowSds, rowSums2, rowTabulates, rowVarDiffs, rowVars,
+    rowWeightedMads, rowWeightedMeans, rowWeightedMedians,
+    rowWeightedSds, rowWeightedVars
+
+Loading required package: GenomicRanges
+Loading required package: stats4
+Loading required package: BiocGenerics
+
+Attaching package: ‘BiocGenerics’
+
+The following objects are masked from ‘package:stats’:
+
+    IQR, mad, sd, var, xtabs
+
+The following objects are masked from ‘package:base’:
+
+    anyDuplicated, append, as.data.frame, basename, cbind, colnames,
+    dirname, do.call, duplicated, eval, evalq, Filter, Find, get, grep,
+    grepl, intersect, is.unsorted, lapply, Map, mapply, match, mget,
+    order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank,
+    rbind, Reduce, rownames, sapply, setdiff, sort, table, tapply,
+    union, unique, unsplit, which.max, which.min
+
+Loading required package: S4Vectors
+
+Attaching package: ‘S4Vectors’
+
+The following objects are masked from ‘package:base’:
+
+    expand.grid, I, unname
+
+Loading required package: IRanges
+Loading required package: GenomeInfoDb
+Loading required package: Biobase
+Welcome to Bioconductor
+
+    Vignettes contain introductory material; view with
+    'browseVignettes()'. To cite Bioconductor, see
+    'citation("Biobase")', and for packages 'citation("pkgname")'.
+
+
+Attaching package: ‘Biobase’
+
+The following object is masked from ‘package:MatrixGenerics’:
+
+    rowMedians
+
+The following objects are masked from ‘package:matrixStats’:
+
+    anyMissing, rowMedians
+
+Loading required package: scuttle
+Loading required package: ggplot2
+[1] 1237
+[1] 1237
+[1] 23686     1
+[1] 1566    1
+null device 
+          1 
+[1] 712
+[1] 712
+2245 [INFO ] Made Vdb dir JIT: /mnt/beegfs/acasas/PROTOCOLO-R_CHINAMEN/7-MetabolicFeatures/feb23
+2360 [INFO ] Begun importing: Dataset from: expr.txt
+3360 [INFO ] Your current version of GSEA is 3.0. A newer version (4.2.2) is available.
+To update, please download from http://gsea-msigdb.org/gsea/downloads.jsp
+(build date: Thu, 20 Jan 2022 21:50:21 -0500)
+3361 [INFO ] Note: GenePattern users should update through GenePattern.
+# of elements = 1
+pheno.cls#CD4_versus_CD8 
+3438 [INFO ] Begun importing: Template from: pheno.cls
+3492 [INFO ] No dataset collapsing was done .. using original as is
+to parse>../Data/KEGG_metabolism.gmt< got: [../Data/KEGG_metabolism.gmt]
+3495 [INFO ] Begun importing: GeneSetMatrix from: KEGG_metabolism.gmt
+3507 [INFO ] Got gsets: 85 now preprocessing them ... min: 5 max: 10000
+3516 [INFO ] Done preproc for smaller than: 5
+3540 [INFO ] Already a synched dataset-template -- NO extracting done
+shuffleGeneSet for GeneSet 1/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 6/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 11/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 16/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 21/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 26/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 31/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 36/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 41/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 46/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 51/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 56/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 61/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 66/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 71/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 76/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+Finished permutations ... creating reports
+5895 [INFO ] Already a synched dataset-template -- NO extracting done
+Creating marker selection reports ...
+Creating FDR reports ...
+7828 [INFO ] File found in local file cache; will process /mnt/beegfs/acasas/gsea_home/file_cache/chip/GENE_SYMBOL.chip in place of ftp://gseaftp.broadinstitute.org/pub/gsea/annotations/GENE_SYMBOL.chip.  Ignore any following message(s) about this URL.
+7829 [INFO ] Begun importing: Chip from: ftp://gseaftp.broadinstitute.org/pub/gsea/annotations/GENE_SYMBOL.chip
+7948 [INFO ] Parsed from unigene / gene symbol: 38870
+14163 [ERROR] Error making details: GLYCOLYSIS / GLUCONEOGENESIS	at edu.mit.broad.genome.reports.ChartHelper.createReport(EnrichmentReports.java:658)
+java.io.FileNotFoundException: datasets/head_neck/CD4_CD8_GSEA/t_CD4_vs_CD8.Gsea.1645654323366/GLYCOLYSIS / GLUCONEOGENESIS.html (No such file or directory)
+	at java.io.FileOutputStream.open0(Native Method)
+	at java.io.FileOutputStream.open(FileOutputStream.java:270)
+	at java.io.FileOutputStream.<init>(FileOutputStream.java:213)
+	at java.io.FileOutputStream.<init>(FileOutputStream.java:162)
+	at edu.mit.broad.genome.reports.EnrichmentReports.createReport(EnrichmentReports.java:649)
+	at edu.mit.broad.genome.reports.EnrichmentReports.createGseaLikeReport(EnrichmentReports.java:351)
+	at edu.mit.broad.genome.reports.EnrichmentReports.createGseaLikeReport(EnrichmentReports.java:175)
+	at xtools.gsea.AbstractGsea2Tool.execute_one_with_reporting(AbstractGsea2Tool.java:171)
+	at xtools.gsea.Gsea.execute(Gsea.java:116)
+	at xtools.api.AbstractTool.tool_main(AbstractTool.java:406)
+	at xtools.gsea.Gsea.main(Gsea.java:140)
+Done FDR reports for positive phenotype
+Done FDR reports for negative phenotype
+Creating global reports ...
+Done all reports!!
+Time taken: 25 secs
+null device 
+          1 
+0809 [INFO ] Begun importing: Dataset from: expr.txt
+1614 [INFO ] Your current version of GSEA is 3.0. A newer version (4.2.2) is available.
+To update, please download from http://gsea-msigdb.org/gsea/downloads.jsp
+(build date: Thu, 20 Jan 2022 21:50:21 -0500)
+1615 [INFO ] Note: GenePattern users should update through GenePattern.
+# of elements = 1
+pheno.cls#Tregs_versus_Th 
+1693 [INFO ] Begun importing: Template from: pheno.cls
+1726 [INFO ] No dataset collapsing was done .. using original as is
+to parse>../Data/KEGG_metabolism.gmt< got: [../Data/KEGG_metabolism.gmt]
+1728 [INFO ] Begun importing: GeneSetMatrix from: KEGG_metabolism.gmt
+1741 [INFO ] Got gsets: 85 now preprocessing them ... min: 5 max: 10000
+1749 [INFO ] Done preproc for smaller than: 5
+1780 [INFO ] Already a synched dataset-template -- NO extracting done
+shuffleGeneSet for GeneSet 1/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 6/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 11/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 16/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 21/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 26/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 31/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 36/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 41/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 46/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 51/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 56/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 61/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 66/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 71/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+shuffleGeneSet for GeneSet 76/80 nperm: 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+GeneSetCohorted: 501 / 1000
+GeneSetCohorted_scored: 501 / 1000
+Finished permutations ... creating reports
+4071 [INFO ] Already a synched dataset-template -- NO extracting done
+Creating marker selection reports ...
+Creating FDR reports ...
+5157 [INFO ] File found in local file cache; will process /mnt/beegfs/acasas/gsea_home/file_cache/chip/GENE_SYMBOL.chip in place of ftp://gseaftp.broadinstitute.org/pub/gsea/annotations/GENE_SYMBOL.chip.  Ignore any following message(s) about this URL.
+5158 [INFO ] Begun importing: Chip from: ftp://gseaftp.broadinstitute.org/pub/gsea/annotations/GENE_SYMBOL.chip
+5253 [INFO ] Parsed from unigene / gene symbol: 38870
+6795 [ERROR] Error making details: GLYCOLYSIS / GLUCONEOGENESIS	at edu.mit.broad.genome.reports.ChartHelper.createReport(EnrichmentReports.java:658)
+java.io.FileNotFoundException: datasets/head_neck/CD4_CD8_GSEA/t_Tregs_vs_Th.Gsea.1645654351620/GLYCOLYSIS / GLUCONEOGENESIS.html (No such file or directory)
+	at java.io.FileOutputStream.open0(Native Method)
+	at java.io.FileOutputStream.open(FileOutputStream.java:270)
+	at java.io.FileOutputStream.<init>(FileOutputStream.java:213)
+	at java.io.FileOutputStream.<init>(FileOutputStream.java:162)
+	at edu.mit.broad.genome.reports.EnrichmentReports.createReport(EnrichmentReports.java:649)
+	at edu.mit.broad.genome.reports.EnrichmentReports.createGseaLikeReport(EnrichmentReports.java:351)
+	at edu.mit.broad.genome.reports.EnrichmentReports.createGseaLikeReport(EnrichmentReports.java:175)
+	at xtools.gsea.AbstractGsea2Tool.execute_one_with_reporting(AbstractGsea2Tool.java:171)
+	at xtools.gsea.Gsea.execute(Gsea.java:116)
+	at xtools.api.AbstractTool.tool_main(AbstractTool.java:406)
+	at xtools.gsea.Gsea.main(Gsea.java:140)
+Done FDR reports for positive phenotype
+Done FDR reports for negative phenotype
+Creating global reports ...
+Done all reports!!
+Time taken: 13 secs
+Error in hclust(as.dist(1 - cor(t(dat), method = "pearson")), method = "ward.D2") : 
+  NA/NaN/Inf in foreign function call (arg 10)
+In addition: Warning message:
+In cor(t(dat), method = "pearson") : the standard deviation is zero
+Execution halted
