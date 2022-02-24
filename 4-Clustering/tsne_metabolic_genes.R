@@ -96,3 +96,8 @@ visualizacion_tsne <- ggplot(tmp) + geom_point(aes(x, y, colour = procedencia), 
 
 ggsave(file.path(outDir,"healthy_metabolic_tsne2.pdf"), visualizacion_tsne, 
        width = 7, height = 5)
+
+
+# Mensaje de fin
+print("")
+print("GRACIAS POR ASISTIR A MI CHARLA TED")

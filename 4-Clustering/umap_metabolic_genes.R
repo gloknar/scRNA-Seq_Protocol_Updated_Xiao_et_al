@@ -95,3 +95,7 @@ visualizacion_umap <- ggplot(tmp) + geom_point(aes(x, y, colour = procedencia), 
 ggsave(file.path(outDir,"healthy_metabolic_umap2.pdf"), visualizacion_umap, 
        width = 7, height = 5)
 
+
+# Mensaje de fin
+print("")
+print("GRACIAS POR ASISTIR A MI CHARLA TED")

@@ -1,6 +1,6 @@
 #!/bin/sh
 #SBATCH --job-name=tSNE-tumor-R       # Job name
-#SBATCH --mail-type=BEING,END              # Mail events (NONE, BEGIN, END, FAIL, ALL)
+#SBATCH --mail-type=BEGIN,END              # Mail events (NONE, BEGIN, END, FAIL, ALL)
 #SBATCH --mail-user=acm95@ugr.es     # Where to send mail 
 #SBATCH --nodes=1                    # Use one node
 #SBATCH --ntasks=1                   # Run a single task
@@ -10,8 +10,8 @@
 
 
 # t-SNE
-Rscript tsne_metabolic_genes.R melanoma 20 &&
-Rscript tsne_metabolic_genes.R head_neck 20
+/opt/R/4.1.2/bin/Rscript tsne_metabolic_genes.R melanoma 20 &&
+/opt/R/4.1.2/bin/Rscript tsne_metabolic_genes.R head_neck 20
 
 
 

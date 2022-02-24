@@ -1,6 +1,6 @@
 #!/bin/sh
 #SBATCH --job-name=Correlation-interTumor-R       # Job name
-#SBATCH --mail-type=BEING,END              # Mail events (NONE, BEGIN, END, FAIL, ALL)
+#SBATCH --mail-type=BEGIN,END              # Mail events (NONE, BEGIN, END, FAIL, ALL)
 #SBATCH --mail-user=acm95@ugr.es     # Where to send mail 
 #SBATCH --nodes=1                    # Use one node
 #SBATCH --ntasks=1                   # Run a single task
@@ -10,8 +10,8 @@
 
 
 # Matriz de correlación de Spearman
-Rscript inter_tumor_correlation_matrix.R melanoma &&
-Rscript inter_tumor_correlation_matrix.R head_neck
+/opt/R/4.1.2/bin/Rscript inter_tumor_correlation_matrix.R melanoma &&
+/opt/R/4.1.2/bin/Rscript inter_tumor_correlation_matrix.R head_neck
 
 
 

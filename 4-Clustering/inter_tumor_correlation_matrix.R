@@ -116,3 +116,9 @@ if (argumento == "melanoma"){
    # Guardamos el heatmap en el disco duro
    dev.off()
 }
+
+
+
+# Mensaje de fin
+print("")
+print("GRACIAS POR ASISTIR A MI CHARLA TED")
