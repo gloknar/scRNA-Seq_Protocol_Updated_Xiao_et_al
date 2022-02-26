@@ -286,7 +286,7 @@ data[is.na(data)] <- 1
 
 # Generamos el PDF donde guardaremos el heatmap
 pdf(file.path(outDir,"KEGGpathway_activity_heatmap_permutation.pdf"), onefile = T,
-    width = 6, height = 9)
+    width = 9, height = 9)
 
 # Generamos la paleta de colores: un gradiente de azul a rojo (pasando por el
 # blanco) de 100 pasos
