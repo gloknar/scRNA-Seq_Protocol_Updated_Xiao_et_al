@@ -290,7 +290,8 @@ pdf(file.path(outDir,"KEGGpathway_activity_heatmap_permutation.pdf"), onefile = 
 
 # Generamos la paleta de colores: un gradiente de azul a rojo (pasando por el
 # blanco) de 100 pasos
-color <- colorRampPalette(c("blue", "white", "red"))(100)
+# color <- colorRampPalette(c("blue", "white", "red"))(100)
+color <- colorRampPalette(c("#0095ff", "#ffffff", "#ff6663"))(100)   # Los colores usados en las imagenes del paper original
 
 # Le decimos al heatmap que use esa paleta de manera gradual, siendo el 2 rojo,
 # el 1 blanco y el 0 azul
