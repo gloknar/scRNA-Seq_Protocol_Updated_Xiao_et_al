@@ -21,11 +21,21 @@ mybreaks <- c(
 )
 
 
-pdf("head_neck_V2.pdf", onefile = T,
+pdf("head_neck_V3.pdf", onefile = T,
     width = 9, height = 9)   # He aumentado la width de 6 a 9 para que se queden rectangulos en vez de cuadrados
 
 pheatmap(data[sorted_rows, sorted_columns], cluster_cols = F,
          cluster_rows = F, color = color, breaks = mybreaks)
 
 dev.off()
+
+################
+
+write.csv(sorted_rows, "sorted_rows.csv")
+
+sorted_rows2 <-  read.csv("sorted_rows_prueba.csv", header = FALSE, row.names = NULL)
+sorted_rows2 <- unname(unlist(sorted_rows2))  # Para pasar de dataframe a vector...
+
+pheatmap(data[sorted_rows2,sorted_columns], cluster_cols = F, cluster_rows = F, color = color, breaks = mybreaks)
+
 
