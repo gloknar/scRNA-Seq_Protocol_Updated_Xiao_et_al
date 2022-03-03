@@ -31,11 +31,24 @@ dev.off()
 
 ################
 
-write.csv(sorted_rows, "sorted_rows.csv")
 
-sorted_rows2 <-  read.csv("sorted_rows_prueba.csv", header = FALSE, row.names = NULL)
-sorted_rows2 <- unname(unlist(sorted_rows2))  # Para pasar de dataframe a vector...
+sorted_rows2 <-  read.csv("sorted_rows_prueba.csv")
+sorted_rows2 <- unname(unlist(sorted_rows2))  # Para pasar de algo a vector...
+
+sorted_rows2 <- sorted_rows2[-16] # Quitamos el Steroid hormone biosynthesis 
+data[sorted_rows2[1:70],]
+sorted_rows2[16]
+# View(data)
+
+
+
+# pheatmap(data[sorted_rows2,sorted_columns], cluster_cols = F, cluster_rows = F, color = color, breaks = mybreaks)
+
+
+
+pdf("head_neck_reordenado.pdf", onefile = T,
+    width = 9, height = 9)   # He aumentado la width de 6 a 9 para que se queden rectangulos en vez de cuadrados
 
 pheatmap(data[sorted_rows2,sorted_columns], cluster_cols = F, cluster_rows = F, color = color, breaks = mybreaks)
 
-
+dev.off()

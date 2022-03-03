@@ -1,0 +1,1801 @@
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+Loading required package: SingleCellExperiment
+Loading required package: SummarizedExperiment
+Loading required package: MatrixGenerics
+Loading required package: matrixStats
+
+Attaching package: ‘MatrixGenerics’
+
+The following objects are masked from ‘package:matrixStats’:
+
+    colAlls, colAnyNAs, colAnys, colAvgsPerRowSet, colCollapse,
+    colCounts, colCummaxs, colCummins, colCumprods, colCumsums,
+    colDiffs, colIQRDiffs, colIQRs, colLogSumExps, colMadDiffs,
+    colMads, colMaxs, colMeans2, colMedians, colMins, colOrderStats,
+    colProds, colQuantiles, colRanges, colRanks, colSdDiffs, colSds,
+    colSums2, colTabulates, colVarDiffs, colVars, colWeightedMads,
+    colWeightedMeans, colWeightedMedians, colWeightedSds,
+    colWeightedVars, rowAlls, rowAnyNAs, rowAnys, rowAvgsPerColSet,
+    rowCollapse, rowCounts, rowCummaxs, rowCummins, rowCumprods,
+    rowCumsums, rowDiffs, rowIQRDiffs, rowIQRs, rowLogSumExps,
+    rowMadDiffs, rowMads, rowMaxs, rowMeans2, rowMedians, rowMins,
+    rowOrderStats, rowProds, rowQuantiles, rowRanges, rowRanks,
+    rowSdDiffs, rowSds, rowSums2, rowTabulates, rowVarDiffs, rowVars,
+    rowWeightedMads, rowWeightedMeans, rowWeightedMedians,
+    rowWeightedSds, rowWeightedVars
+
+Loading required package: GenomicRanges
+Loading required package: stats4
+Loading required package: BiocGenerics
+
+Attaching package: ‘BiocGenerics’
+
+The following object is masked from ‘package:penalized’:
+
+    as.data.frame
+
+The following objects are masked from ‘package:stats’:
+
+    IQR, mad, sd, var, xtabs
+
+The following objects are masked from ‘package:base’:
+
+    anyDuplicated, append, as.data.frame, basename, cbind, colnames,
+    dirname, do.call, duplicated, eval, evalq, Filter, Find, get, grep,
+    grepl, intersect, is.unsorted, lapply, Map, mapply, match, mget,
+    order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank,
+    rbind, Reduce, rownames, sapply, setdiff, sort, table, tapply,
+    union, unique, unsplit, which.max, which.min
+
+Loading required package: S4Vectors
+
+Attaching package: ‘S4Vectors’
+
+The following objects are masked from ‘package:base’:
+
+    expand.grid, I, unname
+
+Loading required package: IRanges
+Loading required package: GenomeInfoDb
+Loading required package: Biobase
+Welcome to Bioconductor
+
+    Vignettes contain introductory material; view with
+    'browseVignettes()'. To cite Bioconductor, see
+    'citation("Biobase")', and for packages 'citation("pkgname")'.
+
+
+Attaching package: ‘Biobase’
+
+The following object is masked from ‘package:MatrixGenerics’:
+
+    rowMedians
+
+The following objects are masked from ‘package:matrixStats’:
+
+    anyMissing, rowMedians
+
+Loading required package: scuttle
+Loading required package: ggplot2
+[1] "reading in raw count matrix ..."
+[1] "number of genes in raw count matrix 23684"
+[1] "number of cells in raw count matrix 1167"
+[1] "reading finished!"
+[1] "imputation starts ..."
+[1] "searching candidate neighbors ... "
+[1] "calculating cell distances ..."
+starting worker pid=17023 on localhost:11209 at 12:49:45.170
+starting worker pid=17016 on localhost:11209 at 12:49:45.172
+starting worker pid=17009 on localhost:11209 at 12:49:45.178
+starting worker pid=17024 on localhost:11209 at 12:49:45.179
+starting worker pid=17021 on localhost:11209 at 12:49:45.186
+starting worker pid=17022 on localhost:11209 at 12:49:45.191
+starting worker pid=17015 on localhost:11209 at 12:49:45.193
+starting worker pid=17013 on localhost:11209 at 12:49:45.193
+starting worker pid=17017 on localhost:11209 at 12:49:45.193
+starting worker pid=17010 on localhost:11209 at 12:49:45.200
+starting worker pid=17025 on localhost:11209 at 12:49:45.201
+starting worker pid=17020 on localhost:11209 at 12:49:45.203
+starting worker pid=17012 on localhost:11209 at 12:49:45.207
+starting worker pid=17014 on localhost:11209 at 12:49:45.210
+starting worker pid=17019 on localhost:11209 at 12:49:45.210
+starting worker pid=17011 on localhost:11209 at 12:49:45.211
+[1] "estimating dropout probability for type 1 ..."
+[1] 2000
+[1] 4000
+[1] 6000
+[1] 8000
+[1] 10000
+[1] 12000
+[1] 14000
+[1] 16000
+[1] 18000
+[1] 20000
+[1] 22000
+[1] "searching for valid genes ..."
+[1] "imputing dropout values for type 1 ..."
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+[1] "estimating dropout probability for type 2 ..."
+[1] 2000
+[1] 4000
+[1] 6000
+[1] 8000
+[1] 10000
+[1] 12000
+[1] 14000
+[1] 16000
+[1] 18000
+[1] 20000
+[1] 22000
+[1] "searching for valid genes ..."
+[1] "imputing dropout values for type 2 ..."
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+[1] 100
+[1] "estimating dropout probability for type 3 ..."
+[1] 2000
+[1] 4000
+[1] 6000
+[1] 8000
+[1] 10000
+[1] 12000
+[1] 14000
+[1] 16000
+[1] 18000
+[1] 20000
+[1] 22000
+[1] "searching for valid genes ..."
+[1] "imputing dropout values for type 3 ..."
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+[1] 100
+[1] "estimating dropout probability for type 4 ..."
+[1] 2000
+[1] 4000
+[1] 6000
+[1] 8000
+[1] 10000
+[1] 12000
+[1] 14000
+[1] 16000
+[1] 18000
+[1] 20000
+[1] 22000
+[1] "searching for valid genes ..."
+[1] "imputing dropout values for type 4 ..."
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+[1] 100
+[1] 200
+[1] 300
+[1] 400
+[1] "estimating dropout probability for type 5 ..."
+[1] 2000
+[1] 4000
+[1] 6000
+[1] 8000
+[1] 10000
+[1] 12000
+[1] 14000
+[1] 16000
+[1] 18000
+[1] 20000
+[1] 22000
+[1] "searching for valid genes ..."
+[1] "imputing dropout values for type 5 ..."
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+[1] "estimating dropout probability for type 6 ..."
+[1] 2000
+[1] 4000
+[1] 6000
+[1] 8000
+[1] 10000
+[1] 12000
+[1] 14000
+[1] 16000
+[1] 18000
+[1] 20000
+[1] 22000
+[1] "searching for valid genes ..."
+[1] "imputing dropout values for type 6 ..."
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+[1] 100
+[1] "estimating dropout probability for type 7 ..."
+[1] 2000
+[1] 4000
+[1] 6000
+[1] 8000
+[1] 10000
+[1] 12000
+[1] 14000
+[1] 16000
+[1] 18000
+[1] 20000
+[1] 22000
+[1] "searching for valid genes ..."
+[1] "imputing dropout values for type 7 ..."
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+[1] 100
+[1] "estimating dropout probability for type 8 ..."
+[1] 2000
+[1] 4000
+[1] 6000
+[1] 8000
+[1] 10000
+[1] 12000
+[1] 14000
+[1] 16000
+[1] 18000
+[1] 20000
+[1] 22000
+[1] "searching for valid genes ..."
+[1] "imputing dropout values for type 8 ..."
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+[1] "writing imputed count matrix ..."
+integer(0)
+Warning message:
+In dir.create(out_dir, recursive = TRUE) :
+  'datasets/melanoma/malignant' already exists
+[1] "reading in raw count matrix ..."
+[1] "number of genes in raw count matrix 23684"
+[1] "number of cells in raw count matrix 2887"
+[1] "reading finished!"
+[1] "imputation starts ..."
+[1] "searching candidate neighbors ... "
+[1] "calculating cell distances ..."
+starting worker pid=18414 on localhost:11209 at 12:58:00.783
+starting worker pid=18408 on localhost:11209 at 12:58:00.784
+starting worker pid=18417 on localhost:11209 at 12:58:00.785
+starting worker pid=18409 on localhost:11209 at 12:58:00.788
+starting worker pid=18410 on localhost:11209 at 12:58:00.791
+starting worker pid=18416 on localhost:11209 at 12:58:00.793
+starting worker pid=18421 on localhost:11209 at 12:58:00.796
+starting worker pid=18418 on localhost:11209 at 12:58:00.796
+starting worker pid=18407 on localhost:11209 at 12:58:00.799
+starting worker pid=18419 on localhost:11209 at 12:58:00.799
+starting worker pid=18413 on localhost:11209 at 12:58:00.804
+starting worker pid=18411 on localhost:11209 at 12:58:00.809
+starting worker pid=18412 on localhost:11209 at 12:58:00.810
+starting worker pid=18415 on localhost:11209 at 12:58:00.810
+starting worker pid=18420 on localhost:11209 at 12:58:00.811
+starting worker pid=18406 on localhost:11209 at 12:58:00.816
+[1] "estimating dropout probability for type 1 ..."
+[1] 2000
+[1] 4000
+[1] 6000
+[1] 8000
+[1] 10000
+[1] 12000
+[1] 14000
+[1] 16000
+[1] 18000
+[1] 20000
+[1] 22000
+[1] "searching for valid genes ..."
+[1] "imputing dropout values for type 1 ..."
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+[1] 100
+[1] 200
+[1] 300
+[1] 400
+[1] 500
+[1] "estimating dropout probability for type 2 ..."
+[1] 2000
+[1] 4000
+[1] 6000
+[1] 8000
+[1] 10000
+[1] 12000
+[1] 14000
+[1] 16000
+[1] 18000
+[1] 20000
+[1] 22000
+[1] "searching for valid genes ..."
+[1] "imputing dropout values for type 2 ..."
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+[1] 100
+[1] 200
+[1] 300
+[1] 400
+[1] 500
+[1] 600
+[1] 700
+[1] 800
+[1] 900
+[1] 1000
+[1] 1100
+[1] 1200
+[1] 1300
+[1] 1400
+[1] 1500
+[1] 1600
+[1] 1700
+[1] 1800
+[1] 1900
+[1] 2000
+[1] "estimating dropout probability for type 3 ..."
+[1] 2000
+[1] 4000
+[1] 6000
+[1] 8000
+[1] 10000
+[1] 12000
+[1] 14000
+[1] 16000
+[1] 18000
+[1] 20000
+[1] 22000
+[1] "searching for valid genes ..."
+[1] "imputing dropout values for type 3 ..."
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+[1] "estimating dropout probability for type 4 ..."
+[1] 2000
+[1] 4000
+[1] 6000
+[1] 8000
+[1] 10000
+[1] 12000
+[1] 14000
+[1] 16000
+[1] 18000
+[1] 20000
+[1] 22000
+[1] "searching for valid genes ..."
+[1] "imputing dropout values for type 4 ..."
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+[1] 100
+[1] "estimating dropout probability for type 5 ..."
+[1] 2000
+[1] 4000
+[1] 6000
+[1] 8000
+[1] 10000
+[1] 12000
+[1] 14000
+[1] 16000
+[1] 18000
+[1] 20000
+[1] 22000
+[1] "searching for valid genes ..."
+[1] "imputing dropout values for type 5 ..."
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+[1] "estimating dropout probability for type 6 ..."
+[1] 2000
+[1] 4000
+[1] 6000
+[1] 8000
+[1] 10000
+[1] 12000
+[1] 14000
+[1] 16000
+[1] 18000
+[1] 20000
+[1] 22000
+[1] "searching for valid genes ..."
+[1] "imputing dropout values for type 6 ..."
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+[1] "writing imputed count matrix ..."
+integer(0)
+[1] ""
+[1] "GRACIAS POR ASISTIR A MI CHARLA TED"
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+Loading required package: SingleCellExperiment
+Loading required package: SummarizedExperiment
+Loading required package: MatrixGenerics
+Loading required package: matrixStats
+
+Attaching package: ‘MatrixGenerics’
+
+The following objects are masked from ‘package:matrixStats’:
+
+    colAlls, colAnyNAs, colAnys, colAvgsPerRowSet, colCollapse,
+    colCounts, colCummaxs, colCummins, colCumprods, colCumsums,
+    colDiffs, colIQRDiffs, colIQRs, colLogSumExps, colMadDiffs,
+    colMads, colMaxs, colMeans2, colMedians, colMins, colOrderStats,
+    colProds, colQuantiles, colRanges, colRanks, colSdDiffs, colSds,
+    colSums2, colTabulates, colVarDiffs, colVars, colWeightedMads,
+    colWeightedMeans, colWeightedMedians, colWeightedSds,
+    colWeightedVars, rowAlls, rowAnyNAs, rowAnys, rowAvgsPerColSet,
+    rowCollapse, rowCounts, rowCummaxs, rowCummins, rowCumprods,
+    rowCumsums, rowDiffs, rowIQRDiffs, rowIQRs, rowLogSumExps,
+    rowMadDiffs, rowMads, rowMaxs, rowMeans2, rowMedians, rowMins,
+    rowOrderStats, rowProds, rowQuantiles, rowRanges, rowRanks,
+    rowSdDiffs, rowSds, rowSums2, rowTabulates, rowVarDiffs, rowVars,
+    rowWeightedMads, rowWeightedMeans, rowWeightedMedians,
+    rowWeightedSds, rowWeightedVars
+
+Loading required package: GenomicRanges
+Loading required package: stats4
+Loading required package: BiocGenerics
+
+Attaching package: ‘BiocGenerics’
+
+The following object is masked from ‘package:penalized’:
+
+    as.data.frame
+
+The following objects are masked from ‘package:stats’:
+
+    IQR, mad, sd, var, xtabs
+
+The following objects are masked from ‘package:base’:
+
+    anyDuplicated, append, as.data.frame, basename, cbind, colnames,
+    dirname, do.call, duplicated, eval, evalq, Filter, Find, get, grep,
+    grepl, intersect, is.unsorted, lapply, Map, mapply, match, mget,
+    order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank,
+    rbind, Reduce, rownames, sapply, setdiff, sort, table, tapply,
+    union, unique, unsplit, which.max, which.min
+
+Loading required package: S4Vectors
+
+Attaching package: ‘S4Vectors’
+
+The following objects are masked from ‘package:base’:
+
+    expand.grid, I, unname
+
+Loading required package: IRanges
+Loading required package: GenomeInfoDb
+Loading required package: Biobase
+Welcome to Bioconductor
+
+    Vignettes contain introductory material; view with
+    'browseVignettes()'. To cite Bioconductor, see
+    'citation("Biobase")', and for packages 'citation("pkgname")'.
+
+
+Attaching package: ‘Biobase’
+
+The following object is masked from ‘package:MatrixGenerics’:
+
+    rowMedians
+
+The following objects are masked from ‘package:matrixStats’:
+
+    anyMissing, rowMedians
+
+Loading required package: scuttle
+Loading required package: ggplot2
+[1] "reading in raw count matrix ..."
+[1] "number of genes in raw count matrix 23686"
+[1] "number of cells in raw count matrix 2176"
+[1] "reading finished!"
+[1] "imputation starts ..."
+[1] "searching candidate neighbors ... "
+[1] "calculating cell distances ..."
+starting worker pid=21172 on localhost:11673 at 13:16:29.261
+starting worker pid=21166 on localhost:11673 at 13:16:29.274
+starting worker pid=21164 on localhost:11673 at 13:16:29.275
+starting worker pid=21168 on localhost:11673 at 13:16:29.282
+starting worker pid=21167 on localhost:11673 at 13:16:29.283
+starting worker pid=21163 on localhost:11673 at 13:16:29.289
+starting worker pid=21171 on localhost:11673 at 13:16:29.290
+starting worker pid=21162 on localhost:11673 at 13:16:29.296
+starting worker pid=21173 on localhost:11673 at 13:16:29.296
+starting worker pid=21161 on localhost:11673 at 13:16:29.296
+starting worker pid=21159 on localhost:11673 at 13:16:29.297
+starting worker pid=21169 on localhost:11673 at 13:16:29.299
+starting worker pid=21160 on localhost:11673 at 13:16:29.304
+starting worker pid=21170 on localhost:11673 at 13:16:29.305
+starting worker pid=21165 on localhost:11673 at 13:16:29.305
+starting worker pid=21158 on localhost:11673 at 13:16:29.311
+[1] "estimating dropout probability for type 1 ..."
+[1] 2000
+[1] 4000
+[1] 6000
+[1] 8000
+[1] 10000
+[1] 12000
+[1] 14000
+[1] 16000
+[1] 18000
+[1] 20000
+[1] 22000
+[1] "searching for valid genes ..."
+[1] "imputing dropout values for type 1 ..."
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+[1] 100
+[1] 200
+[1] "estimating dropout probability for type 2 ..."
+[1] 2000
+[1] 4000
+[1] 6000
+[1] 8000
+[1] 10000
+[1] 12000
+[1] 14000
+[1] 16000
+[1] 18000
+[1] 20000
+[1] 22000
+[1] "searching for valid genes ..."
+[1] "imputing dropout values for type 2 ..."
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+[1] 100
+[1] 200
+[1] "estimating dropout probability for type 3 ..."
+[1] 2000
+[1] 4000
+[1] 6000
+[1] 8000
+[1] 10000
+[1] 12000
+[1] 14000
+[1] 16000
+[1] 18000
+[1] 20000
+[1] 22000
+[1] "searching for valid genes ..."
+[1] "imputing dropout values for type 3 ..."
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+[1] 100
+[1] "estimating dropout probability for type 4 ..."
+[1] 2000
+[1] 4000
+[1] 6000
+[1] 8000
+[1] 10000
+[1] 12000
+[1] 14000
+[1] 16000
+[1] 18000
+[1] 20000
+[1] 22000
+[1] "searching for valid genes ..."
+[1] "imputing dropout values for type 4 ..."
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+[1] 100
+[1] "estimating dropout probability for type 5 ..."
+[1] 2000
+[1] 4000
+[1] 6000
+[1] 8000
+[1] 10000
+[1] 12000
+[1] 14000
+[1] 16000
+[1] 18000
+[1] 20000
+[1] 22000
+[1] "searching for valid genes ..."
+[1] "imputing dropout values for type 5 ..."
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+[1] 100
+[1] "estimating dropout probability for type 6 ..."
+[1] 2000
+[1] 4000
+[1] 6000
+[1] 8000
+[1] 10000
+[1] 12000
+[1] 14000
+[1] 16000
+[1] 18000
+[1] 20000
+[1] 22000
+[1] "searching for valid genes ..."
+[1] "imputing dropout values for type 6 ..."
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+[1] 100
+[1] 200
+[1] 300
+[1] 400
+[1] 500
+[1] 600
+[1] "estimating dropout probability for type 7 ..."
+[1] 2000
+[1] 4000
+[1] 6000
+[1] 8000
+[1] 10000
+[1] 12000
+[1] 14000
+[1] 16000
+[1] 18000
+[1] 20000
+[1] 22000
+[1] "searching for valid genes ..."
+[1] "imputing dropout values for type 7 ..."
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+[1] 100
+[1] 200
+[1] 300
+[1] "estimating dropout probability for type 8 ..."
+[1] 2000
+[1] 4000
+[1] 6000
+[1] 8000
+[1] 10000
+[1] 12000
+[1] 14000
+[1] 16000
+[1] 18000
+[1] 20000
+[1] 22000
+[1] "searching for valid genes ..."
+[1] "imputing dropout values for type 8 ..."
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+[1] "estimating dropout probability for type 9 ..."
+[1] 2000
+[1] 4000
+[1] 6000
+[1] 8000
+[1] 10000
+[1] 12000
+[1] 14000
+[1] 16000
+[1] 18000
+[1] 20000
+[1] 22000
+[1] "searching for valid genes ..."
+[1] "imputing dropout values for type 9 ..."
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+[1] 100
+[1] "estimating dropout probability for type 10 ..."
+[1] 2000
+[1] 4000
+[1] 6000
+[1] 8000
+[1] 10000
+[1] 12000
+[1] 14000
+[1] 16000
+[1] 18000
+[1] 20000
+[1] 22000
+[1] "searching for valid genes ..."
+[1] "imputing dropout values for type 10 ..."
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+[1] 100
+[1] "writing imputed count matrix ..."
+integer(0)
+[1] "reading in raw count matrix ..."
+[1] "number of genes in raw count matrix 23686"
+[1] "number of cells in raw count matrix 3326"
+[1] "reading finished!"
+[1] "imputation starts ..."
+[1] "searching candidate neighbors ... "
+[1] "calculating cell distances ..."
+starting worker pid=23682 on localhost:11673 at 13:33:14.064
+starting worker pid=23681 on localhost:11673 at 13:33:14.068
+starting worker pid=23683 on localhost:11673 at 13:33:14.070
+starting worker pid=23677 on localhost:11673 at 13:33:14.070
+starting worker pid=23684 on localhost:11673 at 13:33:14.070
+starting worker pid=23676 on localhost:11673 at 13:33:14.076
+starting worker pid=23673 on localhost:11673 at 13:33:14.076
+starting worker pid=23680 on localhost:11673 at 13:33:14.082
+starting worker pid=23678 on localhost:11673 at 13:33:14.082
+starting worker pid=23679 on localhost:11673 at 13:33:14.082
+starting worker pid=23670 on localhost:11673 at 13:33:14.085
+starting worker pid=23671 on localhost:11673 at 13:33:14.090
+starting worker pid=23672 on localhost:11673 at 13:33:14.092
+starting worker pid=23675 on localhost:11673 at 13:33:14.108
+starting worker pid=23674 on localhost:11673 at 13:33:14.111
+starting worker pid=23669 on localhost:11673 at 13:33:14.111
+[1] "estimating dropout probability for type 1 ..."
+[1] 2000
+[1] 4000
+[1] 6000
+[1] 8000
+[1] 10000
+[1] 12000
+[1] 14000
+[1] 16000
+[1] 18000
+[1] 20000
+[1] 22000
+[1] "searching for valid genes ..."
+[1] "imputing dropout values for type 1 ..."
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+Loading required package: scImpute
+Loading required package: parallel
+Loading required package: penalized
+Loading required package: survival
+Welcome to penalized. For extended examples, see vignette("penalized").
+Loading required package: doParallel
+Loading required package: foreach
+Loading required package: iterators
+loaded scImpute and set parent environment
+[1] 100
+[1] 200
+[1] 300
+[1] 400
+[1] 500
+[1] 600
+[1] 700
+[1] 800
+[1] 900
+[1] 1000
+[1] 1100
+[1] 1200
+[1] 1300
+[1] 1400
+[1] "estimating dropout probability for type 2 ..."
+[1] 2000
+[1] 4000
+[1] 6000
+[1] 8000
+[1] 10000
+[1] 12000
+[1] 14000
+[1] 16000
+[1] 18000
+[1] 20000
+[1] 22000
+[1] "searching for valid genes ..."
+[1] "imputing dropout values for type 2 ..."
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+[1] 100
+[1] "estimating dropout probability for type 3 ..."
+[1] 2000
+[1] 4000
+[1] 6000
+[1] 8000
+[1] 10000
+[1] 12000
+[1] 14000
+[1] 16000
+[1] 18000
+[1] 20000
+[1] 22000
+[1] "searching for valid genes ..."
+[1] "imputing dropout values for type 3 ..."
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+[1] "estimating dropout probability for type 4 ..."
+[1] 2000
+[1] 4000
+[1] 6000
+[1] 8000
+[1] 10000
+[1] 12000
+[1] 14000
+[1] 16000
+[1] 18000
+[1] 20000
+[1] 22000
+[1] "searching for valid genes ..."
+[1] "imputing dropout values for type 4 ..."
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+[1] 100
+[1] 200
+[1] "estimating dropout probability for type 5 ..."
+[1] 2000
+[1] 4000
+[1] 6000
+[1] 8000
+[1] 10000
+[1] 12000
+[1] 14000
+[1] 16000
+[1] 18000
+[1] 20000
+[1] 22000
+[1] "searching for valid genes ..."
+[1] "imputing dropout values for type 5 ..."
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+[1] 100
+[1] 200
+[1] 300
+[1] 400
+[1] 500
+[1] 600
+[1] 700
+[1] 800
+[1] 900
+[1] 1000
+[1] 1100
+[1] 1200
+[1] "estimating dropout probability for type 6 ..."
+[1] 2000
+[1] 4000
+[1] 6000
+[1] 8000
+[1] 10000
+[1] 12000
+[1] 14000
+[1] 16000
+[1] 18000
+[1] 20000
+[1] 22000
+[1] "searching for valid genes ..."
+[1] "imputing dropout values for type 6 ..."
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+[1] "estimating dropout probability for type 7 ..."
+[1] 2000
+[1] 4000
+[1] 6000
+[1] 8000
+[1] 10000
+[1] 12000
+[1] 14000
+[1] 16000
+[1] 18000
+[1] 20000
+[1] 22000
+[1] "searching for valid genes ..."
+[1] "imputing dropout values for type 7 ..."
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+loaded scImpute and set parent environment
+[1] 100
+[1] "writing imputed count matrix ..."
+integer(0)
+[1] ""
+[1] "GRACIAS POR ASISTIR A MI CHARLA TED"

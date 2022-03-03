@@ -313,8 +313,7 @@ dev.off()
 saveRDS(data, "data.rds")
 saveRDS(sorted_rows, "sorted_rows.rds")
 saveRDS(sorted_columns, "sorted_columns.rds")
-saveRDS(color, "color.rds")
-saveRDS(mybreaks, "mybreaks.rds")
+
 
 #####################
 

@@ -1,0 +1,76 @@
+Taurine and hypotaurine metabolism
+Glycosaminoglycan biosynthesis - heparan sulfate / heparin
+Starch and sucrose metabolism
+Glycosaminoglycan biosynthesis - chondroitin sulfate / dermatan sulfate
+Ascorbate and aldarate metabolism
+Phenylalanine metabolism
+Drug metabolism - cytochrome P450
+Tyrosine metabolism
+Glycolysis / Gluconeogenesis
+Arginine biosynthesis
+Metabolism of xenobiotics by cytochrome P450
+Steroid biosynthesis
+Pentose phosphate pathway
+Glutathione metabolism
+Ubiquinone and other terpenoid-quinone biosynthesis
+Pentose and glucuronate interconversions
+Alanine, aspartate and glutamate metabolism
+Linoleic acid metabolism
+Drug metabolism - other enzymes
+Citrate cycle (TCA cycle)
+Selenocompound metabolism
+Oxidative phosphorylation
+Pyruvate metabolism
+Arginine and proline metabolism
+Fructose and mannose metabolism
+Arachidonic acid metabolism
+Porphyrin and chlorophyll metabolism
+Riboflavin metabolism
+Biosynthesis of unsaturated fatty acids
+Propanoate metabolism
+Valine, leucine and isoleucine degradation
+Fatty acid elongation
+Folate biosynthesis
+Glyoxylate and dicarboxylate metabolism
+Terpenoid backbone biosynthesis
+Glycine, serine and threonine metabolism
+Synthesis and degradation of ketone bodies
+beta-Alanine metabolism
+Glycosylphosphatidylinositol (GPI)-anchor biosynthesis
+Amino sugar and nucleotide sugar metabolism
+Pyrimidine metabolism
+Cysteine and methionine metabolism
+Purine metabolism
+Sulfur metabolism
+Retinol metabolism
+Fatty acid degradation
+Thiamine metabolism
+Butanoate metabolism
+One carbon pool by folate
+Tryptophan metabolism
+Glycosphingolipid biosynthesis - ganglio series
+N-Glycan biosynthesis
+Glycosaminoglycan biosynthesis - keratan sulfate
+Vitamin B6 metabolism
+Nitrogen metabolism
+Phosphonate and phosphinate metabolism
+Other glycan degradation
+Galactose metabolism
+Glycerophospholipid metabolism
+Glycosphingolipid biosynthesis - globo and isoglobo series
+Pantothenate and CoA biosynthesis
+Mucin type O-glycan biosynthesis
+Inositol phosphate metabolism
+Primary bile acid biosynthesis
+Lysine degradation
+Glycosaminoglycan degradation
+alpha-Linolenic acid metabolism
+Mannose type O-glycan biosynthesis
+Other types of O-glycan biosynthesis
+Glycerolipid metabolism
+Histidine metabolism
+Glycosphingolipid biosynthesis - lacto and neolacto series
+Nicotinate and nicotinamide metabolism
+Ether lipid metabolism
+Fatty acid biosynthesis
+Sphingolipid metabolism

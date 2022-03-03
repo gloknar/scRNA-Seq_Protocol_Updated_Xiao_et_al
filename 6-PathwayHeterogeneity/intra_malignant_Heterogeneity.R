@@ -106,31 +106,33 @@ select_enrich_data_df <- select_enrich_data_df[select_enrich_data_df$y %in% path
 ########################################
 select_enrich_data_df$y <- factor(select_enrich_data_df$y,levels = pathway_order)
 
-# #buble plot
+# bubble plot
 p <- ggplot(select_enrich_data_df, aes(x = x, y = y, size = PVAL, color = NES)) +
-  geom_point(shape=19) +
+  geom_point(shape = 19) +
   #ggtitle("pathway heterogeneity") +
   labs(x = NULL, y = NULL,
        size = "-log10 pvalue", color = "NES") +
   scale_size(range = c(0, 2.5)) +
   scale_color_gradient( low = "white", high = "red") +
-  #scale_color_gradient2(low="red",mid="white",high="blue",midpoint = 1) +
-  theme(legend.position = "bottom", legend.direction = "horizontal",   # legend.position = "bottom"
-        legend.box = "horizontal",
-        legend.key.size = unit(0.1, "cm"),
-        legend.text = element_text(colour="black",size=6),
-        axis.line = element_line(size=0.3, colour = "black"),
-        #panel.grid.major = element_line(colour = "#d3d3d3"),
-        #panel.grid.minor = element_blank(),
+  # scale_color_gradient2(low = "red", mid = "white", high = "blue", midpoint = 1) +
+  theme(legend.position = "right", legend.direction = "vertical",   # legend.position = "bottom"
+        legend.box = "vertical",
+        legend.key.size = unit(0.2, "cm"),
+        legend.text = element_text(colour = "black", size = 6),
+        axis.line = element_line(size = 0.3, colour = "black"),
+        # panel.grid.major = element_line(colour = "#d3d3d3"),
+        # panel.grid.minor = element_blank(),
         axis.ticks = element_line(colour = "black", size = 0.3),
         panel.border = element_blank(), panel.background = element_blank(),
-        axis.text.x=element_text(colour="black", size = 6,angle=90,hjust=1,vjust=0.5),
-        axis.text.y=element_text(colour="black", size = 6)) +
-  theme(plot.margin = unit(rep(1,4),"lines"))
+        axis.text.x = element_text(colour = "black", size = 6, angle = 90, hjust = 1, vjust = 0.5),
+        axis.text.y = element_text(colour = "black", size = 6)) +
+  theme(plot.margin = unit(rep(1,4), "lines")); p
 
-ggsave(file.path(outDir,"malignant_enriched_pathway.pdf"), p,
-       width = 5, height = 4, units = "in", device = "pdf",
+ggsave(file.path(outDir,"non_malignant_enriched_pathway.pdf"), p,
+       width = 5, height = 2.5, units = "in", device = "pdf",
        useDingbats = FALSE)
+
+# saveRDS(select_enrich_data_df, file = "select_enrich_data_df.rds")
 
 ##plot variance
 p <- ggplot(pc_plotdata) + 

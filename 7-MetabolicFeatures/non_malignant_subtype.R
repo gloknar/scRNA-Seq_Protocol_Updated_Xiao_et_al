@@ -170,58 +170,58 @@ invisible(gc())
 ######################################################################
 
 #3 Fibroblast cells: only for head and neck tumors
-if (tejido == "head_neck"){
-  fib_sce <- healthy_sce[, healthy_sce$cellType == "Fibroblast"]
-  fib_exp <- assay(fib_sce, "exprs")
-  
-  # Filter
-  select <- (fib_exp["FOS", ] >= 1) & (fib_exp["VIM",] >= 1)
-  select_fib_sce <- fib_sce[,select]
-  select_fib_exp <- assay(select_fib_sce, "exprs")
-  
-  # Select CAF and Myofib, at least 2 of markers > 1
-  myofib_markers <- c("ACTA2", "MCAM", "MYLK", "MYL9", "PDGFA")
-  CAFs_markers <- c("FAP", "THY1", "PDPN", "PDGFRA", "PDGFRL", "MMP2")
-  select <- (apply(select_fib_exp[myofib_markers,], 2, function(x) sum(x >= 1)>=2)) | (apply(select_fib_exp[CAFs_markers,], 2, function(x) sum(x >= 1)>=2))
-  select_fib_sce2 <- select_fib_sce[,select]
-  select_fib_exp2 <- assay(select_fib_sce2, "exprs")
-  
-  # Write the marker gene
-  dat <- select_fib_exp2[c("FOS", "VIM", myofib_markers, CAFs_markers),]
-  hr <- hclust(as.dist(1-cor(t(dat), method = "pearson")), method = "ward.D2")
-  hc <- hclust(as.dist(1-cor(dat, method = "pearson")), method = "ward.D2")
-  
-  mybreaks <- c(seq(-2, 0, length.out = ceiling(200/2)+1),
-                seq(2/200, 2, length.out = floor(200/2)))
-  
-  library(RColorBrewer)
-  
-  mycolor=colorRampPalette(rev(brewer.pal(n = 7, name ="RdYlBu")))(200)
-  
-  pdf(file.path(outDir,"fibro_markers.pdf"), width = 3.5, height = 2, onefile = T)
-  
-  pheatmap(dat, show_colnames = F, scale = "row", cluster_cols = hc, cluster_rows = hr, 
-           breaks=mybreaks, legend = F, color = mycolor)
-  
-  dev.off()
-  
-  # cluster to CAFs or myofibroblasts
-  tmp = select_fib_exp2[c(CAFs_markers, myofib_markers),]
-  kmeans_res <- kmeans(t(tmp), centers = 2)
-  metadatos_celulas <- data.frame(type = rep(NA, ncol(select_fib_exp2)), row.names = colnames(select_fib_exp2))
-  
-  if(sum(tmp[CAFs_markers, kmeans_res$cluster == 1]) > sum(tmp[CAFs_markers, kmeans_res$cluster == 2])){
-    metadatos_celulas[kmeans_res$cluster==1,] <- "CAF"
-    metadatos_celulas[kmeans_res$cluster==2,] <- "Myofib"
-  }else{
-    metadatos_celulas[kmeans_res$cluster==1,] <- "Myofib"
-    metadatos_celulas[kmeans_res$cluster==2,] <- "CAF"
-  }
-  select_fib_metabolic_sce2 <- select_fib_sce2[rowData(select_fib_sce2)$metabolic,]
-  select_fib_metabolic_sce2$type <- metadatos_celulas$type
-  
-  runGSEA(select_fib_metabolic_sce2,"type","CAF","Myofib","t",ruta_archivo_pathways,file.path(outDir,"CAF_Myofib_GSEA"))
-}
+# if (tejido == "head_neck"){
+#   fib_sce <- healthy_sce[, healthy_sce$cellType == "Fibroblast"]
+#   fib_exp <- assay(fib_sce, "exprs")
+#   
+#   # Filter
+#   select <- (fib_exp["FOS", ] >= 1) & (fib_exp["VIM",] >= 1)
+#   select_fib_sce <- fib_sce[,select]
+#   select_fib_exp <- assay(select_fib_sce, "exprs")
+#   
+#   # Select CAF and Myofib, at least 2 of markers > 1
+#   myofib_markers <- c("ACTA2", "MCAM", "MYLK", "MYL9", "PDGFA")
+#   CAFs_markers <- c("FAP", "THY1", "PDPN", "PDGFRA", "PDGFRL", "MMP2")
+#   select <- (apply(select_fib_exp[myofib_markers,], 2, function(x) sum(x >= 1)>=2)) | (apply(select_fib_exp[CAFs_markers,], 2, function(x) sum(x >= 1)>=2))
+#   select_fib_sce2 <- select_fib_sce[,select]
+#   select_fib_exp2 <- assay(select_fib_sce2, "exprs")
+#   
+#   # Write the marker gene
+#   dat <- select_fib_exp2[c("FOS", "VIM", myofib_markers, CAFs_markers),]
+#   hr <- hclust(as.dist(1-cor(t(dat), method = "pearson")), method = "ward.D2")
+#   hc <- hclust(as.dist(1-cor(dat, method = "pearson")), method = "ward.D2")
+#   
+#   mybreaks <- c(seq(-2, 0, length.out = ceiling(200/2)+1),
+#                 seq(2/200, 2, length.out = floor(200/2)))
+#   
+#   library(RColorBrewer)
+#   
+#   mycolor=colorRampPalette(rev(brewer.pal(n = 7, name ="RdYlBu")))(200)
+#   
+#   pdf(file.path(outDir,"fibro_markers.pdf"), width = 3.5, height = 2, onefile = T)
+#   
+#   pheatmap(dat, show_colnames = F, scale = "row", cluster_cols = hc, cluster_rows = hr, 
+#            breaks=mybreaks, legend = F, color = mycolor)
+#   
+#   dev.off()
+#   
+#   # cluster to CAFs or myofibroblasts
+#   tmp = select_fib_exp2[c(CAFs_markers, myofib_markers),]
+#   kmeans_res <- kmeans(t(tmp), centers = 2)
+#   metadatos_celulas <- data.frame(type = rep(NA, ncol(select_fib_exp2)), row.names = colnames(select_fib_exp2))
+#   
+#   if(sum(tmp[CAFs_markers, kmeans_res$cluster == 1]) > sum(tmp[CAFs_markers, kmeans_res$cluster == 2])){
+#     metadatos_celulas[kmeans_res$cluster==1,] <- "CAF"
+#     metadatos_celulas[kmeans_res$cluster==2,] <- "Myofib"
+#   }else{
+#     metadatos_celulas[kmeans_res$cluster==1,] <- "Myofib"
+#     metadatos_celulas[kmeans_res$cluster==2,] <- "CAF"
+#   }
+#   select_fib_metabolic_sce2 <- select_fib_sce2[rowData(select_fib_sce2)$metabolic,]
+#   select_fib_metabolic_sce2$type <- metadatos_celulas$type
+#   
+#   runGSEA(select_fib_metabolic_sce2,"type","CAF","Myofib","t",ruta_archivo_pathways,file.path(outDir,"CAF_Myofib_GSEA"))
+# }
 
 
 # Limpieza RAM
