@@ -22,7 +22,7 @@ Este pipeline permite analizar perfiles de expresión de genes metabólicos en e
 
 ## Requisitos
 
-Además de emplear `R 4.1`, se requiere una serie de paquetes, los cuales pueden ser instalados mediante la siguiente línea de `bash`:
+Además de emplear `R 4.1`, se requiere una serie de paquetes los cuales pueden ser instalados mediante la siguiente línea de `bash`:
 
 ``` bash
 Rscript install_requiredPackages.R 
