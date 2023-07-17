@@ -1,10 +1,11 @@
 # Proyecto scRNA-seq de ovarios
 
-En su [publicación](https://www.nature.com/articles/s41467-019-11738-0) de Nature Communications (2019), Xiao _et al._ caracterizaron 2 tipos de tumores a nivel de sc-RNA-Seq y GSEA (Gene pathways) mediante el empleo del lenguaje de programación estadístico `R 3.5` y `bash`, y se puede visitar su código original en el siguiente repositorio: https://github.com/LocasaleLab/Single-Cell-Metabolic-Landscape.
+En su [publicación](https://www.nature.com/articles/s41467-019-11738-0) de Nature Communications (2019), Xiao _et al._ caracterizaron 2 tipos de tumores a nivel de sc-RNA-Seq y GSEA (gene expression pathways) mediante el empleo del lenguaje de programación estadístico `R 3.5` y `bash`, y se puede visitar su código original en el siguiente repositorio: https://github.com/LocasaleLab/Single-Cell-Metabolic-Landscape.
+
 
 Nosotros queremos replicar dicho protocolo en nuestras muestras del Karolinska Institutet, las cuales son bulk RNA-seq y scRNA-seq de ovarios. Para ello he creado el presente repositorio, en el cual se clarifica, refactoriza, optimiza y traduce el protocolo de Xiao y compañeros a la versión más actualizada de R a fecha de redacción de este documento, `R 4.1`.
 
-Este protocolo ha sido testado en una estación de trabajo con Ubuntu 20.04 LTS, 1 CPU de 12 núcleos, 24 hilos @ 3.8GHz, 16GB de RAM DDR4 y un HDD de 1TB
+Este protocolo ha sido probado en una estación de trabajo con Ubuntu 20.04 LTS, 1 CPU de 12 núcleos, 24 hilos @ 3.8GHz, 16GB de RAM y 1TB de HDD.
 
 <br>
 
