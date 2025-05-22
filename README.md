@@ -8,7 +8,7 @@ Este protocolo ha sido probado en una estación de trabajo con Ubuntu 20.04 LTS,
 
 <br>
 
-Adam C, 2021 | ~~acm95@ugr.es~~ adam.casas95@gmail.com
+Adam Casas, Investigador bioinformático de la UGR, 2021 | ~~acm95@ugr.es~~ adam.casas95@gmail.com
 
 ------------
 
