@@ -131,7 +131,7 @@ Para calcular la actividad de cada ruta, se obtuvo en cada linaje celular la exp
 
 
 
-## Metabolic pathway heterogeneity
+## Análisis de rutas metabólicas
 
 ``` bash
 cd 6-PathwayHeterogeneity
@@ -153,14 +153,16 @@ Rscript GeneSignature-of-OXPHOS_Glycolysis_Hypoxia head_neck
 cd ..
 ```
 
-En este paso hacemos un PCA y un GSEA para investigar to investigate the metabolic pathway heterogeneity across single cells in malignant and non-malignant cell populations.
+En este paso hacemos un PCA y un GSEA para investigar la expresión diferencial de las rutas metabólicas de las células de las poblaciones malignas y sanas.
 
 También realizamos scatterplots para analizar la actividad y correlaciones entre las rutas de OXPHOS, glicólisis y respuesta a hipoxia en células tumorales. 
 
-The gene signatures in single cells with low OXPHOS/glycolysis/hypoxia activity will be identified and stored as the text files, which can be used as the input of GO analysis on the website: http://metascape.org
+Las rutas metabólicas de las células con una baja actividad OXPHOS/glycolisis/hypoxia se identifican y son guardadas en archivos de texto, los cuales se pueden usar como input de un análisis GO en http://metascape.org
 
-Metabolic features of nonmalignant cell subtypes
 
+
+
+## Perfil metabólico de subtipos celulares sanos
 
 ``` bash
 cd 7-MetabolicFeatures
@@ -168,5 +170,5 @@ Rscript non-malignant_subtype.R melanoma
 Rscript non-malignant_subtype.R head_neck
 cd ..
 ```
-The metabolic features in different T-cell subtypes and fibroblast subtypes will be identified in this step. 
 
+Se caracteriza la expresión de las rutas metabólicas de diversos subtipos de linfocitos T y fibroblastos
